@@ -17,20 +17,39 @@ const getTexasElectionID = function(callData, callback){
       cdOfficeType: 'S',
       cdFlow: '0',
       idTown:0,
-      idElection: callData.idElection
+      idElection:callData.idElection,
     }
   }, (e,r,b)=>{
     if(e) return callback(e);
     let $ = cheerio.load(b);
     const election_html = $(callData.optionSearch);
-    election_html.find('option').each((i,op)=>{
-      if($(op).text().includes('GENERAL')){
-        callback(null, $(op).attr('value'))
-      }
-    })
+    if(!callData.idElection){
+      election_html.find('option').each((i,op)=>{
+        if($(op).text().includes('GENERAL')){
+          callback(null, $(op).attr('value'))
+        };
+      });
+    } else {
+      const senate_object = {};
+      const all_districts = election_html.text().split("\n")
+      const all_senate_districts = all_districts.map(x=>{
+        if(x.includes("SENATOR")){
+          return x.trim();
+        }
+      }).filter((element)=>{
+        return element !== undefined
+      })
+      election_html.find('option').each((i,op)=>{
+        all_senate_districts.map((x)=>{
+          if($(op).text().includes(x)){
+            senate_object[x] = $(op).attr('value')
+          }
+        })
+      })
+      callback(null,senate_object)
+    }
+  });
+};
 
 
-  })
-}
-
-getTexasElectionID({year:2020,idElection:'',optionSearch:'#idElection'})
+getTexasElectionID({year:2020,optionSearch:'#idOffice', idElection:44144})
