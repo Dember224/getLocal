@@ -124,9 +124,9 @@ const getCandidateMoney = function(){
       })
     },
     pdf:(cb)=>{
-      crawler('https://www.ethics.state.tx.us/data/search/cf/2020/CandE012020.pdf').then(function(response){
-        const report_array = response.text.split("Report Due:1/15/20Report Number:");
-        const num_of_reports = response.text.split("Report Due:1/15/20Report Number:").length - 1;
+      crawler('https://www.ethics.state.tx.us/data/search/cf/2021/CandE012021.pdf').then(function(response){
+        const report_array = response.text.split("Report Due:1/15/21Report Number:");
+        const num_of_reports = response.text.split("Report Due:1/15/21Report Number:").length - 1;
         console.log(`There are ${num_of_reports} candidates and pacs in this file`);
         return cb(null, report_array)
       })
@@ -141,7 +141,15 @@ const getCandidateMoney = function(){
         console.log(first_name, last_name)
         r.pdf.forEach(report=>{
           if(report.toUpperCase().includes(first_name) && report.toUpperCase().includes(`${last_name},`)){
-            console.log(report)
+            const report_array = report.split('\n');
+            const report_object = {
+              name: candidate.name,
+              office:candidate.office,
+              district:candidate.district,
+              state:candidate.state,
+              contributions: report_array[8]
+            }
+            console.log(report_object)
           }
         })
       }
