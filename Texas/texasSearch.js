@@ -147,7 +147,9 @@ const getCandidateMoney = function(){
               office:candidate.office,
               district:candidate.district,
               state:candidate.state,
-              contributions: report_array[8]
+              contributions: report_array[8],
+              expenditures: report_array[11],
+              asOf: new Date()
             }
             console.log(report_object)
           }
