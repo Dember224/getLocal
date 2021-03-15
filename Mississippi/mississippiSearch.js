@@ -164,6 +164,7 @@ const getCandidateMoney = function(callData,callback){
               name: name_object.name,
               office: name_object.office,
               district:name_object.district,
+              state:"Mississippi",
               year: name_object.year,
               contributions:money_object.contributions,
               expenditures:money_object.expenditures,
@@ -175,6 +176,7 @@ const getCandidateMoney = function(callData,callback){
               name: name_object.name,
               office: name_object.office,
               district:name_object.district,
+              state:"Mississippi"
               year: name_object.year,
               contributions:null,
               expenditures:null,
