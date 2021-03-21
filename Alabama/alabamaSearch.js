@@ -1,7 +1,7 @@
 const request = require('request');
 const cheerio = require('cheerio')
 
-const getSearchSettings = function(){
+const getSearchSettings = function(callData,callback){
   request({
     uri:'https://fcpa.alabamavotes.gov/PublicSite/SearchPages/PoliticalRaceSearch.aspx?tb=politicalracesearch',
     qs:{
@@ -16,14 +16,25 @@ const getSearchSettings = function(){
   },(e,r,b)=>{
     if(e) return e;
     const $ = cheerio.load(b);
-    const elements = $('.md-form').text()
-    console.log(elements);
+    const election = `${callData.year} ELECTION CYCLE`;
+    const office = callData.office //STATE SENATOR  OR STATE REPRESENTATIVE all caps
+    const party = callData.party; //only first letter caps ex. Democrat
+    const form_html = $(".md-form").html();
+    const election_number = $(`option:contains(\'${election}')`).attr('value');
+    const office_number = $(`option:contains(\'${office}')`).attr('value');
+    const party_number =  $(`option:contains(\'${party}')`).attr('value');
+    const search_object = {
+      election:election_number,
+      office:office_number,
+      party:party_number
+    }
+    return callback(null, search_object)
   })
 }
 
 
 
-getSearchSettings()
+getSearchSettings({year:2018, office:"STATE SENATOR", party:"Democrat"})
 
 
 // 'https://fcpa.alabamavotes.gov/PublicSite/SearchPages/PoliticalRaceSearch.aspx?tb=politicalracesearch'
