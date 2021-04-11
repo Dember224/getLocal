@@ -168,7 +168,9 @@ const getCandidateMoney = function(callData,callback){
               year: name_object.year,
               contributions:money_object.contributions,
               expenditures:money_object.expenditures,
-              asOf: new Date()
+              asOf: new Date(),
+              election_type:callData.election_type,
+              election_year: callData.year
             }
             return call(null,report_object)
           } else{
@@ -180,7 +182,9 @@ const getCandidateMoney = function(callData,callback){
               year: name_object.year,
               contributions:null,
               expenditures:null,
-              asOf: new Date()
+              asOf: new Date(),
+              election_type: callData.election_type,
+              election_year: callData.year
             }
             return call(null,report_object)
           }
@@ -196,7 +200,7 @@ const getCandidateMoney = function(callData,callback){
   })
 }
 
-getCandidateMoney({year:2019},(e,r)=>{
+getCandidateMoney({year:2019, election_type:"General"},(e,r)=>{
   if(e) return e;
   console.log(r);
 })
