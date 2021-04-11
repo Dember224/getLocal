@@ -296,7 +296,7 @@ const getMoneyObject = function(){
       }).filter(x=>{
         return x !== undefined;
       })
-      console.log({repDems, senDems});
+      console.log({repDems, senDems}); //have to loop through each of these.
       return res;
     })
   })

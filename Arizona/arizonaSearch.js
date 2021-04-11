@@ -1,7 +1,9 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const async = require('async');
+const loader = require('../Loaders/uploadFinances.js');
 
-const getPageNumbers = function(callData){
+const getTheMoney = function(callData,callback){
   const startYear = callData.startYear;
   const endYear = callData.endYear;
   request({
@@ -25,7 +27,7 @@ const getPageNumbers = function(callData){
     const $ = cheerio.load(b)
     // const pages = $('.paginate_button').text();
     const getTheMoney = b.map(x=>{
-      const office_array = x.OfficeName.split("-")
+      const office_array = x.OfficeName ? x.OfficeName.split("-") : [null,null];
       const money_object = {
         name:`${x.EntityFirstName} ${x.EntityLastName}`,
         office:office_array[0],
@@ -33,14 +35,30 @@ const getPageNumbers = function(callData){
         state:"Arizona",
         contributions:x.Income,
         expenditures:x.Expense,
-        asOf: new Date()
+        asOf: new Date(),
+        election_year: callData.startYear,
+        election_type: 'General'
       }
       console.log(money_object)
       return money_object;
     });
+    return callback(null, getTheMoney);
   })
 };
 
-getPageNumbers({startYear:2020,endYear:2021});
+const loadArizonaFinances = function(callData){
+  getTheMoney({startYear:callData.startYear,endYear:callData.endYear}, (e,money_array)=>{
+    if(e) return e;
+    async.mapSeries(money_array, (money_object, cb)=>{
+      console.log(money_object)
+      loader.loadFinanceData(money_object)
+      return cb(null, money_object)
+    },(e,r)=>{
+      if(e) return e;
+      return r;
+    })
+  })
+}
+loadArizonaFinances({startYear:2020, endYear:2021})
 
 //paginate_button
