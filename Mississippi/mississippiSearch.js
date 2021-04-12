@@ -2,6 +2,7 @@ const crawler = require('crawler-request');
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
+const loader = require('../Loaders/uploadFinances.js');
 
 const checkPDF = function(callData,callback){
   crawler(`https://www.sos.ms.gov/Elections-Voting/Documents/QualifyingForms/${callData.year}%20Candidate%20Qualifying%20List.pdf`).then(function(response){
@@ -165,7 +166,6 @@ const getCandidateMoney = function(callData,callback){
               office: name_object.office,
               district:name_object.district,
               state:"Mississippi",
-              year: name_object.year,
               contributions:money_object.contributions,
               expenditures:money_object.expenditures,
               asOf: new Date(),
@@ -178,8 +178,7 @@ const getCandidateMoney = function(callData,callback){
               name: name_object.name,
               office: name_object.office,
               district:name_object.district,
-              state:"Mississippi"
-              year: name_object.year,
+              state:"Mississippi",
               contributions:null,
               expenditures:null,
               asOf: new Date(),
@@ -196,14 +195,27 @@ const getCandidateMoney = function(callData,callback){
     }
   },function(e,r){
     if(e) return e;
-    return callback(null, r)
+    return callback(null, r.makeReportCall)
   })
 }
 
-getCandidateMoney({year:2019, election_type:"General"},(e,r)=>{
-  if(e) return e;
-  console.log(r);
-})
+
+const loadMississippiFinances = function(callData){
+  getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+    if(e) return e;
+    async.mapSeries(money_array,(money_object, cb)=>{
+      console.log(money_object);
+      loader.loadFinanceData(money_object);
+      return cb(null, money_object)
+    }, (e,r)=>{
+      if(e) return e;
+      return r;
+      loader.loadFinanceData({finished:true})
+    })
+  })
+}
+
+loadMississippiFinances({year:2019, election_type:"General"})
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{
 //   if (e) return e;
 //   console.log(r)

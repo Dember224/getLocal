@@ -31,12 +31,12 @@ const loadFinanceData = function(callData){
       if(e) return e;
       console.log("These are the values", values)
       if(r.length === 0) {console.log("The method didn't load anything")};
-      release()
-      return r.rows;
+      if(callData.finished){pool.end()};
     })
   })
 }
 
 module.exports = {
-  loadFinanceData
+  loadFinanceData,
+  pool
 }
