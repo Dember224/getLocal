@@ -4,7 +4,7 @@ const async = require('async');
 const fs = require('fs');
 const pdf = require('pdf-parse');
 const crawler = require('crawler-request');
-
+const loader = require('../Loaders/uploadFinances.js');
 
 
 const getTexasElectionID = function(callData, callback){
@@ -39,7 +39,7 @@ const getTexasElectionID = function(callData, callback){
       const senate_object = {};
       const all_districts = election_html.text().split("\n")
       const all_senate_districts = all_districts.map(x=>{
-        if(x.includes("SENATOR")){
+        if(x.includes(callData.office)){
           return x.trim();
         }
       }).filter((element)=>{
@@ -61,13 +61,13 @@ const getTexasElectionID = function(callData, callback){
 const getTexasCandidateNames = function(callData, callback){
   async.autoInject({
     get_election_id: (cb)=>{
-      getTexasElectionID({year:2020,optionSearch:'#idElection'}, (e,election_id)=>{
+      getTexasElectionID({year:2020,optionSearch:'#idElection', office:callData.office}, (e,election_id)=>{
         if(e) return cb(e);
         return cb(null, election_id)
       })
     },
     get_offices: (get_election_id,cb)=>{
-      getTexasElectionID({year:2020,optionSearch:'#idOffice', idElection:get_election_id}, (e,senate_offices)=>{
+      getTexasElectionID({year:2020,optionSearch:'#idOffice', idElection:get_election_id, office:callData.office}, (e,senate_offices)=>{
         if(e) return cb(e);
         return cb(null, {election_id:get_election_id, senate_offices})
       })
@@ -99,10 +99,12 @@ const getTexasCandidateNames = function(callData, callback){
         let $ = cheerio.load(b);
         const candidate_name = $('p strong').first().text();
         district_array = office_name.split(',');
+        const office = office_name.split("DISTRICT")[0];
+        const district = office_name.replace(/\D/g, "");
         candidate_object = {
           name: candidate_name,
-          office:district_array[0],
-          district:district_array[1],
+          office:office,
+          district:district,
           state: 'Texas'
         }
         candidate_array.push(candidate_object)
@@ -115,10 +117,10 @@ const getTexasCandidateNames = function(callData, callback){
   })
 }
 
-const getCandidateMoney = function(){
+const getCandidateMoney = function(callData, callback){
   async.autoInject({
     candidates:(cb)=>{
-      getTexasCandidateNames({year:2020},(e,candidate)=>{
+      getTexasCandidateNames({year:2020, office: callData.office},(e,candidate)=>{
         if(e) return e;
         return cb(null, candidate)
       })
@@ -133,6 +135,7 @@ const getCandidateMoney = function(){
     }
   },(e,r)=>{
     if(e) return e;
+    const money_array = []
     r.candidates.forEach(candidate=>{
       if(candidate.name.length){
         const name_split = candidate.name.split(" ");
@@ -149,14 +152,36 @@ const getCandidateMoney = function(){
               state:candidate.state,
               contributions: report_array[8],
               expenditures: report_array[11],
-              asOf: new Date()
+              asOf: new Date(),
+              election_year:callData.election_year,
+              election_type:callData.election_type,
+              party:"Democrat"
             }
-            console.log(report_object)
+            money_array.push(report_object)
           }
         })
       }
     })
+      return callback(null, money_array)
   })
 }
 
-getCandidateMoney();
+
+
+const loadSenateData = function(callData){
+  getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
+    if(e) return e;
+    loader.loadFinanceArray(r)
+  });
+}
+
+const loadRepData = function(callData){
+  getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{ //office name must be capitalized
+    if(e) return e;
+    loader.loadFinanceArray(r)
+    return r;
+  });
+}
+
+loadRepData({election_year:2020, election_type:"General"})
+// loadSenateData({election_year:2020,election_type:"General"})
