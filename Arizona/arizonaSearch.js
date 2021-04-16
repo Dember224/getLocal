@@ -52,9 +52,10 @@ const loadArizonaFinances = function(callData){
     async.mapSeries(money_array, (money_object, cb)=>{
       console.log(money_object)
       loader.loadFinanceData(money_object)
-      return cb(null, money_object)
+      return cb(null, money_object);
     },(e,r)=>{
       if(e) return e;
+      loader.loadFinanceData({finished:true})
       return r;
     })
   })
