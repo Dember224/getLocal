@@ -1,13 +1,14 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
+const loader = require('../Loaders/uploadFinances.js');
 
 const getCandidates = function(callData, callback){
   const office = callData.office === "State Representative" ? "STR" : "STS"
   request({
     uri:'https://dos.elections.myflorida.com/candidates/canlist.asp',
     qs:{
-      elecid: '20201103-GEN',//have to re-lookup election ID for new elections. Seems to be the date.
+      elecid: `${callData.election_year}${callData.election_date}-GEN`,//have to re-lookup election ID for new elections. Seems to be the date.
       OfficeGroup: "LEG",
       StatusCode: "ALX",
       OfficeCode: office,
@@ -25,6 +26,7 @@ const getCandidates = function(callData, callback){
     if(e) return e;
     const $ = cheerio.load(b)
     const table = $("td").text().split('You can narrow your search results for candidates by county.  A search by county will provide a list of candidates running for offices for which all or a portion of the geographical area represented by the office is located in that county.  For information on county or municipal candidates, please contact your local  Supervisor of Elections.')
+    if(!table[2]){return callback(null,{first_name:null,last_name:null,office:null})}
     const candidate_array = table[2].split(/[()][A-Z][A-Z][A-Z][()]/);
     const name_array = candidate_array.map((x,i)=>{
       if(i === 0){
@@ -55,7 +57,7 @@ const getCashData = function(callData,callback){
     uri:`https://dos.elections.myflorida.com/cgi-bin/${callData.spendType}.exe`,
     method:'POST',
     qs:{
-      election: '20201103-GEN', //have to look up election code
+      election: `${callData.election_year}${callData.election_date}-GEN`, //have to look up election code
       CanFName: callData.first_name,
       CanLName: callData.last_name,
       CanNameSrch: 2,
@@ -89,7 +91,7 @@ const getAccountNumbers = function(callData, callback){
   request({
     uri:'https://dos.elections.myflorida.com/candidates/CanList.asp',
     qs:{
-      elecid: "20201103-GEN",
+      elecid: `${callData.election_year}${callData.election_date}-GEN`,
       GenSubmit: "View List"
     },
     headers: {
@@ -139,7 +141,7 @@ const getCash = function(callData, callback){
     uri:'https://dos.elections.myflorida.com/cgi-bin/TreSel.exe',
     method: 'POST',
     qs:{
-      elecdesc:'2020 General Election',
+      elecdesc:`${callData.election_year} General Election`,
       account: callData.account_number
     },
     headers: {
@@ -157,10 +159,10 @@ const getCash = function(callData, callback){
   })
 }
 
-const getMoney = function(callback){
+const getMoney = function(callData,callback){
   async.autoInject({
     getRepCandidates:(cb)=>{
-      getCandidates({office:"State Representative"}, (e,name_array)=>{
+      getCandidates({office:"State Representative", election_year:callData.election_year, election_date:callData.election_date}, (e,name_array)=>{
         console.log("The rep name array", name_array)
         if(e) return e;
          return cb(null, name_array);
@@ -173,7 +175,7 @@ const getMoney = function(callback){
         const last_name = candidate_object.last_name;
         const office = "State Representative";
         if(first_name !== null && last_name !== null){
-          getAccountNumbers({first_name, last_name, office}, (e, account_number)=>{
+          getAccountNumbers({first_name, last_name, office, election_year:callData.election_year, election_date:callData.election_date}, (e, account_number)=>{
             if(e) return e;
             return call(null,{account_number:account_number, first_name, last_name, office});
           })
@@ -186,7 +188,7 @@ const getMoney = function(callback){
       })
     },
     getSenateCandidates:(cb)=>{
-      getCandidates({office:"State Senator"}, (e,name_array)=>{
+      getCandidates({office:"State Senator", election_year:callData.election_year, election_date:callData.election_date}, (e,name_array)=>{
         console.log("The senate name array", name_array)
         if(e) return e;
         return cb(null, name_array);
@@ -199,7 +201,7 @@ const getMoney = function(callback){
         const last_name = candidate_object.last_name;
         const office = "State Senator";
         if(first_name !== null && last_name !== null){
-          getAccountNumbers({first_name, last_name, office}, (e, account_number)=>{
+          getAccountNumbers({first_name, last_name, office, election_year:callData.election_year, election_date:callData.election_date}, (e, account_number)=>{
             if(e) return e;
             // console.log({account_number:number_object, first_name, last_name, office})
             return call(null, {account_number:account_number, first_name, last_name, office});
@@ -220,8 +222,8 @@ const getMoney = function(callback){
   })
 }
 
-const getMoneyObject = function(){
-  getMoney((e,r)=>{
+const getMoneyObject = function(callData, callback){
+  getMoney({election_year:callData.election_year, election_date:callData.election_date},(e,r)=>{
     if(e) return e;
     async.autoInject({
       getReps:(call)=>{
@@ -231,13 +233,17 @@ const getMoneyObject = function(){
             const name = `${rep_object.first_name} ${rep_object.last_name}`;
             const office = rep_object.office;
             const money_object = {};
-            getDistrict({account_number}, (e, district_object)=>{
+            getDistrict({account_number, election_year:callData.election_year, election_date:callData.election_date}, (e, district_object)=>{
               if(e) return e;
               money_object["name"] = name;
               money_object["office"] = office;
               money_object["district"] = district_object.district;
               money_object["party"] = district_object.party;
-              getCash({account_number}, (e,cash)=>{
+              money_object["state"] = "Florida";
+              money_object["election_year"] = callData.election_year;
+              money_object["election_type"] = callData.election_type
+              money_object["asOf"] = new Date
+              getCash({account_number, election_year:callData.election_year, election_date:callData.election_date}, (e,cash)=>{
                 if(e) return e;
                 money_object["contributions"] = cash.contributions;
                 money_object["expenditures"] = cash.expenditures;
@@ -259,13 +265,17 @@ const getMoneyObject = function(){
             const name = `${senate_object.first_name} ${senate_object.last_name}`;
             const office = senate_object.office;
             const money_object = {};
-            getDistrict({account_number}, (e, district_object)=>{
+            getDistrict({account_number, election_year:callData.election_year, election_date:callData.election_date}, (e, district_object)=>{
               if(e) return e;
               money_object["name"] = name;
               money_object["office"] = office;
               money_object["district"] = district_object.district;
               money_object["party"] = district_object.party;
-              getCash({account_number}, (e,cash)=>{
+              money_object["state"] = "Florida";
+              money_object["election_year"] = callData.election_year;
+              money_object["election_type"] = callData.election_type
+              money_object["asOf"] = new Date
+              getCash({account_number, election_year:callData.election_year, election_date:callData.election_date}, (e,cash)=>{
                 if(e) return e;
                 money_object["contributions"] = cash.contributions;
                 money_object["expenditures"] = cash.expenditures;
@@ -296,9 +306,16 @@ const getMoneyObject = function(){
       }).filter(x=>{
         return x !== undefined;
       })
-      console.log({repDems, senDems}); //have to loop through each of these.
-      return res;
+      return callback(null,{repDems, senDems}); //have to loop through each of these.
     })
+  })
+}
+
+loadFloridaRepFinances = function(callData){
+  getMoneyObject({election_year: callData.election_year, election_date: callData.election_date, election_type:callData.election_type}, (e, money_arrays)=>{
+    if(e) return e;
+    loader.loadFinanceArray(money_arrays.repDems)
+    return r.repDems;
   })
 }
 
@@ -311,7 +328,7 @@ const getMoneyObject = function(){
 //   console.log(r);
 // })
 // getCash({account_number:74295})
-getMoneyObject()
+loadFloridaRepFinances({election_year:2020, election_date:'1103', election_type:"General"})
 // getDistrict({account_number:74154}, (e,r)=>{
 //   if(e) return e;
 //   console.log(r)
