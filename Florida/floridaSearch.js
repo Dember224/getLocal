@@ -52,37 +52,42 @@ const getCandidates = function(callData, callback){
 };
 
 const getCashData = function(callData,callback){
-  const office = callData.office === "State Representative" ? "STR" : "STS"
-  request({
-    uri:`https://dos.elections.myflorida.com/cgi-bin/${callData.spendType}.exe`,
-    method:'POST',
-    qs:{
-      election: `${callData.election_year}${callData.election_date}-GEN`, //have to look up election code
-      CanFName: callData.first_name,
-      CanLName: callData.last_name,
-      CanNameSrch: 2,
-      office,
-      party: 'DEM',
-      search_on: 3,
-      ComNameSrch: 2,
-      committee: 'All',
-      namesearch: 2,
-      rowlimit: 500,
-      csort1:'DAT',
-      csort2:'CAN',
-      queryformat: 1,
-      Submit: 'Submit'
-    },
-    headers: {
-      'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
-      'content-type': 'application/x-www-form-urlencoded'
-    }
-  },(e,r,b)=>{
-    if(e) return e;
-    const $ = cheerio.load(b);
-    const money = $('pre').text().split('\n')[3].split('Total:')[1].trim()
-    return callback(null, money)
-  })
+  if(callData.first_name && callData.last_name){
+
+    const office = callData.office === "State Representative" ? "STR" : "STS"
+    request({
+      uri:`https://dos.elections.myflorida.com/cgi-bin/${callData.spendType}.exe`,
+      method:'POST',
+      qs:{
+        election: `${callData.election_year}${callData.election_date}-GEN`, //have to look up election code
+        CanFName: callData.first_name,
+        CanLName: callData.last_name,
+        CanNameSrch: 2,
+        office,
+        party: 'DEM',
+        search_on: 3,
+        ComNameSrch: 2,
+        committee: 'All',
+        namesearch: 2,
+        rowlimit: 500,
+        csort1:'DAT',
+        csort2:'CAN',
+        queryformat: 1,
+        Submit: 'Submit'
+      },
+      headers: {
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    },(e,r,b)=>{
+      if(e) return e;
+      const $ = cheerio.load(b);
+      const money = $('pre').text().split('\n')[3].split('Total:')[1].trim()
+      return callback(null, money)
+    })
+  } else{
+    return callback(null,null)
+  }
 }
 
 
@@ -105,58 +110,71 @@ const getAccountNumbers = function(callData, callback){
     const $ = cheerio.load(b);
     const first_name = callData.first_name;
     const last_name = callData.last_name;
-    const td = $('tr').has(`td:contains(${first_name}):contains(${last_name})`).last().html()
-    const get_href = function(html){
-      const $ = cheerio.load(html)
-      const account_number = $('a').attr('href').split('=')[1]
-      return callback(null,account_number)
-    }
+    if(first_name && last_name){
+      const td = $('tr').has(`td:contains(${first_name}):contains(${last_name})`).last().html()
+      const get_href = function(html){
+        const $ = cheerio.load(html)
+        const account_number = $('a').attr('href').split('=')[1]
+        return callback(null,account_number)
+      }
 
-    get_href(td)
+      get_href(td)
+    } else{
+      return callback(null, null);
+    }
   })
 }
 
 const getDistrict = function(callData, callback){
-  request({
-    uri:'https://dos.elections.myflorida.com/candidates/CanDetail.asp',
-    qs:{
-      account: callData.account_number
-    },
-    headers: {
-      'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
-      'content-type': 'application/x-www-form-urlencoded'
-    },
-    json:true
-  },(e,r,b)=>{
-    if(e) return e;
-    const $ = cheerio.load(b);
-    const party = $('td').text().split('\n')[12].trim()
-    const district = $('td').text().split('\n')[5].match(/\d+/)[0]
-    return callback(null, {party, district});
-  })
+  if(callData.account_number){
+    request({
+      uri:'https://dos.elections.myflorida.com/candidates/CanDetail.asp',
+      qs:{
+        account: callData.account_number
+      },
+      headers: {
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      json:true
+    },(e,r,b)=>{
+      if(e) return e;
+      const $ = cheerio.load(b);
+      const party = $('td').text().split('\n')[12].trim()
+      const district = $('td').text().split('\n')[5].match(/\d+/)[0]
+      return callback(null, {party, district});
+    })
+  } else{
+    return callback(null, null);
+  }
 }
 
 const getCash = function(callData, callback){
-  request({
-    uri:'https://dos.elections.myflorida.com/cgi-bin/TreSel.exe',
-    method: 'POST',
-    qs:{
-      elecdesc:`${callData.election_year} General Election`,
-      account: callData.account_number
-    },
-    headers: {
-      'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
-      'content-type': 'application/x-www-form-urlencoded'
-    },
-    json:true
-  },(e,r,b)=>{
-    if(e) return e;
-    const $ = cheerio.load(b);
-    const rows = $('tr').text().split('All Dates (Totals)')[1].split('\n')
-    const contributions = rows[2];
-    const expenditures = rows [8]
-    return callback(null, {contributions, expenditures});
-  })
+  if(callData.account_number){
+    request({
+      uri:'https://dos.elections.myflorida.com/cgi-bin/TreSel.exe',
+      method: 'POST',
+      qs:{
+        elecdesc:`${callData.election_year} General Election`,
+        account: callData.account_number
+      },
+      headers: {
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      json:true
+    },(e,r,b)=>{
+      if(e) return e;
+      const $ = cheerio.load(b);
+      console.log($('tr').text())
+      const rows = $('tr').text().split('Total:')[1].split('\n')
+      const contributions = rows[2];
+      const expenditures = rows [8]
+      return callback(null, {contributions, expenditures});
+    })
+  } else{
+    return callback(null, null)
+  }
 }
 
 const getMoney = function(callData,callback){
@@ -169,12 +187,12 @@ const getMoney = function(callData,callback){
       })
     },
     getRepAccountNumbers:(getRepCandidates,cb)=>{
-      async.mapSeries(getRepCandidates,(candidate_object, call)=>{
+      async.map(getRepCandidates,(candidate_object, call)=>{
         console.log(candidate_object)
         const first_name = candidate_object.first_name;
         const last_name = candidate_object.last_name;
         const office = "State Representative";
-        if(first_name !== null && last_name !== null){
+        if(first_name  && last_name){
           getAccountNumbers({first_name, last_name, office, election_year:callData.election_year, election_date:callData.election_date}, (e, account_number)=>{
             if(e) return e;
             return call(null,{account_number:account_number, first_name, last_name, office});
@@ -195,12 +213,12 @@ const getMoney = function(callData,callback){
       })
     },
     getSenateAccountNumbers:(getSenateCandidates, cb)=>{
-      async.mapSeries(getSenateCandidates,(candidate_object, call)=>{
+      async.map(getSenateCandidates,(candidate_object, call)=>{
         console.log(candidate_object)
         const first_name = candidate_object.first_name;
         const last_name = candidate_object.last_name;
         const office = "State Senator";
-        if(first_name !== null && last_name !== null){
+        if(first_name && last_name){
           getAccountNumbers({first_name, last_name, office, election_year:callData.election_year, election_date:callData.election_date}, (e, account_number)=>{
             if(e) return e;
             // console.log({account_number:number_object, first_name, last_name, office})
@@ -243,10 +261,12 @@ const getMoneyObject = function(callData, callback){
               money_object["election_year"] = callData.election_year;
               money_object["election_type"] = callData.election_type
               money_object["asOf"] = new Date
+              money_object["name_year"] = `${name}${year}`
               getCash({account_number, election_year:callData.election_year, election_date:callData.election_date}, (e,cash)=>{
                 if(e) return e;
                 money_object["contributions"] = cash.contributions;
                 money_object["expenditures"] = cash.expenditures;
+                console.log(money_object)
                 return cb(null, money_object)
               })
             })
@@ -259,7 +279,7 @@ const getMoneyObject = function(callData, callback){
         })
       },
       getSenators:(call)=>{
-        async.mapSeries(r.getSenateAccountNumbers, (senate_object, cb)=>{
+        async.map(r.getSenateAccountNumbers, (senate_object, cb)=>{
           if(senate_object){
             const account_number = senate_object.account_number;
             const name = `${senate_object.first_name} ${senate_object.last_name}`;
@@ -279,6 +299,7 @@ const getMoneyObject = function(callData, callback){
                 if(e) return e;
                 money_object["contributions"] = cash.contributions;
                 money_object["expenditures"] = cash.expenditures;
+                console.log(money_object)
                 return cb(null, money_object)
               })
             })
@@ -315,7 +336,7 @@ loadFloridaRepFinances = function(callData){
   getMoneyObject({election_year: callData.election_year, election_date: callData.election_date, election_type:callData.election_type}, (e, money_arrays)=>{
     if(e) return e;
     loader.loadFinanceArray(money_arrays.repDems)
-    return r.repDems;
+    return money_arrays.repDems;
   })
 }
 
@@ -328,7 +349,13 @@ loadFloridaRepFinances = function(callData){
 //   console.log(r);
 // })
 // getCash({account_number:74295})
-loadFloridaRepFinances({election_year:2020, election_date:'1103', election_type:"General"})
+
+getMoneyObject({election_year: 2020, election_date: 1103, election_type:"General"}, (e, money_arrays)=>{
+  if(e) return e;
+  return money_arrays.repDems;
+})
+
+// loadFloridaRepFinances({election_year:2020, election_date:'1103', election_type:"General"})
 // getDistrict({account_number:74154}, (e,r)=>{
 //   if(e) return e;
 //   console.log(r)
