@@ -66,6 +66,7 @@ const loadFinanceData = function(callData){
   const asOf = callData.asOf;
   const election_year = callData.election_year;
   const election_type = callData.election_type;
+  const name_year = money_object.name_year;
   const text = 'INSERT INTO campaign_finance(name,office, state, district, contributions, expenditures, asOf, election_year, election_type) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *';
   const values = [
     name,
@@ -76,7 +77,8 @@ const loadFinanceData = function(callData){
     expenditures,
     asOf,
     election_year,
-    election_type
+    election_type,
+    name_year
   ];
   pool.connect((e,client, release)=>{
     if(e) return e;
@@ -89,7 +91,34 @@ const loadFinanceData = function(callData){
   })
 }
 
+const theSuperDeDuper = function(){
+  const text = `DELETE FROM campaign_finance
+    WHERE id IN
+    (SELECT id
+    FROM
+        (SELECT id,
+         ROW_NUMBER() OVER( PARTITION BY name_year
+        ORDER BY  id ) AS row_num
+        FROM campaign_finance ) t
+        WHERE t.row_num > 1 );`
+
+        pool.connect()
+        .then(client =>{
+          return client
+          .query(format(text, values))
+          .then(res=>{
+            console.log(res.rows);
+            client.release()
+          })
+          .catch(e=>{
+            console.log(e)
+            client.release()
+          })
+        })
+}
+
 module.exports = {
   loadFinanceArray,
-  loadFinanceData
+  loadFinanceData,
+  theSuperDeDuper
 }
