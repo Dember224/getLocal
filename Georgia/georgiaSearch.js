@@ -31,9 +31,37 @@ const getCandidates = function(callData){
         name: unparsed[1] ? unparsed[1].trim().replace("(i)", "") : unparsed[1]
       }
       return return_object
+    }).filter(x=>{
+      if(x !== null && x.name){
+        return x;
+      }
     })
     console.log(candidate_array);
   })
 }
 
-getCandidates({office:'State Senate', year:2020})
+const getCandidateViewstate = function(callData){
+  request({
+    uri: 'https://media.ethics.ga.gov/search/Campaign/Campaign_ByName.aspx',
+    qs:{
+      ctl00$ContentPlaceHolder1$Search: 'Search for Candidate',
+      ctl00$ContentPlaceHolder1$txtLast: callData.lastName,
+      ctl00$ContentPlaceHolder1$txtFirst: callData.firstName,
+      ctl00$ContentPlaceHolder1$rbLastName: 'rbLastNameBegins',
+      ctl00$ContentPlaceHolder1$rbFirstName: 'rbFirstNameBegins',
+      ctl00$ContentPlaceHolder1$txtCommittee:'' ,
+      ctl00$ContentPlaceHolder1$rbNCType: 'rbNonCand',
+
+    },
+    method: 'POST',
+    json:true
+  }, (e,r,b)=>{
+    if(e) return e;
+    const $ = cheerio.load(b);
+    const viewstate = $('input').attr('value')
+    console.log(viewstate);
+  })
+}
+
+getCandidateViewstate({lastName:"Jordan", firstName:"Jen"})
+// getCandidates({office:'State Senate', year:2020})
