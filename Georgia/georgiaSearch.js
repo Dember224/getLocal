@@ -40,7 +40,7 @@ const getCandidates = function(callData){
   })
 }
 
-const getCandidateViewstate = function(callData){
+const getCandidateViewstate = function(callData, callback){
   request({
     uri: 'https://media.ethics.ga.gov/search/Campaign/Campaign_ByName.aspx',
     qs:{
@@ -56,12 +56,92 @@ const getCandidateViewstate = function(callData){
     method: 'POST',
     json:true
   }, (e,r,b)=>{
-    if(e) return e;
+    if(e) return callback(e);
     const $ = cheerio.load(b);
-    const viewstate = $('input').attr('value')
-    console.log(viewstate);
+    const viewstate = $('input').attr('value');
+    const eventvalidation = $('#__EVENTVALIDATION').attr('value');
+    const generator = $('#__VIEWSTATEGENERATOR').attr('value');
+    callback(null,{viewstate,eventvalidation,generator});
   })
 }
 
-getCandidateViewstate({lastName:"Jordan", firstName:"Jen"})
+const getEventTarget = function(callData, callback){
+  getCandidateViewstate({firstName:callData.firstName,lastName:callData.lastName}, (e,viewstate)=>{
+    if(e) return;
+    request({
+      uri: 'https://media.ethics.ga.gov/search/Campaign/Campaign_ByName.aspx',
+      form:{
+        ctl00$ContentPlaceHolder1$Search: 'Search for Candidate',
+        ctl00$ContentPlaceHolder1$txtLast: callData.lastName,
+        ctl00$ContentPlaceHolder1$txtFirst: callData.firstName,
+        ctl00$ContentPlaceHolder1$rbLastName: 'rbLastNameBegins',
+        ctl00$ContentPlaceHolder1$rbFirstName: 'rbFirstNameBegins',
+        ctl00$ContentPlaceHolder1$txtCommittee:'' ,
+        ctl00$ContentPlaceHolder1$rbNCType: 'rbNonCand',
+        ctl00$ContentPlaceHolder1$txtNonCommittee:'' ,
+        '__VIEWSTATE': viewstate.viewstate,
+        '__EVENTVALIDATION':viewstate.eventvalidation,
+        '__VIEWSTATEGENERATOR':viewstate.generator
+      },
+      followAllRedirects: true,
+      method: 'POST',
+      headers: {
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        'content-type': 'application/x-www-form-urlencoded',
+
+      }
+    }, (e,r,b)=>{
+      if(e) return callback(e);
+      // const $ = cheerio.load(b);
+      //change the query string to a form and this should return a response body
+      const $ = cheerio.load(b);
+      const event_target = $(".lblentrylink").attr('id')
+      const viewstate = $("#__VIEWSTATE").attr('value');
+      const eventvalidation = $('#__EVENTVALIDATION').attr('value');
+      const generator = $('#__VIEWSTATEGENERATOR').attr('value');
+      const event_object = {
+        event_target,
+        viewstate,
+        eventvalidation,
+        generator
+      }
+      return callback(null, event_object)
+    })
+  })
+}
+
+const getCandidateData = function(callData){
+  getEventTarget({lastName:callData.lastName, fistName:callData.firstName}, (e, event_object)=>{
+    if(e) return e;
+    console.log('The event object', event_object)
+    request({
+      uri: 'https://media.ethics.ga.gov/search/Campaign/Campaign_Namesearchresults.aspx',
+      form:{
+        '__VIEWSTATE': event_object.viewstate,
+        '__EVENTVALIDATION':event_object.eventvalidation,
+        '__VIEWSTATEGENERATOR':event_object.generator,
+        '__EVENTTARGET':event_object.event_target
+      },
+      qs:{
+        CommitteeName:'',
+        LastName:callData.lastName,
+        FirstName:callData.firstName,
+        Method:0
+      },
+      transport_method : 'query',
+      followAllRedirects: true,
+      method: 'POST',
+      headers: {
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        'content-type': 'application/x-www-form-urlencoded',
+
+      }
+    }, (e,r,b)=>{
+      if(e) return e;
+      console.log(b);
+    })
+  })
+}
+
+getCandidateData({lastName:"Jordan", firstName:"Jen"})
 // getCandidates({office:'State Senate', year:2020})
