@@ -1,0 +1,19 @@
+{
+  "name": "campaign_bucs",
+  "version": "1.0.0",
+  "description": "An app designed to assess Democratic and left campaign finance at the state and local level in order to aid the direction of funds.",
+  "main": "StateMap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dember224/getLocal.git"
+  },
+  "author": "Antoine Washington",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dember224/getLocal/issues"
+  },
+  "homepage": "https://github.com/Dember224/getLocal#readme"
+}
