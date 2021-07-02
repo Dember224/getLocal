@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Dember224/getLocal/issues"
   },
-  "homepage": "https://github.com/Dember224/getLocal#readme"
+  "homepage": "https://github.com/Dember224/getLocal#readme",
+  "dependencies": {
+    "got": "^11.8.2"
+  }
 }
