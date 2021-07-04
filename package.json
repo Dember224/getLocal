@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/Dember224/getLocal#readme",
   "dependencies": {
-    "got": "^11.8.2"
+    "cloudflare-scraper": "^1.0.8",
+    "got": "^11.8.2",
+    "puppeteer": "^10.1.0",
+    "taiko": "^1.2.5"
   }
 }
