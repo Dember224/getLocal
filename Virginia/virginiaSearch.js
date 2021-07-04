@@ -260,7 +260,7 @@ const getCandidateNames = function(callData){
 
 
 function sortOffice(office_name){
-  if(office_name.includes("Senate") || office_name .includes("Senator")){
+  if(office_name.includes("Senate") || office_name.includes("Senator")){
     return "state senator";
   } else if (office_name.includes("Delegate") || office_name.includes("House")) {
     return "state delegate";
@@ -269,14 +269,15 @@ function sortOffice(office_name){
   }
 }
 const readReportCsv = function(callData, callback){
-  const results = []
-  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_11/Report.csv`)
+  const results = [];
+  const month = callData.month<10? `0${callData.month}` : callData.month;
+  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/Report.csv`)
   .pipe(csv())
   .on('data', (data) => results.push(data))
   .on('end', () => {
     const report_array = results.map(x=>{
       const report_object = {
-        name: x.CandidateName,
+        name: x.CandidateName.replace(/(Mr|MR|Ms|Miss|Mrs|Dr|Sir|Senator|Hon.|Rev.|Delegate)(\.?)\s/,""),
         report_id:x.ReportId,
         district:x.District,
         party:x.Party === "Democratic" ? "Democrat" : x.party,
@@ -288,13 +289,18 @@ const readReportCsv = function(callData, callback){
       }
       return report_object
     })
-    return callback(null, report_array.filter(x=>{return x.name && x.party === "Democrat" && x.office !== "N/A"}));
+    return callback(null, report_array.filter(x=>{
+      if( x.name && x.party === "Democrat" && x.office !== "N/A"){
+        return x
+      }
+    }));
   });
 }
 
 const readScheduleHCsv = function(callData, callback){
-  const results = []
-  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_11/ScheduleH.csv`)
+  const results = [];
+  const month = callData.month<10? `0${callData.month}` : callData.month;
+  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/ScheduleH.csv`)
     .pipe(csv())
     .on('data', (data) => results.push(data))
     .on('end', () => {
@@ -311,13 +317,15 @@ const readScheduleHCsv = function(callData, callback){
 }
 
 const getMoney = function(callData, callback){
-  readReportCsv({year:callData.year, election_type:callData.election_type}, (e, candidate_data)=>{
+  readReportCsv({year:callData.year, election_type:callData.election_type, month:callData.month}, (e, candidate_data)=>{
     if(e) return e;
-    readScheduleHCsv({year:callData.year, election_type: callData.election_type}, (e, money_object)=>{
+    readScheduleHCsv({year:callData.year, election_type: callData.election_type, month:callData.month}, (e, money_object)=>{
       if(e) return e;
-      async.mapSeries(candidate_data, (can_d, cb)=>{
+      let counter = 0;
+      async.map(candidate_data,(can_d, cb)=>{
         const this_money = money_object.find(x=>{
-          if(x.report_id === can_d.report_id){
+          if(x.report_id == can_d.report_id){
+            counter = counter + 1;
             return x;
           }
         })
@@ -326,10 +334,10 @@ const getMoney = function(callData, callback){
           contributions: this_money ? parseFloat(this_money.contributions) : null,
           state: "Virginia",
           district:can_d.district.replace(/\D/g, ""),
-          name: can_d.name,
+          name: can_d.name.replace(/(Mr|MR|Ms|Miss|Mrs|Dr|Sir|Senator|Hon.|Rev.|Delegate)(\.?)\s/,""),
           office: can_d.office,
           asOf: new Date(),
-          election_year: callData.year,
+          election_year: new Date('01/01/'+callData.year).toGMTString(),
           election_type: callData.election_type,
           party: can_d.party,
           name_year:can_d.name + callData.year + callData.election_type
@@ -340,21 +348,67 @@ const getMoney = function(callData, callback){
         const result = r.filter(x=>{
           return x.contributions !== null
         });
+        console.log(counter, " records were retrieved")
         callback(null, result)
       })
     })
   })
 }
 
-const loadData = function(callData){
-  getMoney({year:callData.year, election_type:callData.election_type}, (e,money_object)=>{
+const getCommiteeRecords = function(callData){
+  const results = [];
+  const month = callData.month<10? `0${callData.month}` : callData.month;
+  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/Report.csv`)
+  .pipe(csv())
+  .on('data', (data) => results.push(data))
+  .on('end', () => {
+    const committee_records = results.filter(x=>{
+      return x.CandidateName === '';
+    })
+    console.log(committee_records)
+  })
+}
+
+const checkAllMonths = async function(callData, callback){
+  async.map([1,2,3,4,5,6,7,8,9,10,11,12], (month,cb)=>{
+    getMoney({year: callData.year, election_type:callData.election_type, month}, (e, money_object)=>{
+      if(e) return e;
+      const result_array = [];
+      money_object.map(x=>{
+        if(result_array.find(y=>{return x.name===y.name})){
+          const current_object = result_array.find(y=>{return x.name === y.name});
+          if(current_object.contributions > x.contributions){
+            const index = result_array.indexOf(current_object)
+            result_array.splice(index, 1)
+            result_array.push(current_object);
+          }
+        } else{
+          result_array.push(x);
+        }
+      })
+      return cb(null, result_array)
+    });
+  }, (e,result_array)=>{
     if(e) return e;
-    loader.loadFinanceArray(money_object);
+    const true_results = [];
+    result_array.map(x=>{
+      x.map(y=>{
+        true_results.push(y)
+      })
+    })
+    console.log({number_of_records: result_array.length})
+    return callback(null, true_results)
+  })
+}
+// getCommiteeRecords({year:2019})
+// checkAllMonths({year:2019, election_type:'General'})
+
+const loadData = async function(callData){
+  await checkAllMonths({year:callData.year, election_type:callData.election_type}, async(e,money_object)=>{
+    if(e) return e;
+    await loader.loadFinanceArray(money_object);
     return money_object;
   });
 }
-
 loadData({year:2019, election_type:"General"})
-
-
 // getCandidateNames({election_type:'General', office:'House of Delegates', year: 2019}); //The offices are State Senate and House of Delegates case sensitive
