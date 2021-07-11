@@ -4,34 +4,40 @@ const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../Loaders/uploadFinances.js');
 
+function getOffice(text){
+  if(text.includes('Representative')){
+    return 'state representative'
+  } else if( text.includes('Senate')){
+    return 'state senator'
+  }
+}
+
 const checkPDF = function(callData,callback){
-  crawler(`https://www.sos.ms.gov/Elections-Voting/Documents/QualifyingForms/${callData.year}%20Candidate%20Qualifying%20List.pdf`).then(function(response){
+  crawler(`https://www.sos.ms.gov/Content/documents/Elections/candidate%20qualifying/${callData.year}%20Candidate%20Qualifying%20List.pdf`).then(function(response){
     const response_array = response.text.split('\n')
-    const just_the_democrats = response_array.map(x=>{
-      if(x.includes('Democratic')){
-        if(x.includes('Representative') || x.includes('Senate')){
-          return x.split("State");
+    const senate_rep_array = response_array.map(x=>{
+      if(x.includes('Senate') || x.includes('Representative')){
+        if(x.includes('Democrat') && x.includes('State')){
+          const data_obj = x.split('State');
+          const name = data_obj[0].match(/[A-Z][a-z]+/g).join().replace(","," ").replace(","," ");
+          const return_obj = {
+            name,
+            office: getOffice(data_obj[1]),
+            district: data_obj[1].replace(/\D/g, "")
+          }
+          return return_obj;
         }
       }
-    }).filter(function(x) {
-      return x !== undefined;
-    });
-
-    const candidate_object = just_the_democrats.map(x=>{
-      const district = x[1].replace(/\D/g, "")
-      const candidate_details = {
-        name: x[0],
-        office:x[1].includes('Senate')?'Senate':'Representative',
-        district,
-        year:callData.year
+    }).filter(x=>{
+      if(x !== undefined){
+        return x
       }
-      return candidate_details;
     })
-
-    return callback(null,candidate_object)
+    return callback(null, senate_rep_array)
   })
 } //Requites a year be entered
 
+// checkPDF({year:2019})
 const getEntityId = function(callData,callback){
   request({
     uri: 'https://cfportal.sos.ms.gov/online/Services/MS/CampaignFinanceServices.asmx/CandidateNameSearch',
@@ -135,23 +141,20 @@ const getCandidateMoney = function(callData,callback){
   async.autoInject({
     getNames:(cb)=>{
       checkPDF({year:callData.year},(e,candidate_array)=>{
-        if(e)return e;
+        if(e) return cb(e);
         return cb(null, candidate_array)
       })
     },
     parseNames:(getNames, cb)=>{
       async.map(getNames,(candidate_object, call)=>{
-        const split_name = candidate_object.name.split(/(?=[A-Z])/)
-        const last_name = split_name.includes('Jr.') || split_name.includes('Sr.') ? split_name[split_name.length - 2] : split_name[split_name.length - 1];
-        const first_name = split_name[0];
-        const name = `${first_name} ${last_name}`;
+        const name = candidate_object.name;
         const office = candidate_object.office;
         const district = candidate_object.district;
-        const year = candidate_object.year
+        const year = callData.year
 
         return call(null, {name, office, district, year})
       }, (e,name_array)=>{
-        if(e) return e;
+        if(e) return cb(e);
         return cb(null,name_array)
       })
     },
@@ -159,20 +162,22 @@ const getCandidateMoney = function(callData,callback){
       async.map(parseNames,(name_object,call)=>{
         // name = name office district year
         getCampaignFinancePdf({name:name_object.name},(e,money_object)=>{
-          if(e) return e;
+          if(e) return call(e);
           if(money_object){
             const report_object = {
               name: name_object.name,
               office: name_object.office,
               district:name_object.district,
               state:"Mississippi",
-              contributions:money_object.contributions,
-              expenditures:money_object.expenditures,
+              contributions:money_object.contributions ? parseFloat(money_object.contributions.replace(/,/g, '')) : null,
+              expenditures:money_object.expenditures ? parseFloat(money_object.expenditures.replace(/,/g, '')) : null,
               asOf: new Date(),
               election_type:callData.election_type,
-              election_year: callData.year
+              election_year: new Date('01/01/'+callData.year).toGMTString(),
+              name_year: `${name_object.name}${callData.year}${callData.election_type}`
             }
-            return call(null,report_object)
+            console.log("The report",report_object);
+            return call(null, report_object)
           } else{
             const report_object = {
               name: name_object.name,
@@ -185,37 +190,40 @@ const getCandidateMoney = function(callData,callback){
               election_type: callData.election_type,
               election_year: callData.year
             }
-            return call(null,report_object)
+            return call(null, report_object)
           }
         })
       },(e,r)=>{
-        if(e) return e;
+        if(e) return cb(e);
         return cb(null, r);
       })
     }
-  },function(e,r){
-    if(e) return e;
+  },(e,r)=>{
+    if(e) return callback(e);
     return callback(null, r.makeReportCall)
   })
 }
 
-
-const loadMississippiFinances = function(callData){
-  getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
-    if(e) return e;
-    async.mapSeries(money_array,(money_object, cb)=>{
-      console.log(money_object);
-      loader.loadFinanceData(money_object);
-      return cb(null, money_object)
-    }, (e,r)=>{
-      if(e) return e;
-      return r;
-      loader.loadFinanceData({finished:true})
-    })
-  })
-}
-
-loadMississippiFinances({year:2019, election_type:"General"})
+//
+// const loadMississippiFinances = function(callData){
+//   getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+//     if(e) return e;
+//     async.mapSeries(money_array,(money_object, cb)=>{
+//       console.log(money_object);
+//       loader.loadFinanceData(money_object);
+//       return cb(null, money_object)
+//     }, (e,r)=>{
+//       if(e) return e;
+//       return r;
+//       loader.loadFinanceData({finished:true})
+//     })
+//   })
+// }
+//
+getCandidateMoney({year:2019, election_type:"General"}, (e,money)=>{
+  if(e) return e;
+   console.log("the cahones on this guy",money)
+ })
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{
 //   if (e) return e;
 //   console.log(r)
