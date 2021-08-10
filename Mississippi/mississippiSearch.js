@@ -90,29 +90,39 @@ const getFilingId=function(callData, callback){
       },(e,r,b)=>{
         if(e) return cb(e);
         const $ = cheerio.load(b);
-        if($('.k-button')["1"]){
-          const data_val = $('.k-button')["1"]["attribs"]["data-val"].split('\n')
-          const data_array = [0];
-          data_val.map(x=>{
-            if(data_array.includes(x[0])){
-              data_array.push(x)
-            }
-          })
-          if(data_val === data_array){
-            console.log(data_array[0][0])
-          }
 
-          return cb(null, data_val)
-      } else {
+        if($('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html()){
+          const pre_election = $('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html().split(/\r?\n/)[4].split(/ data-val="|" onclick=/)[1]
+          return cb(null, pre_election)
+      } else if($('.k-button')["1"]){
+        const data_val = $('.k-button')["1"]["attribs"]["data-val"].split('\n')
+        const data_array = [0];
+        data_val.map(x=>{
+          if(data_array.includes(x[0])){
+            data_array.push(x)
+          }
+        })
+        if(data_val === data_array){
+          console.log(data_array[0][0])
+        }
+        return cb(null, data_val[0])
+      }
+
+      else {
         return callback(null,null)
       }
       })
     }
   }, (e,r)=>{
     if (e) return e;
-    return callback(null,r.filingOptions[0]);
+    return callback(null,r.filingOptions);
   })
 }
+
+// getFilingId({name:'kabir Karriem', year:2019}, (e,r)=>{
+//   if(e) return e;
+//   console.log("button", r);
+// })
 
 const getCampaignFinancePdf = function(callData, callback){
   getFilingId({name: callData.name}, (e,filingId)=>{
@@ -146,7 +156,7 @@ const getCandidateMoney = function(callData,callback){
       })
     },
     parseNames:(getNames, cb)=>{
-      async.map(getNames,(candidate_object, call)=>{
+      async.mapSeries(getNames,(candidate_object, call)=>{
         const name = candidate_object.name;
         const office = candidate_object.office;
         const district = candidate_object.district;
@@ -159,7 +169,7 @@ const getCandidateMoney = function(callData,callback){
       })
     },
     makeReportCall:(parseNames, cb)=>{
-      async.map(parseNames,(name_object,call)=>{
+      async.mapSeries(parseNames,(name_object,call)=>{
         // name = name office district year
         getCampaignFinancePdf({name:name_object.name},(e,money_object)=>{
           if(e) return call(e);
@@ -176,7 +186,7 @@ const getCandidateMoney = function(callData,callback){
               election_year: new Date('01/01/'+callData.year).toGMTString(),
               name_year: `${name_object.name}${callData.year}${callData.election_type}`
             }
-            console.log("The report",report_object);
+            console.log("The report", report_object)
             return call(null, report_object)
           } else{
             const report_object = {
@@ -188,9 +198,11 @@ const getCandidateMoney = function(callData,callback){
               expenditures:null,
               asOf: new Date(),
               election_type: callData.election_type,
-              election_year: callData.year
+              election_year: new Date('01/01/'+callData.year).toGMTString(),
+              name_year: `${name_object.name}${callData.year}${callData.election_type}`
             }
-            return call(null, report_object)
+            console.log("The report", report_object)
+            return call(null, report_object);
           }
         })
       },(e,r)=>{
@@ -222,8 +234,13 @@ const getCandidateMoney = function(callData,callback){
 //
 getCandidateMoney({year:2019, election_type:"General"}, (e,money)=>{
   if(e) return e;
-   console.log("the cahones on this guy",money)
+   console.log("the cahones on this guy", money)
+   return money;
  })
+//
+//  const loadData = async function(callData){
+//
+//  }
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{
 //   if (e) return e;
 //   console.log(r)
