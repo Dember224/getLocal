@@ -14,6 +14,18 @@ const txtParser = function(text){
   return text_array;
 } //parses a tab delimited txt file
 
+
+//office parsers
+
+const getOffice = function(office){
+  const lower_office = office.toLowerCase();
+  if(office_name.match(/senate|senator/)){
+    return 'state senator'
+  } else if (office_name.match(/assemblyman|assembly|assembly|assemblyman/)) {
+    return 'state assemblyman'
+  }
+}
+
 module.exports = {
   txtParser
 }
