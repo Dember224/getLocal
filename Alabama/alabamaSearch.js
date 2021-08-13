@@ -160,5 +160,8 @@ loadSenateData({year:2018,office:"STATE REPRESENTATIVE", election_type:"General"
 // _ctl0:Content:ddlParty:ucddlParty: 2
 // _ctl0:Content:ddlYearToShow: 0
 // _ctl0:Content:btnSearch: Search
+<<<<<<< HEAD
 
 //need to redo Alabama with natural viewstate adaptations and auto redirects
+=======
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5

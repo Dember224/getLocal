@@ -4,6 +4,7 @@ const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../Loaders/uploadFinances.js');
 
+<<<<<<< HEAD
 function getOffice(text){
   if(text.includes('Representative')){
     return 'state representative'
@@ -38,6 +39,36 @@ const checkPDF = function(callData,callback){
 } //Requites a year be entered
 
 // checkPDF({year:2019})
+=======
+const checkPDF = function(callData,callback){
+  crawler(`https://www.sos.ms.gov/Elections-Voting/Documents/QualifyingForms/${callData.year}%20Candidate%20Qualifying%20List.pdf`).then(function(response){
+    const response_array = response.text.split('\n')
+    const just_the_democrats = response_array.map(x=>{
+      if(x.includes('Democratic')){
+        if(x.includes('Representative') || x.includes('Senate')){
+          return x.split("State");
+        }
+      }
+    }).filter(function(x) {
+      return x !== undefined;
+    });
+
+    const candidate_object = just_the_democrats.map(x=>{
+      const district = x[1].replace(/\D/g, "")
+      const candidate_details = {
+        name: x[0],
+        office:x[1].includes('Senate')?'Senate':'Representative',
+        district,
+        year:callData.year
+      }
+      return candidate_details;
+    })
+
+    return callback(null,candidate_object)
+  })
+} //Requites a year be entered
+
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
 const getEntityId = function(callData,callback){
   request({
     uri: 'https://cfportal.sos.ms.gov/online/Services/MS/CampaignFinanceServices.asmx/CandidateNameSearch',
@@ -90,6 +121,7 @@ const getFilingId=function(callData, callback){
       },(e,r,b)=>{
         if(e) return cb(e);
         const $ = cheerio.load(b);
+<<<<<<< HEAD
 
         if($('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html()){
           const pre_election = $('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html().split(/\r?\n/)[4].split(/ data-val="|" onclick=/)[1]
@@ -109,12 +141,29 @@ const getFilingId=function(callData, callback){
       }
 
       else {
+=======
+        if($('.k-button')["1"]){
+          const data_val = $('.k-button')["1"]["attribs"]["data-val"].split('\n')
+          const data_array = [0];
+          data_val.map(x=>{
+            if(data_array.includes(x[0])){
+              data_array.push(x)
+            }
+          })
+          if(data_val === data_array){
+            console.log(data_array[0][0])
+          }
+
+          return cb(null, data_val)
+      } else {
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
         return callback(null,null)
       }
       })
     }
   }, (e,r)=>{
     if (e) return e;
+<<<<<<< HEAD
     return callback(null,r.filingOptions);
   })
 }
@@ -124,6 +173,12 @@ const getFilingId=function(callData, callback){
 //   console.log("button", r);
 // })
 
+=======
+    return callback(null,r.filingOptions[0]);
+  })
+}
+
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
 const getCampaignFinancePdf = function(callData, callback){
   getFilingId({name: callData.name}, (e,filingId)=>{
     if(e) return callback(e);
@@ -151,11 +206,16 @@ const getCandidateMoney = function(callData,callback){
   async.autoInject({
     getNames:(cb)=>{
       checkPDF({year:callData.year},(e,candidate_array)=>{
+<<<<<<< HEAD
         if(e) return cb(e);
+=======
+        if(e)return e;
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
         return cb(null, candidate_array)
       })
     },
     parseNames:(getNames, cb)=>{
+<<<<<<< HEAD
       async.mapSeries(getNames,(candidate_object, call)=>{
         const name = candidate_object.name;
         const office = candidate_object.office;
@@ -165,20 +225,42 @@ const getCandidateMoney = function(callData,callback){
         return call(null, {name, office, district, year})
       }, (e,name_array)=>{
         if(e) return cb(e);
+=======
+      async.map(getNames,(candidate_object, call)=>{
+        const split_name = candidate_object.name.split(/(?=[A-Z])/)
+        const last_name = split_name.includes('Jr.') || split_name.includes('Sr.') ? split_name[split_name.length - 2] : split_name[split_name.length - 1];
+        const first_name = split_name[0];
+        const name = `${first_name} ${last_name}`;
+        const office = candidate_object.office;
+        const district = candidate_object.district;
+        const year = candidate_object.year
+
+        return call(null, {name, office, district, year})
+      }, (e,name_array)=>{
+        if(e) return e;
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
         return cb(null,name_array)
       })
     },
     makeReportCall:(parseNames, cb)=>{
+<<<<<<< HEAD
       async.mapSeries(parseNames,(name_object,call)=>{
         // name = name office district year
         getCampaignFinancePdf({name:name_object.name},(e,money_object)=>{
           if(e) return call(e);
+=======
+      async.map(parseNames,(name_object,call)=>{
+        // name = name office district year
+        getCampaignFinancePdf({name:name_object.name},(e,money_object)=>{
+          if(e) return e;
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
           if(money_object){
             const report_object = {
               name: name_object.name,
               office: name_object.office,
               district:name_object.district,
               state:"Mississippi",
+<<<<<<< HEAD
               contributions:money_object.contributions ? parseFloat(money_object.contributions.replace(/,/g, '')) : null,
               expenditures:money_object.expenditures ? parseFloat(money_object.expenditures.replace(/,/g, '')) : null,
               asOf: new Date(),
@@ -188,6 +270,15 @@ const getCandidateMoney = function(callData,callback){
             }
             console.log("The report", report_object)
             return call(null, report_object)
+=======
+              contributions:money_object.contributions,
+              expenditures:money_object.expenditures,
+              asOf: new Date(),
+              election_type:callData.election_type,
+              election_year: callData.year
+            }
+            return call(null,report_object)
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
           } else{
             const report_object = {
               name: name_object.name,
@@ -198,6 +289,7 @@ const getCandidateMoney = function(callData,callback){
               expenditures:null,
               asOf: new Date(),
               election_type: callData.election_type,
+<<<<<<< HEAD
               election_year: new Date('01/01/'+callData.year).toGMTString(),
               name_year: `${name_object.name}${callData.year}${callData.election_type}`
             }
@@ -212,10 +304,25 @@ const getCandidateMoney = function(callData,callback){
     }
   },(e,r)=>{
     if(e) return callback(e);
+=======
+              election_year: callData.year
+            }
+            return call(null,report_object)
+          }
+        })
+      },(e,r)=>{
+        if(e) return e;
+        return cb(null, r);
+      })
+    }
+  },function(e,r){
+    if(e) return e;
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
     return callback(null, r.makeReportCall)
   })
 }
 
+<<<<<<< HEAD
 //
 // const loadMississippiFinances = function(callData){
 //   getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
@@ -241,6 +348,25 @@ getCandidateMoney({year:2019, election_type:"General"}, (e,money)=>{
 //  const loadData = async function(callData){
 //
 //  }
+=======
+
+const loadMississippiFinances = function(callData){
+  getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+    if(e) return e;
+    async.mapSeries(money_array,(money_object, cb)=>{
+      console.log(money_object);
+      loader.loadFinanceData(money_object);
+      return cb(null, money_object)
+    }, (e,r)=>{
+      if(e) return e;
+      return r;
+      loader.loadFinanceData({finished:true})
+    })
+  })
+}
+
+loadMississippiFinances({year:2019, election_type:"General"})
+>>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{
 //   if (e) return e;
 //   console.log(r)
