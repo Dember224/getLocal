@@ -17,16 +17,14 @@
   },
   "homepage": "https://github.com/Dember224/getLocal#readme",
   "dependencies": {
-<<<<<<< HEAD
+
     "cloudflare-scraper": "^1.0.8",
     "cloudscraper": "^4.6.0",
     "got": "^11.8.2",
     "jszip": "^3.6.0",
     "puppeteer": "^10.1.0",
     "taiko": "^1.2.5",
-    "unzipper": "^0.10.11"
-=======
+    "unzipper": "^0.10.11",
     "got": "^11.8.2"
->>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
   }
 }
