@@ -93,7 +93,7 @@ const getCandidateList = function(callData, callback){
       lstCounty: '',
       lstMunicipality:'',
       lstStatus: 'All',
-      lstFilerType: 'Candidate',
+      lstFilerType: 'Committee',
       lstOffice: '- Select -',
       lstDistrict: '- Select -',
       lstDateType: 'All',
@@ -161,13 +161,15 @@ const combineCandidateAndMoney = function(callData){
   }, (e,r)=>{
     if(e) return e;
     const filtered_list = r.getCandidates.filter(x=>{
-      if(x){
+      if(x && x.contributions != 0){
         return x
       }
     })
-    console.log(filtered_list)
+    console.log(filtered_list) //pass to callback when finished
   })
 }
+
+//have to get list of committees then assign a candidate name to that committee. Most NY candidates have their cash bound in committees rather than directly to the candidate.
 
 combineCandidateAndMoney({office:'Member of Assembly', start_date:'01/01/2020', end_date:'12/31/2020', election_type:'primary'})
 
