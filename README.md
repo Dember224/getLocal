@@ -50,3 +50,7 @@ Which types of money should be included in the totals furnished to the end user?
 In general we include in-kind contributions to our totals. We want our numbers to reflect all types of largesse. We are therefore trusting the state's or individual's assessment of the value of an in-kind contribution. Not ideal, but too onerous to evaluate for ourselves. 
 
 Our numbers do not reflect loan totals. Again, we are trying to reflect largesse. A candidate incurring debt is not in keeping with this goal. If our project can assuage financial fears that underfinanced parties have about running for office we'd prefer to point potential contributors in their direction. 
+
+### Using Get Local
+
+For now, the modules for getting the data can be run locally using Node. Just download and run NPM install and run the methods get methods through your terminal. Loading the information to a database takes setting up and configuring a DB. More practical ways of using this repository will take some time. In the meantime, the links above are the public facing aspects of Get Local.
