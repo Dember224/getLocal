@@ -1,5 +1,4 @@
 const request = require('request');
-<<<<<<< HEAD
 const tools = require('../Tools/parsers.js');
 const cheerio =  require('cheerio');
 const async = require('async');
@@ -86,7 +85,7 @@ const getMoney = function(callData, callback){
       getCost({expend_or_contrib:'contrib', first_name: callData.first_name, last_name: callData.last_name, year:callData.year}, (e,contributions)=>{
         if(e) return cb(e);
         return cb(null, contributions)
-=======
+
 const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../Loaders/uploadFinances.js');
@@ -318,12 +317,10 @@ const getMoney = function(callData,callback){
       }, (e,r)=>{
         if(e) return e;
         return cb(null, r)
->>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
       })
     }
   }, (e,r)=>{
     if(e) return e;
-<<<<<<< HEAD
     const money_object = {
       expenditures:r.getExpend,
       contributions:r.getContribs
@@ -359,8 +356,6 @@ const getAllMoney = function(callData, callback){
       if(e) return e;
       console.log(`${count} records loaded`)
       return callback(null, r);
-=======
-
     return callback(null, {getSenateAccountNumbers: r.getSenateAccountNumbers, getRepAccountNumbers: r.getRepAccountNumbers})
     //You;ve got the name and account numbers on r. Do the request using this info. call an autoInject inside of thsi autoInject
   })
@@ -454,12 +449,11 @@ const getMoneyObject = function(callData, callback){
         return x !== undefined;
       })
       return callback(null,{repDems, senDems}); //have to loop through each of these.
->>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
     })
   })
 }
 
-<<<<<<< HEAD
+
 const loadData = async function(callData){
   await getAllMoney({year:callData.year, election_type:callData.election_type}, async (e,money_object)=>{
     if(e) return e;
@@ -478,7 +472,7 @@ loadData({year:2020, election_type:'General'})
 // <option value="LEG">Senate and House</option>
 // <option value="JUD">Judicial Offices</option>
 // <option value="SPD">Special Districts</option>
-=======
+
 loadFloridaRepFinances = function(callData){
   getMoneyObject({election_year: callData.election_year, election_date: callData.election_date, election_type:callData.election_type}, (e, money_arrays)=>{
     if(e) return e;
@@ -508,4 +502,3 @@ getMoneyObject({election_year: 2020, election_date: 1103, election_type:"General
 //   console.log(r)
 // })
 // getCashData({office:"State Representative", first_name:'Keisha', last_name:'Grimsley',spendType: 'expend'}) //spendType is either contrib or expend
->>>>>>> 2c6391b65235303c4ca6ab8edcf8469ce3739dd5
