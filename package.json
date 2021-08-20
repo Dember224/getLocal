@@ -17,14 +17,13 @@
   },
   "homepage": "https://github.com/Dember224/getLocal#readme",
   "dependencies": {
-
+    "@material-ui/core": "^4.12.3",
     "cloudflare-scraper": "^1.0.8",
     "cloudscraper": "^4.6.0",
     "got": "^11.8.2",
     "jszip": "^3.6.0",
     "puppeteer": "^10.1.0",
     "taiko": "^1.2.5",
-    "unzipper": "^0.10.11",
-    "got": "^11.8.2"
+    "unzipper": "^0.10.11"
   }
 }
