@@ -1,0 +1,11 @@
+{
+  "name": "loaders",
+  "version": "1.0.0",
+  "description": "A local package to allow React access to files outside of its src",
+  "main": "showData.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antoine Washington",
+  "license": "ISC"
+}
