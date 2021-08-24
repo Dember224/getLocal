@@ -11,6 +11,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
 import { sizing, display, borders } from '@material-ui/system';
 import Title from './Title';
+import {ShortfallExplained} from './shortfallexplainer.js'
 
 function preventDefault(event) {
   event.preventDefault();
@@ -19,16 +20,29 @@ function preventDefault(event) {
 const useStyles = makeStyles((theme) => ({
   table: {
     width:"60%",
-    "margin-left":"15%",
-    borderRadius:"45%"
-  },
-  head: {
-    "margin-left":"-12%"
+    margin:'auto',
+    borderRadius:"45%",
 
   },
+  cell:{
+    height:"45px !important",
+
+
+  },
+  head: {
+    "margin":"auto",
+    border:"solid",
+    backgroundColor:'#95CCCC',
+    color:"white"
+
+  },
+  headercell:{
+    color:"white"
+  },
   footer: {
-    "margin-left":"15%",
-    display:"flex"
+    margin:"auto",
+    display:"flex",
+    width:"150%"
   }
 }));
 
@@ -71,42 +85,43 @@ function colorChart(num) {
   const classes = useStyles();
   return (
   <React.Fragment >
-    <p className={classes.head}>Short Fall</p>
+    <ShortfallExplained />
     <Table size="small" className={classes.table}>
-      <TableHead>
+      <TableHead className={classes.head}>
         <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>State</TableCell>
-          <TableCell>Office</TableCell>
-          <TableCell>Contributions</TableCell>
-          <TableCell>Expenditures</TableCell>
-          <TableCell>Short-fall</TableCell>
+          <TableCell className={classes.headercell}>Name</TableCell>
+          <TableCell className={classes.headercell}>State</TableCell>
+          <TableCell className={classes.headercell}>Office</TableCell>
+          <TableCell className={classes.headercell}>Contributions</TableCell>
+          <TableCell className={classes.headercell}>Expenditures</TableCell>
+          <TableCell className={classes.headercell}>Short-fall</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {queryResults.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((queryResult, i) => (
-          <TableRow key={queryResult.id} bgColor={colorChart(i)}>
-            <TableCell >{queryResult.name}</TableCell>
-            <TableCell>{queryResult.state}</TableCell>
-            <TableCell>{queryResult.office}</TableCell>
-            <TableCell>{queryResult.contributions}</TableCell>
-            <TableCell>{queryResult.expenditures}</TableCell>
-            <TableCell>{queryResult.shortfall}</TableCell>
+          <TableRow key={queryResult.id} bgColor={colorChart(i)} >
+            <TableCell className={classes.cell}>{queryResult.name}</TableCell>
+            <TableCell className={classes.cell}>{queryResult.state}</TableCell>
+            <TableCell className={classes.cell}>{queryResult.office}</TableCell>
+            <TableCell className={classes.cell}>{queryResult.contributions}</TableCell>
+            <TableCell className={classes.cell}>{queryResult.expenditures}</TableCell>
+            <TableCell className={classes.cell}>{queryResult.shortfall}</TableCell>
           </TableRow>
         ))}
       </TableBody>
+      <TableFooter className={classes.footer}>
+          <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          count={queryResults.data.length}
+          rowsPerPage={rowsPerPage}
+          component="div"
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+      </TableFooter>
     </Table>
-    <TableFooter className={classes.footer}>
-        <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        count={queryResults.data.length}
-        rowsPerPage={rowsPerPage}
-        component="div"
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-    </TableFooter>
+
   </React.Fragment>
 
   )

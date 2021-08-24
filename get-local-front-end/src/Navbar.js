@@ -30,7 +30,7 @@ export function Navbar() {
           <TabList onChange={handleChange} aria-label="simple tabs example">
             <Tab label="Data" value="1" />
             <Tab label="About Us" value="2" />
-            <Tab label="Item Three" value="3" />
+            <Tab label="Data Standards" value="3" />
           </TabList>
         </AppBar>
         <TabPanel value="1"><LoadShortfallGrid/></TabPanel>
