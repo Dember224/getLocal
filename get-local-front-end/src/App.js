@@ -1,10 +1,13 @@
 import './App.css';
-import {LoadGrid} from './grid';
+import {LoadShortfallGrid} from './shortfallgrid';
+import logo from './getLocal-Logo-V1.gif'
+import {Navbar} from './Navbar';
 
 function App() {
   return (
     <div className="App">
-    < LoadGrid />
+    <img src={logo} alt="Logo"/>
+    < Navbar />
 
     </div>
   );
