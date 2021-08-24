@@ -1,0 +1,9 @@
+p, h1,h2,h3{
+  font-family: PT Sans,sans-serif;
+}
+
+.explainer {
+  width: 40%;
+  text-align: center;
+  margin:auto;
+}
