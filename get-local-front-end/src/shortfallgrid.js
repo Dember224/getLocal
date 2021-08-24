@@ -7,6 +7,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableFooter from '@material-ui/core/TableFooter';
+import { sizing, display, borders } from '@material-ui/system';
 import Title from './Title';
 
 function preventDefault(event) {
@@ -14,13 +17,25 @@ function preventDefault(event) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
+  table: {
+    width:"60%",
+    "margin-left":"15%",
+    borderRadius:"45%"
   },
+  head: {
+    "margin-left":"-12%"
+
+  },
+  footer: {
+    "margin-left":"15%",
+    display:"flex"
+  }
 }));
 
-export function LoadGrid() {
+export function LoadShortfallGrid() {
   let [queryResults, setQueryResults] = useState({data: [{"name":"Tess Judge","state":"North Carolina","office":"state senator","contributions":"344370.09","expenditures":"2224761.92","shortfall":"1880391.83"}]});
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() =>{
     axios.get('http://localhost:4000/shortfall')
@@ -35,12 +50,29 @@ export function LoadGrid() {
     return function cleanup(){
       console.log('results displayed')
     }
-  }, [])
+  }, []);
+
+const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+};
+
+const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+};
+function colorChart(num) {
+  if(num % 2){
+    return '#B5D8FF'
+  } else {
+    return '#9CA69F'
+  }
+}
+
   const classes = useStyles();
   return (
-  <React.Fragment>
-    <Title>Short Fall</Title>
-    <Table size="small">
+  <React.Fragment >
+    <p className={classes.head}>Short Fall</p>
+    <Table size="small" className={classes.table}>
       <TableHead>
         <TableRow>
           <TableCell>Name</TableCell>
@@ -52,9 +84,9 @@ export function LoadGrid() {
         </TableRow>
       </TableHead>
       <TableBody>
-        {queryResults.data.map((queryResult) => (
-          <TableRow key={queryResult.id}>
-            <TableCell>{queryResult.name}</TableCell>
+        {queryResults.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((queryResult, i) => (
+          <TableRow key={queryResult.id} bgColor={colorChart(i)}>
+            <TableCell >{queryResult.name}</TableCell>
             <TableCell>{queryResult.state}</TableCell>
             <TableCell>{queryResult.office}</TableCell>
             <TableCell>{queryResult.contributions}</TableCell>
@@ -64,11 +96,17 @@ export function LoadGrid() {
         ))}
       </TableBody>
     </Table>
-    <div className={classes.seeMore}>
-      <Link color="primary" href="#" onClick={preventDefault}>
-        See more orders
-      </Link>
-    </div>
+    <TableFooter className={classes.footer}>
+        <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        count={queryResults.data.length}
+        rowsPerPage={rowsPerPage}
+        component="div"
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+    </TableFooter>
   </React.Fragment>
 
   )
