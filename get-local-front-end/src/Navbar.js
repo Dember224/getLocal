@@ -7,6 +7,8 @@ import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import {LoadShortfallGrid} from './shortfallgrid';
 import {Explainer} from './explainer'
+import {StandardizationExplanation} from './data-standards'
+import {ContactInfo} from './contact'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,11 +33,13 @@ export function Navbar() {
             <Tab label="Data" value="1" />
             <Tab label="About Us" value="2" />
             <Tab label="Data Standards" value="3" />
+            <Tab label="Contact us" value = "4" />
           </TabList>
         </AppBar>
         <TabPanel value="1"><LoadShortfallGrid/></TabPanel>
         <TabPanel value="2"><Explainer/></TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="3"><StandardizationExplanation/></TabPanel>
+        <TabPanel value="4"><ContactInfo/></TabPanel>
       </TabContext>
     </div>
   );
