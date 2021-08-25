@@ -29,8 +29,3 @@ module.exports = {
   standardQuery,
   sql
 }
-
-standardQuery(sql.stateTotals, (e,r)=>{
-  if(e) return e;
-  console.log(r)
-})
