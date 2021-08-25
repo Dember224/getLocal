@@ -3,7 +3,7 @@ const dataRouter = express.Router();
 const  queries = require('../Loaders/showData.js');
 
 dataRouter.get('/', (req, res, next)=>{
-  queries.queryOverDrawn((e, over_drawn_candidates)=>{
+  queries.standardQuery(queries.sql.shortFall,(e, over_drawn_candidates)=>{
     if(e) res.status(404).send({name:'this didnt work'});
     if(over_drawn_candidates.length){
       res.send(over_drawn_candidates)
