@@ -12,16 +12,17 @@ const standardQuery = function(query, callback){
       client.release();
       return callback(null, results.rows)
     })
-  })
-  .catch(e=>{
-    console.log(e);
-    pool.end();
+    .catch(e=>{
+      client.release();
+      console.log(e);
+    })
   })
 }
 
 const sql = {
   shortFall: 'Select name, state, office, contributions, expenditures, expenditures - contributions as shortfall from campaign_finance where expenditures > contributions and expenditures is not null and contributions is not null order by shortfall desc',
-  stateTotals: `select state, sum(contributions) as contributions, sum(expenditures) as expenditures from campaign_finance where contributions is not null and expenditures is not null and expenditures != 'NaN' and contributions != 'NaN' group by state`
+  stateTotals: `select state, sum(contributions) as contributions, sum(expenditures) as expenditures from campaign_finance where contributions is not null and expenditures is not null and expenditures != 'NaN' and contributions != 'NaN' group by state`,
+  averages: `select state, Round(avg(contributions), 2) as contributions, Round(avg(expenditures), 2) as expenditures from campaign_finance where contributions is not null and expenditures is not null and expenditures != 'NaN' and contributions != 'NaN' group by state`
 }
 
 
