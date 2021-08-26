@@ -9,6 +9,7 @@ import {LoadShortfallGrid} from './shortfallgrid';
 import {Explainer} from './explainer'
 import {StandardizationExplanation} from './data-standards'
 import {ContactInfo} from './contact'
+import {LoadTotals} from './stateTotals'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,7 @@ export function Navbar() {
             <Tab label="Contact us" value = "4" />
           </TabList>
         </AppBar>
-        <TabPanel value="1"><LoadShortfallGrid/></TabPanel>
+        <TabPanel value="1"><LoadShortfallGrid/><LoadTotals/></TabPanel>
         <TabPanel value="2"><Explainer/></TabPanel>
         <TabPanel value="3"><StandardizationExplanation/></TabPanel>
         <TabPanel value="4"><ContactInfo/></TabPanel>
