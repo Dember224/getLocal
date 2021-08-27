@@ -6,13 +6,11 @@ import BaseOptionChart  from './materialUiCharts';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-export function LoadTotals() {
-
-  const [queryResults, setQueryResults] = useState({data:[{"state":"North Carolina","contributions":"10747097.72","expenditures":"23820460.08"}]})
+export function LoadAverages() {
+  const [queryResults, setQueryResults] = useState({data:[{"state":"North Carolina","contributions":"93453.02","expenditures":"207134.44"}]})
 
   useEffect(() =>{
-    axios.get('http://localhost:4000/Totals')
+    axios.get('http://localhost:4000/Averages')
       .then((res)=>{
         console.log(res)
         setQueryResults(res);
@@ -72,10 +70,10 @@ export function LoadTotals() {
 
     return (
       <Card>
-        <CardHeader title="Totals Raised and Spent By State" subheader="most recent election cycle" />
+        <CardHeader title="A Campaigns Average Money Raised and Spent By State" subheader="most recent election cycle" />
         <Box sx={{ p: 3, pb: 1 }} dir="ltr">
           <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
         </Box>
       </Card>
     )
-  }
+}

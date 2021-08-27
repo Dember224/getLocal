@@ -17,6 +17,10 @@ app.get('/averages', (req, res, next)=>{
   res.send()
 })
 
+app.get('/buckets', (req, res, next)=>{
+  res.send()
+})
+
 app.listen(port, () =>{
   console.log(`API is live, port: ${port}`);
 })

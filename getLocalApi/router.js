@@ -35,6 +35,17 @@ dataRouter.get('/averages', (req, res, next)=>{
   })
 })
 
+dataRouter.get('/buckets', (req,res,next)=>{
+  queries.standardQuery(queries.sql.buckets, (e, buckets)=>{
+    if(e) res.status(404).send({state:'that didnt work'});
+    if(buckets.length){
+      res.send(buckets)
+    } else {
+      res.status(404).send({state:'State data isnt returning. Check showData, or the pg database.'})
+    }
+  })
+})
+
 module.exports = {
   dataRouter
 };
