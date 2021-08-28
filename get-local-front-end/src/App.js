@@ -6,7 +6,7 @@ import {Navbar} from './Navbar';
 function App() {
   return (
     <div className="App">
-    <img src={logo} alt="Logo"/>
+    <img src={logo} alt="Logo" className="logo"/>
     < Navbar />
 
     </div>
