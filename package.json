@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Dember224/getLocal#readme",
   "dependencies": {
     "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "cloudflare-scraper": "^1.0.8",
     "cloudscraper": "^4.6.0",
     "express": "^4.17.1",

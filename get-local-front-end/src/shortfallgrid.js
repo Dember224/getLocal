@@ -19,13 +19,13 @@ function preventDefault(event) {
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    width:"60%",
+    width:"80%",
     margin:'auto',
     borderRadius:"45%",
 
   },
   cell:{
-    height:"45px !important",
+    height:"55px !important",
 
 
   },
@@ -85,7 +85,7 @@ function colorChart(num) {
   const classes = useStyles();
   return (
   <React.Fragment >
-    <ShortfallExplained />
+  <h1>Shortfall</h1>
     <Table size="small" className={classes.table}>
       <TableHead className={classes.head}>
         <TableRow>
@@ -121,6 +121,7 @@ function colorChart(num) {
           />
       </TableFooter>
     </Table>
+    <ShortfallExplained />
 
   </React.Fragment>
 

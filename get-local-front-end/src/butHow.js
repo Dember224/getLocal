@@ -24,18 +24,20 @@ const useStyles = makeStyles({
   },
 });
 
-export function ContactInfo(){
-  const classes = useStyles()
-  return(
+export function ButHowCard() {
+  const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          Email us:
+          But How?
         </Typography>
         <Typography variant="body2" component="p">
-        <a href = "mailto: campaignbucs@gmail.com">campaginbucs@gmail.com</a>
+          Our approach is to collect campaign finance data from all 50 states, using our custom software, in a way that enables comparative analysis. We are aware of aggregating efforts for the sake of transparency, but none that are designed with the idea of helping people find and support the most in-need liberal campaigns. We standardize data as best we can so that you, the end user, can decide between helping a waiter in San Diego and an engineer in Arizona.
         </Typography>
       </CardContent>
     </Card>
-  )
+  );
 }

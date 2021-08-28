@@ -24,18 +24,20 @@ const useStyles = makeStyles({
   },
 });
 
-export function ContactInfo(){
-  const classes = useStyles()
-  return(
+export function TLDRCard() {
+  const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          Email us:
+          TLDR
         </Typography>
         <Typography variant="body2" component="p">
-        <a href = "mailto: campaignbucs@gmail.com">campaginbucs@gmail.com</a>
+        Get Local is a platform for aggregating state level campaign finance data in order to better target money towards down ballot democrats.
         </Typography>
       </CardContent>
     </Card>
-  )
+  );
 }
