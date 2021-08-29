@@ -16,6 +16,7 @@ import {LoadBuckets} from './buckets';
 import {LoadTotals} from './stateTotals';
 import {LoadAverages} from './stateAverages';
 import {LoadShortfallGrid} from './shortfallgrid';
+import {LoadRawData} from './rawData'
 
 const drawerWidth = 240;
 
@@ -57,6 +58,8 @@ export function SideBar() {
       return <LoadAverages />
     } else if (chart === 'Buckets') {
       return <LoadBuckets />
+    } else if(chart === 'Raw Data'){
+      return <LoadRawData />
     }
   }
 
@@ -78,9 +81,9 @@ export function SideBar() {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {['Shortfall', 'State Totals', 'Averages', 'Buckets'].map((text, index) => (
+          {['Shortfall', 'State Totals', 'Averages', 'Buckets', 'Raw Data'].map((text, index) => (
             <ListItem button key={text} onClick={()=>handleClick(text)}>
-              <ListItemIcon>{text === 'Shortfall' ? <TableChartOutlinedIcon /> : <AssessmentOutlinedIcon />}</ListItemIcon>
+              <ListItemIcon>{text === 'Shortfall' ||text === 'Raw Data' ? <TableChartOutlinedIcon /> : <AssessmentOutlinedIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}

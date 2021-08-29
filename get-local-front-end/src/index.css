@@ -15,3 +15,7 @@ p, h1,h2,h3{
 .logo{
   height: 200px;
 }
+
+.downloadIcon:hover {
+  cursor:pointer
+}

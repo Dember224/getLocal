@@ -46,6 +46,17 @@ dataRouter.get('/buckets', (req,res,next)=>{
   })
 })
 
+dataRouter.get('/raw', (req,res,next)=>{
+  queries.standardQuery(queries.sql.raw, (e, raw_data)=>{
+    if(e) res.status(404).send({state:'that didnt work'});
+    if(raw_data.length){
+      res.send(raw_data)
+    } else {
+      res.status(404).send({state:'State data isnt returning. Check showData, or the pg database.'})
+    }
+  })
+})
+
 module.exports = {
   dataRouter
 };
