@@ -1,5 +1,4 @@
 import './App.css';
-import {LoadShortfallGrid} from './shortfallgrid';
 import logo from './getLocal-Logo-V1.gif'
 import {Navbar} from './Navbar';
 
