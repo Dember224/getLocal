@@ -1,6 +1,10 @@
 const express = require('express');
 const dataRouter = express.Router();
-const  queries = require('../Loaders/showData.js');
+const  queries = require('./showData.js');
+
+dataRouter.get('/', (req,res, next)=>{
+  res.send("Base route for setup. None of the front end makes calls to this route.")
+})
 
 dataRouter.get('/shortfall', (req, res, next)=>{
   queries.standardQuery(queries.sql.shortFall,(e, over_drawn_candidates)=>{
