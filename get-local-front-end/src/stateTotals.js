@@ -12,7 +12,7 @@ export function LoadTotals() {
   const [queryResults, setQueryResults] = useState({data:[{"state":"North Carolina","contributions":"10747097.72","expenditures":"23820460.08"}]})
 
   useEffect(() =>{
-    axios.get('http://localhost:4000/Totals')
+    axios.get('https://get-local-api.herokuapp.com/totals')
       .then((res)=>{
         console.log(res)
         setQueryResults(res);

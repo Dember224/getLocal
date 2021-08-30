@@ -46,7 +46,7 @@ export function LoadShortfallGrid() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() =>{
-    axios.get('http://localhost:4000/shortfall')
+    axios.get('https://get-local-api.herokuapp.com/shortfall')
       .then((res)=>{
         console.log(res)
         setQueryResults(res);

@@ -10,7 +10,7 @@ export function LoadAverages() {
   const [queryResults, setQueryResults] = useState({data:[{"state":"North Carolina","contributions":"93453.02","expenditures":"207134.44"}]})
 
   useEffect(() =>{
-    axios.get('http://localhost:4000/Averages')
+    axios.get('https://get-local-api.herokuapp.com/averages')
       .then((res)=>{
         console.log(res)
         setQueryResults(res);

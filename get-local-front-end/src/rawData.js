@@ -9,8 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
 import GetAppIcon from '@material-ui/icons/GetApp';
+require('dotenv').config();
 
-
+const uri = process.env.API_URI
 const useStyles = makeStyles((theme) => ({
   table: {
     width:"90%",
@@ -41,12 +42,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function LoadRawData() {
+
   let [queryResults, setQueryResults] = useState({data: [{"id":"2109","name":"campbell, mary blackmon","office":"state representative","state":"Georgia","contributions":"2197.34","expenditures":"0","asof":"2021-05-31T21:26:10.300Z","election_year":"2020-01-01T05:00:00.000Z","election_type":"General","district":"97"}]});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() =>{
-    axios.get('http://localhost:4000/raw')
+    axios.get(`https://get-local-api.herokuapp.com/raw`)
       .then((res)=>{
         console.log(res)
         setQueryResults(res);
@@ -79,9 +81,9 @@ function colorChart(num) {
   const classes = useStyles();
   return (
   <React.Fragment >
+  {uri}
   <h1>
   Raw Data Sample
-    <GetAppIcon onClick={event =>  window.location.href='https://data.heroku.com/dataclips/lvfocubcptvffcmhumzyfziuguci.csv'}/>
   </h1>
     <Table size="small" className={classes.table}>
       <TableHead className={classes.head}>

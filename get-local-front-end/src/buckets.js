@@ -11,7 +11,7 @@ export function LoadBuckets() {
     const [queryResults, setQueryResults] = useState({data:[{"0 expenditures":"362"}]})
 
     useEffect(() =>{
-      axios.get('http://localhost:4000/buckets')
+      axios.get('https://get-local-api.herokuapp.com/buckets')
         .then((res)=>{
           console.log(res)
           setQueryResults(res);
