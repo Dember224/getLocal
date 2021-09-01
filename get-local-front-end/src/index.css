@@ -12,9 +12,7 @@ p, h1,h2,h3{
   font-size: 50px;
 }
 
-.logo{
-  height: 200px;
-}
+
 
 .downloadIcon:hover {
   cursor:pointer

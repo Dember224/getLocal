@@ -38,7 +38,7 @@ export function InclusionCard() {
         If the totals don't reflect the same thing your comparisons won't be apples to apple.
         <br />
         <br />
-        In general we include in-kind contributions to our totals.
+        In general we include in-kind contributions in our totals.
         We want our numbers to reflect all types of largesse.
         We are therefore trusting the state's or individual's assessment of the value of an in-kind contribution.
         Not ideal, but too onerous to evaluate for ourselves.

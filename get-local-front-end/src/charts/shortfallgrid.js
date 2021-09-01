@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
-import {ShortfallExplained} from './shortfallexplainer.js'
+import {ShortfallExplained} from '../info/shortfallexplainer.js'
 
 
 const useStyles = makeStyles((theme) => ({

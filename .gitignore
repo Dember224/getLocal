@@ -1,3 +1,4 @@
 .env
 CalAccess
 node_modules
+dbConfig.js
