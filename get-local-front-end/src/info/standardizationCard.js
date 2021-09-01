@@ -32,11 +32,11 @@ export function StandardizationCard() {
           Standardization
         </Typography>
         <Typography variant="body2" component="p">
-        Comparing the needs of candidates accross states poses challenges that require sacrifices.
+        Comparing the needs of candidates across states poses challenges that require sacrifices.
         We have 50 states running their own elections in disparate ways.
         Some states set their contribution  limits relatively low, while others have no contribution limits at all.
-        Even the dissemination of the data is different between states. One may produce reports with contribution totals due by a specific reporting deadline while other interfaces render totals between 2 dates chosen by the user.
-        How are we to compare finance of 2 campaings in states with different election laws so that you can determine which most needs your support? Unfortunately there is no perfect solution and trade-offs are necessary.
+        Even the dissemination of the data is different between states. One state may produce reports with contribution totals due by a specific reporting deadline while other state's interfaces render totals between 2 dates chosen by the user.
+        How are we to compare the finances of 2 campaings in states with different election laws so that you can determine which most needs your support? Unfortunately there is no perfect solution and trade-offs are necessary.
         The following are the decisions we've made on how to collect contribution and expenditure totals.
 
         </Typography>

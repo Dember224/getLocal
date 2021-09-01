@@ -140,7 +140,7 @@ const getCandidateId = function(callData, callback){
       headers: {
         'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         'content-type': 'application/x-www-form-urlencoded',
-        'accept-encoding': 'gzip, deflate, br'
+
 
       }
     }, (e,r,b)=>{
@@ -168,7 +168,6 @@ const getCandidatePage = function(callData,callback){
       headers: {
         'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         'content-type': 'application/x-www-form-urlencoded',
-        'accept-encoding': 'gzip, deflate, br'
 
       },
       followAllRedirects: true
@@ -218,7 +217,6 @@ const getDisclosureReportCDRID = function(callData, callback){
       headers: {
         'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         'content-type': 'application/x-www-form-urlencoded',
-        'accept-encoding': 'gzip, deflate, br'
 
       },
       jar: true,
@@ -254,7 +252,6 @@ const getMoney = function(callData, callback){
       headers: {
         'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         'content-type': 'application/x-www-form-urlencoded',
-        'accept-encoding': 'gzip, deflate, br'
 
       }
     }, (e,r,b)=>{
@@ -275,7 +272,7 @@ const getMoney = function(callData, callback){
         expenditures: expenditures ? expenditures.trim().replace(/[^0-9.-]+/g,"") : null,
         asOf: new Date(),
         election_type: callData.report.includes("Special") ? "Special" : "General",
-        election_year: callData.year,
+        election_year: new Date('01/01/'+callData.year).toGMTString(),
         name_year:`${cdrid_object.whole_name}${callData.year}`
       }
       return callback(null, money_object)
@@ -312,7 +309,11 @@ const loadData = async function(callData){
   })
 }
 
+// get_all_money({report:'December 31st - Election Year', year:2020, office: "State Senate"}, (e, money_array)=>{
+//   if(e) return e;
+//   console.log(money_array)
+// })
 //remember to load senate and representatives election years and special elections
-loadData({report:'December 31st - Election Year', year:2020, office: "State Senate"})
+loadData({report:'December 31st - Election Year', year:2020, office: "State Representative"})
 // getMoney({lastName:"Jones", firstName:"Sheila",report:'December 31st - Election Year', year:2020})//have to get report number from the site.
 // getCandidates({office:'State Senate', year:2020})
