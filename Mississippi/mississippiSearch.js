@@ -121,7 +121,7 @@ const getFilingId=function(callData, callback){
       },(e,r,b)=>{
         if(e) return cb(e);
         const $ = cheerio.load(b);
-<<<<<<< HEAD
+
 
         if($('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html()){
           const pre_election = $('tr').has('td[role=gridcell]:contains(' + callData.year  + ')').html().split(/\r?\n/)[4].split(/ data-val="|" onclick=/)[1]
