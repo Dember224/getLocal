@@ -8,7 +8,7 @@ const {
 } = require('fs');
 const fs = require('fs');
 const StreamZip = require('node-stream-zip');
-
+const DBF = require('stream-dbf');
 
 
 const getStateFIPSCode = function(state, callback){
@@ -90,11 +90,10 @@ const getDistrictFipsByStateFile = function(callData, callback){
   })
 }
 
-const extractStateFiles = function(callData){
+const extractStateFiles = function(callData, callback){
   getDistrictFipsByStateFile({state:callData.state, year:callData.year, chamber: callData.chamber},async (e, file_path)=>{
     if(e) throw Error('There was a problem getting the file. Check the API call.');
     const file_array = file_path.split('/');
-    console.log(file_array);
     const file_name = file_array[file_array.length - 1]+'.zip';
     if(!existsSync(`${file_path}.zip`)){
       throw Error(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
@@ -108,11 +107,23 @@ const extractStateFiles = function(callData){
       const fip_file_dbf_name = `tl_${callData.year}_${state_code}_sld${chamber_initial}.dbf`;
       await zip.extract(fip_file_dbf_name, `./fipCodes/${callData.state}/${callData.year}${callData.chamber}.dbf`);
       await zip.close();
+
+      return callback(null, `./fipCodes/${callData.state}/${callData.year}${callData.chamber}.dbf`)
     })
+  })
+}
 
+const viewFipCodesByDistrict = function(callData){
+  extractStateFiles({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,file_path)=>{
+    if(e) throw Error(`unable to extract files ${e}`);
+    const parser = new DBF(file_path, {lowercase:true});
+    const stream = parser.stream;
+    stream.on('data', (record)=>{
 
+      console.log(record)
+    })
 
   })
 }
 
-extractStateFiles({state:'Alabama', year:2021, chamber:'lower'});
+viewFipCodesByDistrict({state:'Alabama', year:2021, chamber:'lower'});
