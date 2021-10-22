@@ -7,7 +7,7 @@ const {
   mkdirSync
 } = require('fs');
 const fs = require('fs');
-const AdmZip = require('adm-zip');
+const StreamZip = require('node-stream-zip');
 
 
 
@@ -44,7 +44,7 @@ function chamberCheck(chamber){
   }
 }
 
-const getDistrictFipsByState = function(callData){
+const getDistrictFipsByStateFile = function(callData, callback){
   const chamber = chamberCheck(callData.chamber);
   getStateFIPSCode(callData.state, (e,state_fips_code)=>{
     if(e) throw e;
@@ -81,19 +81,38 @@ const getDistrictFipsByState = function(callData){
           await mkdirSync(file_path, { recursive: true });
         }
         const writer = await createWriteStream(file_path + '.zip').write(response.data);
-        return await writer;
+        await writer;
 
-        return file_path;
-
-      })
-      .then((file_path)=>{
-        const file = new AdmZip(file_path);
-        file.extractAllTo('./empty')
+        return callback(null, file_path);
 
       })
-
     })
   })
 }
 
-getDistrictFipsByState({state:'Alabama', year:2021, chamber:'lower'});
+const extractStateFiles = function(callData){
+  getDistrictFipsByStateFile({state:callData.state, year:callData.year, chamber: callData.chamber},async (e, file_path)=>{
+    if(e) throw Error('There was a problem getting the file. Check the API call.');
+    const file_array = file_path.split('/');
+    console.log(file_array);
+    const file_name = file_array[file_array.length - 1]+'.zip';
+    if(!existsSync(`${file_path}.zip`)){
+      throw Error(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
+    }
+
+    const zip = new StreamZip.async({file: `${file_path}.zip`});
+
+    getStateFIPSCode(callData.state, async (e, state_code)=>{
+      if(e) throw Error('cannot retrieve state code');
+      const chamber_initial = chamberCheck(callData.chamber);
+      const fip_file_dbf_name = `tl_${callData.year}_${state_code}_sld${chamber_initial}.dbf`;
+      await zip.extract(fip_file_dbf_name, `./fipCodes/${callData.state}/${callData.year}${callData.chamber}.dbf`);
+      await zip.close();
+    })
+
+
+
+  })
+}
+
+extractStateFiles({state:'Alabama', year:2021, chamber:'lower'});
