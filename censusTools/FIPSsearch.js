@@ -53,7 +53,7 @@ const getDistrictFipsByStateFile = function(callData, callback){
     axios.get('https://www.census.gov/cgi-bin/geo/shapefiles/getFile.php',{
       params: {
         year:callData.year,
-        directory:'SLDL',
+        directory:`SLD${chamber.toUpperCase()}`,
         filename
       }
     })
@@ -95,6 +95,7 @@ const extractStateFiles = function(callData, callback){
     if(e) throw Error('There was a problem getting the file. Check the API call.');
     const file_array = file_path.split('/');
     const file_name = file_array[file_array.length - 1]+'.zip';
+    await setTimeout(()=>{ console.log('waiting a second to load')  }, 10000)
     if(!existsSync(`${file_path}.zip`)){
       throw Error(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
     }
@@ -114,16 +115,22 @@ const extractStateFiles = function(callData, callback){
 }
 
 const viewFipCodesByDistrict = function(callData){
-  extractStateFiles({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,file_path)=>{
-    if(e) throw Error(`unable to extract files ${e}`);
-    const parser = new DBF(file_path, {lowercase:true});
-    const stream = parser.stream;
-    stream.on('data', (record)=>{
+  try{
+    extractStateFiles({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,file_path)=>{
+      if(e) throw Error(`unable to extract files ${e}`);
+      const parser =  new DBF(file_path, {lowercase:true});
+      const stream = parser.stream;
+      stream.on('data', (record)=>{
 
-      console.log(record)
+        console.log(record)
+      })
+
     })
+  } catch(e){
+    console.log(`ReadFile failed due to ${e}. Awaiting to retry....`);
+    setTimeout(function(){ viewFipCodesByDistrict({state:callData.state, year:callData.year, chamber:callData.chamber}); }, 10000);
 
-  })
+  }
 }
 
-viewFipCodesByDistrict({state:'Alabama', year:2021, chamber:'lower'});
+viewFipCodesByDistrict({state:'Florida', year:2021, chamber:'lower'});
