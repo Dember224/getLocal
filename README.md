@@ -53,4 +53,4 @@ Our numbers do not reflect loan totals. Again, we are trying to reflect largesse
 
 ## Using Get Local
 
-For now, the modules for getting the data can be run locally using Node. Just download and run NPM install and run the methods get methods through your terminal. Loading the information to a database takes setting up and configuring a DB. More practical ways of using this repository will take some time. In the meantime, the links above are the public facing aspects of Get Local.
+For now, the modules for getting the data can be run locally using Node. Just download and run NPM install and run the "get" methods through your terminal. Loading the information to a database takes setting up and configuring a DB. More practical ways of using this repository will take some time. In the meantime, the links above are the public facing aspects of Get Local.
