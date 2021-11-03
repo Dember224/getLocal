@@ -133,4 +133,9 @@ const viewFipCodesByDistrict = function(callData, callback){
   }
 }
 
-viewFipCodesByDistrict({state:'Maryland', year:2021, chamber:'lower'});
+// viewFipCodesByDistrict({state:'Maryland', year:2021, chamber:'lower'});
+
+
+module.exports = {
+  viewFipCodesByDistrict
+}
