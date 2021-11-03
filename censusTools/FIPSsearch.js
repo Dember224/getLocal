@@ -114,7 +114,7 @@ const extractStateFiles = function(callData, callback){
   })
 }
 
-const viewFipCodesByDistrict = function(callData){
+const viewFipCodesByDistrict = function(callData, callback){
   try{
     extractStateFiles({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,file_path)=>{
       if(e) throw Error(`unable to extract files ${e}`);
@@ -122,7 +122,7 @@ const viewFipCodesByDistrict = function(callData){
       const stream = parser.stream;
       stream.on('data', (record)=>{
 
-        console.log(record)
+        return callback(null, record)
       })
 
     })
@@ -133,4 +133,4 @@ const viewFipCodesByDistrict = function(callData){
   }
 }
 
-viewFipCodesByDistrict({state:'Florida', year:2021, chamber:'lower'});
+viewFipCodesByDistrict({state:'Maryland', year:2021, chamber:'lower'});
