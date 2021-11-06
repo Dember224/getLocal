@@ -128,6 +128,7 @@ const viewFipCodesByDistrict = function(callData, callback){
 
       })
       toArray(record_stream, (e,record_array)=>{
+        if(e) return callback(e);
         return callback(null, record_array)
       })
 
@@ -139,15 +140,14 @@ const viewFipCodesByDistrict = function(callData, callback){
   }
 }
 
-const searchFipsSingleDistrict = function(callData){
+const searchFipsSingleDistrict = function(callData, callback){
   viewFipCodesByDistrict({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,district_array)=>{
     if(e) return e;
-    console.log(district_array)
-    const searched_object = district_array.find(district_object =>{
+    const searched_object = district_array.filter(district_object =>{
       return district_object.sldlst.replace(/^0+/, '').replace(/\D/g,'') == callData.district_number
     })
 
-    // console.log(searched_object)
+    return callback(null, searched_object)
   })
 }
 
@@ -156,5 +156,6 @@ searchFipsSingleDistrict({state:'Maryland', year:2021, chamber:'lower', district
 
 
 module.exports = {
-  viewFipCodesByDistrict
+  viewFipCodesByDistrict,
+  searchFipsSingleDistrict
 }
