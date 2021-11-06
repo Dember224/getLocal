@@ -9,6 +9,7 @@ const {
 const fs = require('fs');
 const StreamZip = require('node-stream-zip');
 const DBF = require('stream-dbf');
+const toArray = require('stream-to-array');
 
 
 const getStateFIPSCode = function(state, callback){
@@ -120,9 +121,14 @@ const viewFipCodesByDistrict = function(callData, callback){
       if(e) throw Error(`unable to extract files ${e}`);
       const parser =  new DBF(file_path, {lowercase:true});
       const stream = parser.stream;
-      stream.on('data', (record)=>{
 
-        return callback(null, record)
+      const record_stream = stream.on('data', (record)=>{
+
+        return record;
+
+      })
+      toArray(record_stream, (e,record_array)=>{
+        return callback(null, record_array)
       })
 
     })
@@ -133,7 +139,20 @@ const viewFipCodesByDistrict = function(callData, callback){
   }
 }
 
-// viewFipCodesByDistrict({state:'Maryland', year:2021, chamber:'lower'});
+const searchFipsSingleDistrict = function(callData){
+  viewFipCodesByDistrict({state:callData.state, year:callData.year, chamber:callData.chamber}, (e,district_array)=>{
+    if(e) return e;
+    console.log(district_array)
+    const searched_object = district_array.find(district_object =>{
+      return district_object.sldlst.replace(/^0+/, '').replace(/\D/g,'') == callData.district_number
+    })
+
+    // console.log(searched_object)
+  })
+}
+
+searchFipsSingleDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23});
+
 
 
 module.exports = {

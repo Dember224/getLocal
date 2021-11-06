@@ -34,6 +34,7 @@
     "pg-promise": "^10.11.1",
     "puppeteer": "^10.1.0",
     "stream-dbf": "^0.3.0",
+    "stream-to-array": "^2.3.0",
     "taiko": "^1.2.5",
     "unzipper": "^0.10.11"
   }
