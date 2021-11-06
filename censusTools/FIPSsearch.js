@@ -147,11 +147,24 @@ const searchFipsSingleDistrict = function(callData, callback){
       return district_object.sldlst.replace(/^0+/, '').replace(/\D/g,'') == callData.district_number
     })
 
-    return callback(null, searched_object)
+    const refined_array = searched_object.map(raw_object=>{
+      const refined_object = {
+        state_fip:raw_object.statefp,
+        district:raw_object.sldlst.replace(/^0+/, '').replace(/\D/g,''),
+        latitude: parseFloat(raw_object.intptlat),
+        longitude: parseFloat(raw_object.intptlon),
+        sub_district_name:raw_object.namelsad
+      }
+      return refined_object;
+    })
+    return callback(null, refined_array)
   })
 }
 
-searchFipsSingleDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23});
+// searchFipsSingleDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23}, (e,r)=>{
+//   if(e) return e;
+//   console.log(r)
+// });
 
 
 
