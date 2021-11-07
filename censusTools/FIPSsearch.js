@@ -62,41 +62,52 @@ const getDistrictFipsByStateFile = function(callData, callback){
       const file = response.data.replace(/^\/+/, '');
       return file;
     })
-    .then(async (file)=>{
+    .then( (file)=>{
       const file_uri = `https://${file}`;
       const file_path = `./fipCodes/${callData.state}/${callData.year}${callData.chamber}`;
 
-      await axios.get(file_uri,{
+    axios.get(file_uri,{
       responseType: 'arraybuffer',
       headers:{
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
-        'Accept-Encoding':'gzip, deflate, br'
+        'Content-Encoding':'gzip, deflate, br'
       },
       config:{
         decompress:false
       }
     })
       .then( async (response)=>{
-        if(!existsSync(file_path)){
-          await mkdirSync(file_path, { recursive: true });
+        try{
+          if(!existsSync(file_path)){
+            mkdirSync(file_path, { recursive: true });
+          }
+
+          if(response.data){
+            const writer = createWriteStream(file_path + '.zip').write(response.data);
+
+
+            return await callback(null, file_path);
+          } else{
+            return file_path;
+          }
+
+        } catch(e){
+          console.log(e);
         }
-        const writer = await createWriteStream(file_path + '.zip').write(response.data);
-        await writer;
-
-        return callback(null, file_path);
-
+      }).then((response)=>{
+        return callback(null, file_path)
       })
     })
   })
 }
 
 const extractStateFiles = function(callData, callback){
-  getDistrictFipsByStateFile({state:callData.state, year:callData.year, chamber: callData.chamber},async (e, file_path)=>{
+  getDistrictFipsByStateFile({state:callData.state, year:callData.year, chamber: callData.chamber}, (e, file_path)=>{
     if(e) throw Error('There was a problem getting the file. Check the API call.');
     const file_array = file_path.split('/');
     const file_name = file_array[file_array.length - 1]+'.zip';
-    await setTimeout(()=>{ console.log('waiting a second to load')  }, 10000)
+    setTimeout(()=>{ console.log('waiting a second to load')  }, 1000)
     if(!existsSync(`${file_path}.zip`)){
       throw Error(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
     }
