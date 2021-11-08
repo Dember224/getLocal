@@ -54,10 +54,37 @@ const getCensus = function(callData,callback){
 //   console.log(r)
 // });
 
+//fips object example here:
+//{
+//   state_fip: '24',
+//   district: '23',
+//   latitude: 39.014691,
+//   longitude: -76.8000334,
+//   sub_district_name: 'State Legislative Subdistrict 23A'
+// }
+
 const searchCensusStatsByDistrict = function(callData){
-  search_fips.searchFipsSingleDistrict({state:callData.state, year:callData.year, chamber:callData.chamber, district_number: callData.district_number}, (e, fips_data)=>{
+  search_fips.searchFipsSingleDistrict({state:callData.state, year:callData.year, chamber:callData.chamber, district_number: callData.district_number}, async (e, fips_data)=>{
     if(e) return e;
-    console.log(fips_data)
+    const census_data_array = []
+    let counter = 0;
+    for await (const fips_object of fips_data){
+      getCensus({latitude: fips_object.latitude, longitude: fips_object.longitude}, async (e, census_data)=>{
+        if(e) return e;
+        console.log(fips_object)
+        census_data["distict"] = fips_object.district;
+        census_data["sub_district_name"] = fips_object.sub_district_name;
+        census_data["state"] =  callData.state;
+        census_data["year"] = callData.year;
+        census_data["chamber"] = callData.chamber;
+        await census_data_array.push(census_data);
+        counter ++
+      })
+    }
+    setTimeout(()=>{
+      console.log(census_data_array)
+    }, 5000)
+
   })
 }
 
