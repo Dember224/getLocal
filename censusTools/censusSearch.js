@@ -63,29 +63,31 @@ const getCensus = function(callData,callback){
 //   sub_district_name: 'State Legislative Subdistrict 23A'
 // }
 
-const searchCensusStatsByDistrict = function(callData){
+const searchCensusStatsByDistrict = function(callData, callback){
   search_fips.searchFipsSingleDistrict({state:callData.state, year:callData.year, chamber:callData.chamber, district_number: callData.district_number}, async (e, fips_data)=>{
     if(e) return e;
     const census_data_array = []
-    let counter = 0;
     for await (const fips_object of fips_data){
       getCensus({latitude: fips_object.latitude, longitude: fips_object.longitude}, async (e, census_data)=>{
         if(e) return e;
-        console.log(fips_object)
         census_data["distict"] = fips_object.district;
         census_data["sub_district_name"] = fips_object.sub_district_name;
         census_data["state"] =  callData.state;
         census_data["year"] = callData.year;
         census_data["chamber"] = callData.chamber;
         await census_data_array.push(census_data);
-        counter ++
       })
     }
+
+
     setTimeout(()=>{
-      console.log(census_data_array)
-    }, 5000)
+      return callback(null, census_data_array)
+    }, 2000)
 
   })
 }
 
-searchCensusStatsByDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23});
+searchCensusStatsByDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23}, (e,r)=>{
+  if(e) return e;
+  console.log(r);
+});
