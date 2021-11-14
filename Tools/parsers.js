@@ -26,6 +26,16 @@ const getOffice = function(office){
   }
 }
 
+const chamberParser = function(office){
+  const lower_case_office = office.toLowerCase();
+  if(lower_case_office.match(/senate|senator/)){
+    return 'upper';
+  } elseif (lower_case_office.match(/assemblyman|representative|delegate/)){
+    return 'lower';
+  }
+}
+
 module.exports = {
-  txtParser
+  txtParser,
+  chamberParser
 }

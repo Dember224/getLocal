@@ -25,10 +25,12 @@ import {LoadShortfallGrid} from './charts/shortfallgrid';
 import {LoadRawData} from './charts/rawData';
 import AssessmentOutlinedIcon from '@material-ui/icons/AssessmentOutlined';
 import DescriptionIcon from '@material-ui/icons/Description';
-import {Explainer} from './info/explainer'
-import {StandardizationExplanation} from './info/data-standards'
-import {ContactInfo} from './info/contact'
-
+import {Explainer} from './info/explainer';
+import {StandardizationExplanation} from './info/data-standards';
+import {ContactInfo} from './info/contact';
+import {RenderStateButtons} from './interactiveSelectors/stateSelectors';
+import Image from "material-ui-image";
+import logo from './GetLocalLogo.jpg';
 
 
 
@@ -89,6 +91,10 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  logo:{
+    height:'5%',
+    width:'5%'
+  },
 }));
 
 export function SideBar() {
@@ -114,6 +120,8 @@ export function SideBar() {
       return <StandardizationExplanation />
     } else if (chart === 'Contact Us'){
       return <ContactInfo />
+    } else if(chart === 'View Profiles'){
+      return <RenderStateButtons />
     }
   }
 
@@ -170,7 +178,7 @@ export function SideBar() {
         </div>
         <Divider />
         <List>
-          {['Shortfall', 'State Totals', 'Averages', 'Buckets', 'Raw Data'].map((text, index) => (
+          {['Shortfall', 'State Totals', 'Averages', 'Buckets', 'Raw Data', 'View Profiles'].map((text, index) => (
             <ListItem button key={text} onClick={()=>handleClick(text)}>
                 <ListItemIcon>{text === 'Shortfall' ||text === 'Raw Data' ? <TableChartOutlinedIcon /> : <AssessmentOutlinedIcon />}</ListItemIcon>
               <ListItemText primary={text} />

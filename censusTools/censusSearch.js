@@ -81,13 +81,17 @@ const searchCensusStatsByDistrict = function(callData, callback){
 
 
     setTimeout(()=>{
-      return callback(null, census_data_array)
+      return callback(null, census_data_array[0])
     }, 2000)
 
   })
 }
 
-searchCensusStatsByDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23}, (e,r)=>{
-  if(e) return e;
-  console.log(r);
-});
+// searchCensusStatsByDistrict({state:'Maryland', year:2021, chamber:'lower', district_number:23}, (e,r)=>{
+//   if(e) return e;
+//   console.log(r);
+// });
+
+module.exports = {
+  searchCensusStatsByDistrict
+}

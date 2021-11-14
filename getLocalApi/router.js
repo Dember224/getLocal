@@ -61,6 +61,29 @@ dataRouter.get('/raw', (req,res,next)=>{
   })
 })
 
+dataRouter.get('/stateList', (req,res,next)=>{
+  queries.standardQuery(queries.sql.stateList, (e, state_list)=>{
+    if(e) res.status(404).send({message:'Unable to acquire current list of states from our database', error:e});
+    if(state_list.length){
+      res.send(state_list)
+    } else {
+      res.status(404).send({message:'The state list is returning empty. This could be an issue with the database.'})
+    }
+  })
+})
+
+dataRouter.get('/selectedState/:stateName', (req,res,next)=>{
+  queries.getDistrictSQL(req.params.stateName, (e, district_list)=>{
+    if(e) res.status(404).send({message:'Unable to acquire list of districts for the selected state.', error:e});
+    if(district_list.length){
+      res.send(district_list)
+    } else {
+      res.status(404).send({message:'The district list seems to be returning empty for the selected state', error:e})
+    }
+  })
+
+})
+
 module.exports = {
   dataRouter
 };
