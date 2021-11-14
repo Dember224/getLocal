@@ -4,6 +4,7 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import {RenderProfile} from '../charts/profileData';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -109,6 +110,7 @@ const handleClick = (e, candidate_data) =>{
       })}
     </div>
     {JSON.stringify(selectedDistrict)}
+    <RenderProfile state={selectedDistrict.state} office={selectedDistrict.office} district={selectedDistrict.district}/>
     </React.Fragment >
   )
 
