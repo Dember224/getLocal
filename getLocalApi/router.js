@@ -1,6 +1,8 @@
 const express = require('express');
 const dataRouter = express.Router();
 const  queries = require('./showData.js');
+const census = require('./censusTools/censusSearch');
+const tools = require('../Tools/parsers');
 
 dataRouter.get('/', (req,res, next)=>{
   res.send("Base route for setup. None of the front end makes calls to this route.")
@@ -82,6 +84,18 @@ dataRouter.get('/selectedState/:stateName', (req,res,next)=>{
     }
   })
 
+})
+
+dataRouter.get('/profile/:stateName/:district/:office', (req, res, next)=>{
+  const stateName = req.params.stateName;
+  const district = req.params.district;
+  const office = req.params.office;
+  const current_year = new Date().getFullYear()
+  const chamber = tools.chamberParser(office);
+  census.searchCensusStatsByDistrict({state: stateName, year:current_year,chamber, district_number:district }, (e, census_object)=>{
+    if(e) res.status(404).send({message:'Check census tools module. Not returning census object', error:e});
+    res.send(census_object);
+  })
 })
 
 module.exports = {

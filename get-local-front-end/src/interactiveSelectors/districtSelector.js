@@ -15,9 +15,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export function RenderDistrictSelectors(props){
-  const [districtArray, setDistrictArray] = React.useState([])
-  const [selectedDistrict, setSelectedDistrict] = React.useState({})
-  const [display, setDisplay] = React.useState('block');
+  const [districtArray, setDistrictArray] = useState([])
+  const [selectedDistrict, setSelectedDistrict] = useState({})
+  const [display, setDisplay] = useState('block');
 
   useEffect(()=>{
     if(props.selectedState){
@@ -27,7 +27,7 @@ export function RenderDistrictSelectors(props){
         })
     }
 
-  })
+  }, [selectedDistrict])
 
   useEffect(()=>{
     setDisplay('block')
@@ -42,7 +42,7 @@ export function RenderDistrictSelectors(props){
     } else {
       return 1;
     }
-  })
+  },[display])
 let by_district_object = {};
 ordered_district_array.map((district_object)=>{
   if(by_district_object[district_object.office]){
@@ -75,7 +75,7 @@ const processed_entries = district_entries.map((entry)=>{
 })
 
 const toggleDisplay = () =>{
-  if(display =='block'){
+  if(display ==='block'){
     setDisplay('none')
   } else {
     setDisplay('block')
@@ -110,7 +110,7 @@ const handleClick = (e, candidate_data) =>{
       })}
     </div>
     {JSON.stringify(selectedDistrict)}
-    <RenderProfile state={selectedDistrict.state} office={selectedDistrict.office} district={selectedDistrict.district}/>
+    <RenderProfile choosenState={selectedDistrict.state} office={selectedDistrict.office} district={selectedDistrict.district}/>
     </React.Fragment >
   )
 

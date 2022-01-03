@@ -107,9 +107,9 @@ const extractStateFiles = function(callData, callback){
     if(e) throw Error('There was a problem getting the file. Check the API call.');
     const file_array = file_path.split('/');
     const file_name = file_array[file_array.length - 1]+'.zip';
-    setTimeout(()=>{ console.log('waiting a second to load')  }, 1000)
+    setTimeout(()=>{ console.log('waiting a second to load')  }, 3000)
     if(!existsSync(`${file_path}.zip`)){
-      throw Error(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
+      console.log(`This module is having difficulty finding the zipfile from the following filepath:${file_path}.zip`)
     }
 
     const zip = new StreamZip.async({file: `${file_path}.zip`});

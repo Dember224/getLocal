@@ -54,8 +54,27 @@ const getDistrictSQL = function(state, callback){
     })
 }
 
+const getDistrictFips = function(callData, callback){
+  const text = 'Select latitude, longitude, district from fips_by_state_chamber_district where state_name = $1 and chamber = $2 and year = $3 and district = $4';
+  const values = [callData.state, callData.chamber, callData.year, callData.district_number]
+  pool.connect()
+  .then(client=>{
+    return client
+    .query(text, values)
+    .then(res => {
+      client.release()
+      return callback(null, res.rows)
+    })
+    .catch(e=>{
+      client.release()
+      return callback(e)
+    })
+  })
+}
+
 module.exports = {
   standardQuery,
   sql,
-  getDistrictSQL
+  getDistrictSQL,
+  getDistrictFips
 }

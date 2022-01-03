@@ -15,8 +15,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import TableChartOutlinedIcon from '@material-ui/icons/TableChartOutlined';
 import {LoadBuckets} from './charts/buckets';
 import {LoadTotals} from './charts/stateTotals';
@@ -29,9 +27,6 @@ import {Explainer} from './info/explainer';
 import {StandardizationExplanation} from './info/data-standards';
 import {ContactInfo} from './info/contact';
 import {RenderStateButtons} from './interactiveSelectors/stateSelectors';
-import Image from "material-ui-image";
-import logo from './GetLocalLogo.jpg';
-
 
 
 const drawerWidth = 240;
