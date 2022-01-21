@@ -10,12 +10,14 @@ export function RenderProfile(props){
 
   useEffect(()=>{
     setLookP(props)
+  })
+  useEffect(()=>{
     axios.get(`http://localhost:4000/profile/${lookP.choosenState}/${lookP.district}/${lookP.office}`)
       .then((response)=>{
         setCensusData(response)
 
       })
-  }, [lookP])
+  },[lookP.district])
 
 return(
   <div>

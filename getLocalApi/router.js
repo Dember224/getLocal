@@ -90,11 +90,11 @@ dataRouter.get('/profile/:stateName/:district/:office', (req, res, next)=>{
   const stateName = req.params.stateName;
   const district = req.params.district;
   const office = req.params.office;
-  const current_year = new Date().getFullYear()
+  const current_year = new Date().getFullYear() - 1
   const chamber = tools.chamberParser(office);
-  census.searchCensusStatsByDistrict({state: stateName, year:current_year,chamber, district_number:district }, (e, census_object)=>{
+  census.searchCensusStatsByDistrict({state: stateName, year:current_year,chamber, district_number:district }, async (e, census_object)=>{
     if(e) res.status(404).send({message:'Check census tools module. Not returning census object', error:e});
-    res.send(census_object);
+    await res.send(census_object);
   })
 })
 

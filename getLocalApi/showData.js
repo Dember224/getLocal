@@ -63,11 +63,11 @@ const getDistrictFips = function(callData, callback){
     .query(text, values)
     .then(res => {
       client.release()
-      return callback(null, res.rows)
+      return callback(null, res.rows[0])
     })
     .catch(e=>{
       client.release()
-      return callback(e)
+      console.log(e)
     })
   })
 }
