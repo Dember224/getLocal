@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {RenderFemCard} from './femCard';
-import {RenderMascCard} from './mascCard'
+import {RenderMascCard} from './mascCard';
+import {RenderProfileHeader} from './profileHeader'
 
 
 //work around this by using the census methods in the API. I should have never tried it this way in the first place.
@@ -27,6 +28,7 @@ export function RenderProfile(props){
 return(
   <div>
   <div>
+    <RenderProfileHeader choosenState={lookP.choosenState} office={lookP.office} district={lookP.district} />
     <RenderFemCard female_population={femalePopulation} />
     <RenderMascCard male_population={malePopulation} />
   </div>

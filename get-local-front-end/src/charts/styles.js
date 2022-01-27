@@ -21,3 +21,17 @@ export const useStyles = makeStyles({
     marginBottom: 12,
   },
 });
+
+export const headerStyle = makeStyles({
+  root: {
+    width: 900,
+    height:150,
+    margin:"auto",
+    background:'linear-gradient(45deg, #97C5EC 30%, #1E88E5 90%)',
+    color:'white',
+    display:'block'
+  },
+  pos: {
+    marginBottom: 12,
+  },
+})

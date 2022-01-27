@@ -109,7 +109,7 @@ const handleClick = (e, candidate_data) =>{
         )
       })}
     </div>
-    {JSON.stringify(selectedDistrict)}
+    
     <RenderProfile choosenState={selectedDistrict.state} office={selectedDistrict.office} district={selectedDistrict.district}/>
     </React.Fragment >
   )
