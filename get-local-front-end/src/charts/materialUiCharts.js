@@ -148,7 +148,7 @@ export default function BaseOptionChart() {
 
     // Legend
     legend: {
-      show: true,
+      show: false,
       fontSize: 13,
       position: 'top',
       horizontalAlign: 'right',
