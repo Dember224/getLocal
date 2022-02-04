@@ -5,6 +5,7 @@ import {RenderMascCard} from './mascCard';
 import {RenderProfileHeader} from './profileHeader';
 import {RenderRaceGraph} from './racePopulation';
 import {RenderCitizenship} from './citizens';
+import {RenderIncomeCard} from './incomeCard';
 
 
 //work around this by using the census methods in the API. I should have never tried it this way in the first place.
@@ -24,6 +25,7 @@ export function RenderProfile(props){
   const [other, setOther] = useState(0);
   const [citizens, setCitizens]= useState(0);
   const [noncitizens, setNonCitizens] = useState(0);
+  const [income, setIncome] = useState(0)
 
   useEffect(()=>{
     setLookP(props)
@@ -44,6 +46,7 @@ export function RenderProfile(props){
         setOther(response.data.number_of_other_races);
         setCitizens(response.data.number_of_citizens);
         setNonCitizens(response.data.number_of_non_citizens);
+        setIncome(response.data.median_income)
       })
   },[lookP.district])
 
@@ -55,7 +58,8 @@ return(
     <RenderMascCard male_population={malePopulation} />
     <RenderRaceGraph black={black} asian={asian} mixed={mixed} white={white} native={native} latino={latino} pacific={pacific} other={other}/>
     <RenderCitizenship citizens={citizens} noncitizens={noncitizens} />
-    {JSON.stringify(censusData)}
+    <RenderIncomeCard median_income={income} />
+
   </div>
 
   </div>
