@@ -24,6 +24,7 @@ const stats_object = {
   never_married_population:'B06008_002E',
   separated_marriage_population:'B06008_005E',
   divorced_population:'B06008_004E',
+  median_income:'B06011_001E'
 }
 
 
