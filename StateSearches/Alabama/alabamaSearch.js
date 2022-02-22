@@ -1,7 +1,7 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 //Republicans are still being rendered here.
 //Changing the party on the request call doesn't seem to be doing anything.

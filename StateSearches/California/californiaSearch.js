@@ -5,7 +5,7 @@ const csv = require('csv-parser');
 const async = require('async');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 function getOffice(office_name){
   if(office_name ==='SEN'){

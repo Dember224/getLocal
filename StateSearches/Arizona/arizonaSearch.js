@@ -1,7 +1,7 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 const getTheMoney = function(callData,callback){
   const startYear = callData.startYear;

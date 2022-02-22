@@ -1,9 +1,9 @@
 const request = require('request');
-const tools = require('../Tools/parsers.js');
+const tools = require('../../Tools/parsers.js');
 const cheerio =  require('cheerio');
 const async = require('async');
-const dates = require('../Tools/date_tools.js');
-const loader = require('../Loaders/uploadFinances.js');
+const dates = require('../../Tools/date_tools.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 const getCandidates = function(callData, callback){
   request({

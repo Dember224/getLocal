@@ -2,7 +2,7 @@ const crawler = require('crawler-request');
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 
 function getOffice(text){

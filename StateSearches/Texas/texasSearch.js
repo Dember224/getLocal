@@ -4,7 +4,7 @@ const async = require('async');
 const fs = require('fs');
 const pdf = require('pdf-parse');
 const crawler = require('crawler-request');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 
 const getTexasElectionID = function(callData, callback){

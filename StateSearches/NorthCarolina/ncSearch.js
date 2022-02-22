@@ -3,7 +3,7 @@ const got = require('got');
 const csv = require('csv-parser');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 function getOffice(contest_name){
   if(contest_name.includes('NC STATE SENATE')){

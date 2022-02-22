@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const async = require('async');
 const csv = require('csv-parser');
 const fs = require('fs');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 const cloudflareScraper = require('cloudflare-scraper');
 
 const getCandidateCoverPage = async function(callData, callback){

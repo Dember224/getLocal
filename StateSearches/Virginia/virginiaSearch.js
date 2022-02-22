@@ -4,7 +4,7 @@ const async = require('async');
 const csv = require('csv-parser');
 const fs = require('fs');
 const got = require('got');
-const loader = require('../Loaders/uploadFinances.js');
+const loader = require('../../Loaders/uploadFinances.js');
 
 
 function getId(office_name){
