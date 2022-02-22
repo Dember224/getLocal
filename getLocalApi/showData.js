@@ -72,9 +72,24 @@ const getDistrictFips = function(callData, callback){
   })
 }
 
+const selectCandidatesByDistrict = function(callData, callback){ //add office to this
+  const text = 'Select Distinct Name, Office, Contributions, Expenditures, max(election_year) as election_year from campaign_finance where state = $1 and district = $2 group by Name, office, contributions, expenditures';
+  const values = [callData.state, callData.district];
+  pool.connect()
+  .then(client=>{
+    return client
+    .query(text, values)
+    .then(res => {
+      client.release()
+      return callback(null, res.rows)
+    })
+  })
+}
+
 module.exports = {
   standardQuery,
   sql,
   getDistrictSQL,
-  getDistrictFips
+  getDistrictFips,
+  selectCandidatesByDistrict
 }

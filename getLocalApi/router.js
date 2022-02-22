@@ -98,6 +98,16 @@ dataRouter.get('/profile/:stateName/:district/:office', (req, res, next)=>{
   })
 })
 
+dataRouter.get('/district_candidates/:state/:district', (req, res)=>{
+  const state = req.params.state;
+  const district = req.params.district;
+
+  queries.selectCandidatesByDistrict({state, district}, (e,district_object)=>{
+    if(e) res.status(404).send({message:'The query is not returning. The showData module likely has answers', error:e});
+    res.send(district_object)
+  })
+})
+
 module.exports = {
   dataRouter
 };

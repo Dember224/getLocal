@@ -29,7 +29,7 @@ const stats_object = {
 
 
 const viewFinderCodes = function(){
-  axios.get('https://api.census.gov/data/2019/acs/acsse/variables.html').then((response)=>{
+  axios.get('https://api.census.gov/data/2019/acs/acs1/variables.html').then((response)=>{
     const $ = cheerio.load(response.data);
     const table = $('tbody').html()
     const row_split = table.split('<tr>')

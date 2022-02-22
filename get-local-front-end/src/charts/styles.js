@@ -49,3 +49,49 @@ export const incomeStyle = makeStyles({
     marginBottom: 12,
   },
 })
+
+
+export const candidateStyle = makeStyles({
+  root: {
+    width: 900,
+    height:250,
+    margin:"auto",
+    marginTop:'1%',
+    background:'#FAFAFA',
+    color:'#2B8EE6',
+    display:'block'
+  },
+  pos: {
+    marginBottom: 12,
+  },
+})
+
+export const spendStyle = makeStyles({
+  root: {
+    width: 320,
+    height:320,
+    margin:"3%",
+    align:'center',
+    background:'linear-gradient(120deg, #F7836E 30%, #F9F9F9 90%)',
+    color:'white',
+    display:'inline-block'
+  },
+  pos: {
+    marginBottom: 12,
+  },
+})
+
+export const contributeStyle = makeStyles({
+  root: {
+    width: 320,
+    height:320,
+    margin:"3%",
+    text_align:'center',
+    background:'linear-gradient(120deg, #219D6E 30%, #F9F9F9 90%)',
+    color:'white',
+    display:'inline-block'
+  },
+  pos: {
+    marginBottom: 12,
+  },
+})
