@@ -43,7 +43,7 @@ The end date poses similar issues. One might think it obvious to use election da
 
 There is no perfect solution here, so for now, Get Local acquires data from the first day of an election year, to the last.
 
-## Inclusion
+## Inclusion 
 
 Which types of money should be included in the totals furnished to the end user? If I'm looking at contributions, should this total be inclusive of in-kind contributions? Given that a state's UI might report a "total" under a contribution header and not make it clear what this total entails, and another state might explicitly report out in-kind contributions separately, this can get a bit tricky if you're trying to determine if you should give to candidates in one state as opposed to another. If the totals don't reflect the same thing your comparisons won't be apples to apple.
 
