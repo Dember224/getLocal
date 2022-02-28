@@ -96,7 +96,7 @@ export function SideBar() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [chart, setChart] = useState("State Totals");
+  const [chart, setChart] = useState("View Profiles");
 
   function chooseChart(){
     if(chart === 'Shortfall'){
@@ -173,7 +173,7 @@ export function SideBar() {
         </div>
         <Divider />
         <List>
-          {['Shortfall', 'State Totals', 'Averages', 'Buckets', 'Raw Data', 'View Profiles'].map((text, index) => (
+          {[ 'View Profiles','Shortfall', 'State Totals', 'Averages', 'Buckets', 'Raw Data'].map((text, index) => (
             <ListItem button key={text} onClick={()=>handleClick(text)}>
                 <ListItemIcon>{text === 'Shortfall' ||text === 'Raw Data' ? <TableChartOutlinedIcon /> : <AssessmentOutlinedIcon />}</ListItemIcon>
               <ListItemText primary={text} />
