@@ -8,7 +8,16 @@ import React from 'react';
 
 export function RenderRaceGraph(props) {
 
-  const population = [props.black, props.asian, props.mixed, props.white, props.native, props.latino, props.pacific, props.other];
+  const black = props.black ? props.black : 0;
+  const asian = props.asian ? props.asian : 0;
+  const mixed = props.mixed ? props.mixed : 0;
+  const white = props.white ? props.white : 0;
+  const native = props.native ? props.native : 0;
+  const latino = props.latino ? props.latino : 0;
+  const pacific = props.pacific ? props.pacific : 0;
+  const other = props.other ? props.other : 0;
+
+  const population = [black, asian, mixed, white, native, latino, pacific, other];
 
 
   const CHART_DATA = [
@@ -44,7 +53,7 @@ export function RenderRaceGraph(props) {
       <Card>
         <CardHeader title="Population By Race" subheader="Source: American Community 5-year Survey 2019" />
         <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-          <ReactApexChart type="bar" series={CHART_DATA} options={chartOptions} height={364}/>
+          <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364}/>
         </Box>
       </Card>
     )

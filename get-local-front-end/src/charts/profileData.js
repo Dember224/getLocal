@@ -12,7 +12,6 @@ import {RenderCandidateFunds} from './candidateFundarisingCard';
 //work around this by using the census methods in the API. I should have never tried it this way in the first place.
 //Put it in the API and pass back the data in the response. React is going to complain about improting methods from outside src.
 export function RenderProfile(props){
-  const [censusData, setCensusData] = useState({});
   const [lookP, setLookP] = useState(props);
   const [femalePopulation, setFemalePopulation] = useState(0);
   const [malePopulation, setMalePopulation] = useState(0);
@@ -35,7 +34,6 @@ export function RenderProfile(props){
     if(lookP.district){
       axios.get(`http://localhost:4000/profile/${lookP.choosenState}/${lookP.district}/${lookP.office}`)
         .then((response)=>{
-          setCensusData(response)
           setFemalePopulation(response.data.female_population);
           setMalePopulation(response.data.male_population);
           setBlack(response.data.number_of_black_ppl);

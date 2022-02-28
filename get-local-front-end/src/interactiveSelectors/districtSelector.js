@@ -34,8 +34,7 @@ export function RenderDistrictSelectors(props){
     setSelectedDistrict([])
   }, [props.selectedState])
 
-  const office_set_1 = [];
-  const office_set_2 = [];
+
   let ordered_district_array = districtArray.sort((el_1, el_2)=>{
     if(el_1.office < el_2.office){
       return -1;
@@ -109,7 +108,7 @@ const handleClick = (e, candidate_data) =>{
         )
       })}
     </div>
-    
+
     <RenderProfile choosenState={selectedDistrict.state} office={selectedDistrict.office} district={selectedDistrict.district}/>
     </React.Fragment >
   )
