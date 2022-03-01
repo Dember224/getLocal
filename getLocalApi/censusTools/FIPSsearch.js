@@ -1,6 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const stateMap = require('../../StateMap').state_array;
+const stateMap = require('./StateMap').state_array;
 const async = require('async');
 
 const {
