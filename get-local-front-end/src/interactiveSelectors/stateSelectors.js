@@ -60,7 +60,8 @@ export function RenderStateButtons(){
  };
 
   useEffect(()=>{
-    axios.get('http://localhost:4000/stateList')
+    const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+    axios.get(`${endpoint}/stateList`)
     .then((res)=>{
       const mapped_states = res.data.map((x)=>{
         return x.state

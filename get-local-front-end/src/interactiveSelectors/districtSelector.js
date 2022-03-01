@@ -21,7 +21,8 @@ export function RenderDistrictSelectors(props){
 
   useEffect(()=>{
     if(props.selectedState){
-      axios.get(`http://localhost:4000/selectedState/${props.selectedState}`)
+      const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+      axios.get(`${endpoint}/selectedState/${props.selectedState}`)
         .then((res)=>{
           setDistrictArray(res.data)
         })

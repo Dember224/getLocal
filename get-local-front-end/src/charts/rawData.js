@@ -48,7 +48,8 @@ export function LoadRawData() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() =>{
-    axios.get(`https://get-local-api.herokuapp.com/raw`)
+    const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+    axios.get(`${endpoint}/raw`)
       .then((res)=>{
         console.log(res)
         setQueryResults(res);

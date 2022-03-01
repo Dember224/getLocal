@@ -11,7 +11,8 @@ export function LoadBuckets() {
     const [queryResults, setQueryResults] = useState({data:[{"0 expenditures":"362"}]})
 
     useEffect(() =>{
-      axios.get('https://get-local-api.herokuapp.com/buckets', {
+      const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+      axios.get(`${endpoint}/buckets`, {
         headers: {
           "Access-Control-Allow-Origin": "*"
         }
