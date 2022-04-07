@@ -12,7 +12,7 @@ export function LoadTotals() {
   const [queryResults, setQueryResults] = useState({data:[{"state":"North Carolina","contributions":"10747097.72","expenditures":"23820460.08"}]})
 
   useEffect(() =>{
-    const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+    const endpoint = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
     axios.get(`${endpoint}/totals`)
       .then((res)=>{
         console.log(res)

@@ -86,10 +86,24 @@ const selectCandidatesByDistrict = function(callData, callback){ //add office to
   })
 }
 
+const mysteryQuery = function(query, values, callback){
+  const text = query;
+  pool.connect()
+  .then(client=>{
+    return client
+    .query(text, values)
+    .then(res=>{
+      client.release()
+      return callback(null, res.rows)
+    })
+  })
+}
+
 module.exports = {
   standardQuery,
   sql,
   getDistrictSQL,
   getDistrictFips,
-  selectCandidatesByDistrict
+  selectCandidatesByDistrict,
+  mysteryQuery
 }

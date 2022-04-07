@@ -29,10 +29,10 @@ export function RenderProfile(props){
 
   useEffect(()=>{
     setLookP(props)
-  })
+  },[props])
   useEffect(()=>{
     if(lookP.district){
-      const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+      const endpoint = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
       axios.get(`${endpoint}/profile/${lookP.choosenState}/${lookP.district}/${lookP.office}`)
         .then((response)=>{
           setFemalePopulation(response.data.female_population);

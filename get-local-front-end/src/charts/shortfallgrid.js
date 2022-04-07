@@ -46,7 +46,7 @@ export function LoadShortfallGrid() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() =>{
-    const endpoint = process.env.REACT_APP_ENV == 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
+    const endpoint = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_ENDPOINT : process.env.REACT_APP_API_URI;
     axios.get(`${endpoint}/shortfall`)
       .then((res)=>{
         console.log(res)
