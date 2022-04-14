@@ -83,7 +83,7 @@ const selectCandidatesByDistrict = function(callData, callback){ //add office to
       client.release()
       return callback(null, res.rows)
     })
-  })
+  });
 }
 
 module.exports = {
