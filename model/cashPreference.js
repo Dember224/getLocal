@@ -118,7 +118,7 @@ class CashPreferenceModel {
           const census_object = census_array.find((census_object)=>{
             return census_object.chamber == chamber && census_object.district == finance_object.district;
           })
-          if(finance_object.shortfall < census_object.median_income){
+          if(finance_object.shortfall < census_object.median_income && finance_object.surplus < census_object.median_income){
             const no_wealthy_object = finance_object;
             no_wealthy_object.median_income = census_object.median_income;
             return no_wealthy_object
