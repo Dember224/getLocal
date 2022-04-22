@@ -206,11 +206,9 @@ const loadData = async function(callData){
   })
 }
 
-loadData({year:2020, election_type:'General'});
-// getAllMoney({year:2020, election_type:'General'}, (e,r)=>{
-//   if(e) return e;
-//   console.log("The diggity dog on response", r)
-// })
-// getMoney({rid: '178510'}) //datalink is the RID
-// getReportIds({name:'Gray Ellis', year:2020})
-// getCandidateList({year:2020, election_type: 'General'})
+// loadData({year:2020, election_type:'General'});
+
+
+module.exports = {
+  loadData
+}

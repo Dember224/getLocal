@@ -203,5 +203,8 @@ const loadData = async function(callData){
     return money_object;
   });
 }
-loadData({year:2019, election_type:"General"})
+// loadData({year:2019, election_type:"General"})
 // getCandidateNames({election_type:'General', office:'House of Delegates', year: 2019}); //The offices are State Senate and House of Delegates case sensitive
+module.exports = {
+  loadData
+}

@@ -108,5 +108,7 @@ const loadData = async function(callData){
   })
 }
 
-loadData({year:2020, election_type:'General'})
-// getCandidateCoverPage({year: 2020, election_type: "General"})
+// loadData({year:2020, election_type:'General'})
+module.exports = {
+  loadData
+}

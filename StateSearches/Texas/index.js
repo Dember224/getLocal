@@ -183,5 +183,44 @@ const loadRepData = function(callData){
   });
 }
 
-loadRepData({election_year:2020, election_type:"General"})
+const getAllData = function(callData, callback){
+  async.autoInject({
+    get_senate_data:(cb)=>{
+      getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{
+        if(e) return cb(e);
+        return cb(null, r);
+      })
+    },
+    get_rep_data:(cb)=>{
+      getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{
+        if(e) return cb(e);
+        return cb(null, r);
+      })
+    }
+  }, (e,r)=>{
+    if(e) return callback(e);
+    const return_array = []
+    r.get_senate_data.map(x=>{
+      return_array.push(x);
+    })
+    r.get_re_data.map(x=>{
+      return_array.push(x);
+    })
+
+    return callback(null, return_array)
+  })
+}
+
+const loadData = function(callData){
+  getAllData({election_year:callData.election_year, election_type:callData.election_type}, (e, r)=>{
+    if(e) return e;
+    loader.loadFinanceArray(r);
+  })
+}
+
+// loadData({election_year:2020, election_type:"General"})
 // loadSenateData({election_year:2020,election_type:"General"})
+
+module.exports = {
+  loadData
+}

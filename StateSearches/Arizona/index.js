@@ -37,16 +37,17 @@ const getTheMoney = function(callData,callback){
         expenditures:x.Expense,
         asOf: new Date(),
         election_year: callData.startYear,
-        election_type: 'General'
+        election_type: 'General',
+        name_year:`${x.EntityFirstName} ${x.EntityLastName}${callData.startYear}`
       }
-      console.log(money_object)
+
       return money_object;
     });
     return callback(null, getTheMoney);
   })
 };
 
-const loadArizonaFinances = function(callData){
+const loadData = function(callData){
   getTheMoney({startYear:callData.startYear,endYear:callData.endYear}, (e,money_array)=>{
     if(e) return e;
     async.mapSeries(money_array, (money_object, cb)=>{
@@ -60,6 +61,10 @@ const loadArizonaFinances = function(callData){
     })
   })
 }
-loadArizonaFinances({startYear:2020, endYear:2021})
+
+module.exports = {
+  loadData
+}
+// loadData({startYear:2020, endYear:2021})
 
 //paginate_button

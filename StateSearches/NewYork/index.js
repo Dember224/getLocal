@@ -176,3 +176,4 @@ combineCandidateAndMoney({office:'Member of Assembly', start_date:'01/01/2020', 
 // getCandidateList({}, (e,r)=>{if(e) return e; console.log(r)})
 
 // requestMoneyData({office:'Member of Assembly', start_date:'01/01/2020', end_date:'12/31/2020'}, (e,r)=>{if(e) return e; console.log(r)}) //Assembly must be 'Member of Assembly'
+//need to find a way to get candidate party. 

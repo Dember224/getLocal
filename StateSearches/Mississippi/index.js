@@ -348,3 +348,4 @@ loadMississippiFinances({year:2019, election_type:"General"})
 //   if (e) return e;
 //   console.log(r)
 // })
+//Can't use any of this. Mississippi's data is too effed. Have to revisit. 

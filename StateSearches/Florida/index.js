@@ -135,4 +135,7 @@ const loadData = async function(callData){
     return money_object;
   })
 }
-loadData({year:2020, election_type:'General'})
+// loadData({year:2020, election_type:'General'})
+module.exports = {
+  loadData
+}

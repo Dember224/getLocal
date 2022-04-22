@@ -314,6 +314,8 @@ const loadData = async function(callData){
 //   console.log(money_array)
 // })
 //remember to load senate and representatives election years and special elections
-loadData({report:'December 31st - Election Year', year:2020, office: "State Representative"})
-// getMoney({lastName:"Jones", firstName:"Sheila",report:'December 31st - Election Year', year:2020})//have to get report number from the site.
-// getCandidates({office:'State Senate', year:2020})
+// loadData({report:'December 31st - Election Year', year:2020, office: "State Representative"})
+//you have to use the weird date, and name of the year format commented on the line immediately preceeding this one. You can get the refrence from Georgia's UI.
+module.exports={
+  loadData
+}

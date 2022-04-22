@@ -192,4 +192,7 @@ const loadData = async function(callData){
 //   if(e) return e;
 //   console.log(r);
 // })
-loadData({year:2020,election_type:'primary'})
+// loadData({year:2020,election_type:'primary'})
+module.exports={
+  loadData
+}

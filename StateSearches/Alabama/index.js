@@ -261,8 +261,12 @@ const loadData = function(callData){
   })
 }
 
-loadData({year:2018, election_type:'primary'})
+// loadData({year:2018, election_type:'primary'})
 
+
+module.exports = {
+  loadData
+}
 // const loadSenateData = async function(callData){
 //   await checkAllDistricts({year:callData.year, office:callData.office, election_type:callData.election_type}, (e,money_array)=>{
 //     if(e) return e;
