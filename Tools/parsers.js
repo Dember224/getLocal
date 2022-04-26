@@ -35,7 +35,19 @@ const chamberParser = function(office){
   }
 }
 
+const partyParser = function(party){
+  const lower_party = party.toLowerCase();
+  if(lower_party.match(/dem/) ){
+    return 'democrat';
+  } else if(lower_party.match(/rep/) ){
+    return 'republican';
+  } else {
+    return lower_party
+  }
+}
+
 module.exports = {
   txtParser,
-  chamberParser
+  chamberParser,
+  partyParser
 }
