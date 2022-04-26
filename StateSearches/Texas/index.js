@@ -5,6 +5,7 @@ const fs = require('fs');
 const pdf = require('pdf-parse');
 const crawler = require('crawler-request');
 const loader = require('../../Loaders/uploadFinances.js');
+const partyParser = require('../../Tools/parsers.js').partyParser;
 
 
 const getTexasElectionID = function(callData, callback){
@@ -19,7 +20,7 @@ const getTexasElectionID = function(callData, callback){
     },
     qs:{
       nbElecYear: callData.year || 2020,
-      cdParty:'D',
+      cdParty:'',
       cdOfficeType: 'S',
       cdFlow: '0',
       idTown:0,
@@ -57,7 +58,6 @@ const getTexasElectionID = function(callData, callback){
   });
 };
 
-
 const getTexasCandidateNames = function(callData, callback){
   async.autoInject({
     get_election_id: (cb)=>{
@@ -86,7 +86,7 @@ const getTexasCandidateNames = function(callData, callback){
         },
         qs:{
           nbElecYear: callData.year,
-          cdParty:'D',
+          cdParty:'',
           cdOfficeType: 'S',
           cdFlow: 'S',
           idTown:0,
@@ -97,6 +97,8 @@ const getTexasCandidateNames = function(callData, callback){
       }, (e,r,b)=>{
         if(e) return cb(e);
         let $ = cheerio.load(b);
+        const text_array = $('p strong').text().split(/PARTY: |STATUS/);
+        const party = text_array[1];
         const candidate_name = $('p strong').first().text();
         district_array = office_name.split(',');
         const office = office_name.split("DISTRICT")[0];
@@ -105,7 +107,8 @@ const getTexasCandidateNames = function(callData, callback){
           name: candidate_name,
           office:office,
           district:district,
-          state: 'Texas'
+          state: 'Texas',
+          party
         }
         candidate_array.push(candidate_object)
         cb();
@@ -116,6 +119,7 @@ const getTexasCandidateNames = function(callData, callback){
     } )
   })
 }
+
 
 const getCandidateMoney = function(callData, callback){
   async.autoInject({
@@ -141,7 +145,6 @@ const getCandidateMoney = function(callData, callback){
         const name_split = candidate.name.split(" ");
         const first_name = name_split[0]
         const last_name = name_split[name_split.length - 1]
-        console.log(first_name, last_name)
         r.pdf.forEach(report=>{
           if(report.toUpperCase().includes(first_name) && report.toUpperCase().includes(`${last_name},`)){
             const report_array = report.split('\n');
@@ -150,12 +153,13 @@ const getCandidateMoney = function(callData, callback){
               office:candidate.office,
               district:candidate.district,
               state:candidate.state,
-              contributions: report_array[8],
-              expenditures: report_array[11],
+              contributions: parseFloat(report_array[8]),
+              expenditures: parseFloat(report_array[11]),
               asOf: new Date(),
               election_year:callData.election_year,
               election_type:callData.election_type,
-              party:"Democrat"
+              party:partyParser(candidate.party),
+              name_year: `${candidate.name} ${callData.election_year}`
             }
             money_array.push(report_object)
           }
@@ -165,6 +169,12 @@ const getCandidateMoney = function(callData, callback){
       return callback(null, money_array)
   })
 }
+
+getCandidateMoney({election_year:2020, election_type:'GENERAL', office: "SENATOR"}, (e,r)=>{
+  if(e) return e;
+  console.log(r)
+  return r
+})
 
 
 
