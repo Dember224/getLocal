@@ -19,7 +19,8 @@ const loadFinanceArray = function(finance_array){
     const asOf = money_object.asOf;
     const election_year = money_object.election_year;
     const election_type = money_object.election_type;
-    const name_year = money_object.name_year
+    const name_year = money_object.name_year;
+    const party = money_object.party
     const values = [
       name,
       office,
@@ -30,7 +31,8 @@ const loadFinanceArray = function(finance_array){
       asOf,
       election_year,
       election_type,
-      name_year
+      name_year,
+      party
     ];
     return cb(null, values)
     console.log(place, "records loaded")
@@ -38,7 +40,7 @@ const loadFinanceArray = function(finance_array){
 }, (e,r)=>{
   if(e) return e;
   console.log("records loaded:", r);
-  const text = 'INSERT INTO campaign_finance(name,office, state, district, contributions, expenditures, asOf, election_year, election_type,name_year) VALUES %L ON CONFLICT (name_year) DO NOTHING RETURNING *';
+  const text = 'INSERT INTO campaign_finance(name,office, state, district, contributions, expenditures, asOf, election_year, election_type,name_year, party) VALUES %L ON CONFLICT (name_year) DO NOTHING RETURNING *';
   const values = r;
   pool.connect()
   .then(client =>{
