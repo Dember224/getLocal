@@ -1,3 +1,9 @@
+const axios = require('axios').default;
+const tmp = require('tmp');
+const readXlsxFile = require('read-excel-file/node');
+const fs = require('fs');
+const xlsx = require('node-xlsx');
+
 const txtParser = function(text){
   const row_array = text.split(/\r?\n/);
   const headers = row_array[0].split(/\t/)
@@ -46,8 +52,26 @@ const partyParser = function(party){
   }
 }
 
+const parseExcelFileEndpoint = function(url, callback){
+  tmp.file({postfix:'.xlsx'},(e,path, fd)=>{
+    axios({
+      url,
+      method:'GET',
+      responseType:'arraybuffer'
+    })
+    .then((res)=>{
+        const worksheet = xlsx.parse(res.data)
+        return callback(null, worksheet)
+    })
+    .catch((e)=>{
+      if(e) return callback(e);
+    })
+  })
+}
+
 module.exports = {
   txtParser,
   chamberParser,
-  partyParser
+  partyParser,
+  parseExcelFileEndpoint
 }
