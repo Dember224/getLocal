@@ -6,6 +6,8 @@ const pdf = require('pdf-parse');
 const crawler = require('crawler-request');
 const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers.js').partyParser;
+const tmp = require('tmp');
+const parseExcelFileEndpoint = require('../../Tools/parsers.js').parseExcelFileEndpoint;
 
 
 const getTexasElectionID = function(callData, callback){
@@ -120,26 +122,41 @@ const getTexasCandidateNames = function(callData, callback){
   })
 }
 
-
-const getCandidateMoney = function(callData, callback){
+//This state needs a re-do. Plan to get the candidate names the way we are now. We'll make a call to the January semi anual reports pdf.
+//What will change is the pdf will be used to get the filer ID of each candidate.
+//With the filer ID we can scrape the excel sheet with the cumulative yearly totals that get updated as the year progresses.
+//This way data will be more real time.
+const getFilerIds = function(callData, callback){
   async.autoInject({
     candidates:(cb)=>{
-      getTexasCandidateNames({year:2020, office: callData.office},(e,candidate)=>{
-        if(e) return e;
+      getTexasCandidateNames({year:callData.year, office: callData.office},(e,candidate)=>{
+        if(e) return cb(e);
         return cb(null, candidate)
       })
     },
     pdf:(cb)=>{
-      crawler('https://www.ethics.state.tx.us/data/search/cf/2021/CandE012021.pdf').then(function(response){
-        const report_array = response.text.split("Report Due:1/15/21Report Number:");
-        const num_of_reports = response.text.split("Report Due:1/15/21Report Number:").length - 1;
+      crawler(`https://www.ethics.state.tx.us/data/search/cf/${callData.year}/CandE01${callData.year}.pdf`).then(function(response){
+        const year_abbr = JSON.stringify(callData.year).slice(-2);
+        const report_array = response.text.split(`Report Due:1/15/${year_abbr}Report Number:`);
+        const num_of_reports = response.text.split(`Report Due:1/15/${year_abbr}Report Number:`).length - 1;
         console.log(`There are ${num_of_reports} candidates and pacs in this file`);
-        return cb(null, report_array)
+        const re_mapped = [];
+        report_array.map((x,i)=>{
+          if(i > 0){
+            const previous_split = report_array[i - 1].split('\n');
+            const filer_id = previous_split[previous_split.length - 2];
+            const new_string = x.concat(filer_id)
+            re_mapped.push(new_string);
+          }
+          return x
+        })
+        return cb(null, re_mapped)
       })
     }
   },(e,r)=>{
-    if(e) return e;
+    if(e) return callback(e);
     const money_array = []
+    console.log(r)
     r.candidates.forEach(candidate=>{
       if(candidate.name.length){
         const name_split = candidate.name.split(" ");
@@ -153,14 +170,12 @@ const getCandidateMoney = function(callData, callback){
               office:candidate.office,
               district:candidate.district,
               state:candidate.state,
-              contributions: parseFloat(report_array[8]),
-              expenditures: parseFloat(report_array[11]),
               asOf: new Date(),
-              election_year:callData.election_year,
-              election_type:callData.election_type,
               party:partyParser(candidate.party),
-              name_year: `${candidate.name} ${callData.election_year}`
+              name_year: `${candidate.name} ${callData.year}`,
+              filer_id:report_array[report_array.length - 1]
             }
+            console.log(report_object)
             money_array.push(report_object)
           }
         })
@@ -170,13 +185,21 @@ const getCandidateMoney = function(callData, callback){
   })
 }
 
-getCandidateMoney({election_year:2020, election_type:'GENERAL', office: "SENATOR"}, (e,r)=>{
-  if(e) return e;
-  console.log(r)
-  return r
-})
+// getFilerIds({year:2020, office:'REPRESENTATIVE'}, (e,r)=>{
+//   if(e) return e;
+//   console.log(r);
+// })
+const getCandidateMoney = function(callData){
+  const url = `https://www.ethics.state.tx.us/data/search/cf/${callData.year}/${callData.year}_PACs_By_Total_Contribs.xlsx`;
+  parseExcelFileEndpoint(url, (e,r)=>{
+    if(e) console.log(e)
+    console.log(r)
+  })
 
+}
 
+getCandidateMoney({year:2020})
+//needs type, year, expenditures, contributions.
 
 const loadSenateData = function(callData){
   getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
@@ -193,34 +216,61 @@ const loadRepData = function(callData){
   });
 }
 
+// const getAllData = function(callData, callback){
+//   async.auto({
+//     get_senate_data:(cb)=>{
+//       getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{
+//         if(e) return cb(e);
+//         return cb(null, r);
+//       })
+//     },
+//     get_rep_data:(cb)=>{
+//       getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{
+//         if(e) return cb(e);
+//         return cb(null, r);
+//       })
+//     }
+//   },0, (e,r)=>{
+//     if(e) return callback(e);
+//     const return_array = []
+//     r.get_senate_data.map(x=>{
+//       return_array.push(x);
+//       return x;
+//     })
+//     r.get_rep_data.map(x=>{
+//       return_array.push(x);
+//       return x;
+//     })
+//
+//     return callback(null, return_array)
+//   })
+// }
+
 const getAllData = function(callData, callback){
-  async.autoInject({
-    get_senate_data:(cb)=>{
+  async.series([
+    (cb)=>{
       getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{
         if(e) return cb(e);
         return cb(null, r);
       })
     },
-    get_rep_data:(cb)=>{
+    (cb)=>{
       getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{
         if(e) return cb(e);
         return cb(null, r);
       })
     }
-  }, (e,r)=>{
+  ], (e,r)=>{
     if(e) return callback(e);
-    const return_array = []
-    r.get_senate_data.map(x=>{
-      return_array.push(x);
-    })
-    r.get_re_data.map(x=>{
-      return_array.push(x);
-    })
-
-    return callback(null, return_array)
+    return callback(null, r);
   })
 }
 
+// getAllData({election_year:2020, election_type:'GENERAL'}, (e,r)=>{
+//   if(e) return e;
+//   console.log(r);
+// })
+//Not sure why getAllData freezes. Feels like something off in the async logic.
 const loadData = function(callData){
   getAllData({election_year:callData.election_year, election_type:callData.election_type}, (e, r)=>{
     if(e) return e;
