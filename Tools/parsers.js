@@ -61,7 +61,19 @@ const parseExcelFileEndpoint = function(url, callback){
     })
     .then((res)=>{
         const worksheet = xlsx.parse(res.data)
-        return callback(null, worksheet)
+        const worker_data = worksheet[0].data
+        const column_headers = worker_data[0];
+        const return_array = worker_data.map((x,i)=>{
+          if(i >0){
+            const return_object = {}
+            column_headers.map((y,it)=>{
+              return_object[y] = x[it];
+            })
+            return return_object
+          }
+        }) //This process for objectifying the data will totally break on a larger Excel file, but should be fine for a few thousand records.
+        //Don't use on things like a full xlx database download. 
+        return callback(null, return_array)
     })
     .catch((e)=>{
       if(e) return callback(e);
