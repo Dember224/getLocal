@@ -139,7 +139,8 @@ const getCandidateMoney = function(callData, callback){
     },
     pdf:(cb)=>{
       crawler(`https://www.ethics.state.tx.us/data/search/cf/2020/CandE08102620.pdf`).then(function(response){//The pdf changes by proximity to the election.
-        const year_abbr = JSON.stringify(callData.year).slice(-2);
+        const year_abbr = JSON.stringify(callData.year).slice(3,-1);
+        console.log(year_abbr)
         const report_array = response.text.split(`Report Due:10/26/${year_abbr}Report Number:`);//remeber to split by the appropriate dates
         const num_of_reports = response.text.split(`Report Due:10/26/${year_abbr}Report Number:`).length - 1;
         console.log(`There are ${num_of_reports} candidates and pacs in this file`);
@@ -240,30 +241,30 @@ const getCandidateMoney = function(callData, callback){
 //   return r;
 // })
 const loadSenateData = function(callData){
-  getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
+  getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
     if(e) return e;
     loader.loadFinanceArray(r)
   });
 }
 
 const loadRepData = function(callData){
-  getCandidateMoney({election_year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{ //office name must be capitalized
+  getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{ //office name must be capitalized
     if(e) return e;
     loader.loadFinanceArray(r)
     return r;
   });
 }
 
-const getAllData = function(callData, callback){
+const getFinanceData = function(callData, callback){
   async.auto({
     get_senate_data:(cb)=>{
-      getCandidateMoney({year:callData.election_year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{
+      getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{
         if(e) return cb(e);
         return cb(null, r);
       })
     },
     get_rep_data:(cb)=>{
-      getCandidateMoney({year:callData.election_year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{
+      getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{
         if(e) return cb(e);
         return cb(null, r);
       })
@@ -306,16 +307,16 @@ const getAllData = function(callData, callback){
 
 
 //Not sure why getAllData freezes. Feels like something off in the async logic.
-const loadData = function(callData){
-  getAllData({election_year:callData.election_year, election_type:callData.election_type}, (e, r)=>{
-    if(e) return e;
-    loader.loadFinanceArray(r);
-  })
-}
+// const loadData = function(callData){
+//   getFinanceData({year:callData.year, election_type:callData.election_type}, (e, r)=>{
+//     if(e) return e;
+//     loader.loadFinanceArray(r);
+//   })
+// }
 
-loadData({election_year:2020, election_type:"General"})
+// loadData({election_year:2020, election_type:"General"})
 // loadSenateData({election_year:2020,election_type:"General"})
 
 module.exports = {
-  loadData
+  getFinanceData
 }

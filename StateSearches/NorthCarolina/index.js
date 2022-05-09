@@ -153,7 +153,7 @@ const getMoney = function(callData, callback){
   })
 }
 
-const getAllMoney = function(callData, callback){
+const getFinanceData = function(callData, callback){
   getCandidateList({year:callData.year, election_type:callData.election_type}, (e, candidate_list)=>{
     if(e) return e;
     async.mapSeries(candidate_list, (candidate_object,cb)=>{
@@ -198,7 +198,7 @@ const getAllMoney = function(callData, callback){
 }
 
 const loadData = async function(callData){
-  await getAllMoney({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
+  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
     if(e) return e;
     await loader.loadFinanceArray(money_array);
     console.log(`loading ${money_array.length}  records....`)
@@ -210,5 +210,5 @@ const loadData = async function(callData){
 
 
 module.exports = {
-  loadData
+  getFinanceData
 }

@@ -2,12 +2,13 @@ const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../../Loaders/uploadFinances.js');
+const partyParser = require('../../Tools/parsers.js').partyParser
 
-const getTheMoney = function(callData,callback){
-  const startYear = callData.startYear;
-  const endYear = callData.endYear;
+const getFinanceData = function(callData,callback){
+  const startYear = callData.year;
+  const endYear = callData.year;
   request({
-    uri:`https://seethemoney.az.gov/Reporting/GetTableData?Page=1&startYear=2020&endYear=2021&PartyID=10&IsLessActive=false&ChartName=1&ShowAllYears=false`,
+    uri:`https://seethemoney.az.gov/Reporting/GetTableData?Page=1&startYear=${callData.startYear}&endYear=${callData.endYear}&IsLessActive=false&ChartName=1&ShowAllYears=false`,
     json:true,
     headers: {
       'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
@@ -17,10 +18,10 @@ const getTheMoney = function(callData,callback){
       Page: 1,
       startYear: callData.startYear,
       endYear: callData.endYear,
-      PartyID: 10,
       IsLessActive: false,
       ChartName: 1,
-      ShowAllYears: false
+      ShowAllYears: false,
+      ShowOfficeHolder: false
     }
   },(e,r,b)=>{
     if(e) return e;
@@ -30,41 +31,36 @@ const getTheMoney = function(callData,callback){
       const office_array = x.OfficeName ? x.OfficeName.split("-") : [null,null];
       const money_object = {
         name:`${x.EntityFirstName} ${x.EntityLastName}`,
-        office:office_array[0],
-        district:office_array[1],
+        office:office_array[0] ? office_array[0].trim() : office_array[0],
+        district:office_array[1] ? office_array[1].match(/(\d+)/)[0] : office_array[1],
         state:"Arizona",
         contributions:x.Income,
         expenditures:x.Expense,
         asOf: new Date(),
-        election_year: callData.startYear,
+        election_year: new Date('01/01/'+callData.startYear).toGMTString(),
         election_type: 'General',
-        name_year:`${x.EntityFirstName} ${x.EntityLastName}${callData.startYear}`
+        name_year:`${x.EntityFirstName} ${x.EntityLastName}${callData.startYear}`,
+        party: x.PartyName ? partyParser(x.PartyName) : x.PartyName
       }
 
       return money_object;
     });
-    return callback(null, getTheMoney);
+    return callback(null, getTheMoney.filter(x=>{
+      return x.office != null;
+    }));
   })
 };
 
 const loadData = function(callData){
-  getTheMoney({startYear:callData.startYear,endYear:callData.endYear}, (e,money_array)=>{
+  getFinanceData({year: callData.year}, (e,money_array)=>{
     if(e) return e;
-    async.mapSeries(money_array, (money_object, cb)=>{
-      console.log(money_object)
-      loader.loadFinanceData(money_object)
-      return cb(null, money_object);
-    },(e,r)=>{
-      if(e) return e;
-      loader.loadFinanceData({finished:true})
-      return r;
-    })
+    loader.loadFinanceArray(money_array)
   })
 }
 
 module.exports = {
-  loadData
+  getFinanceData
 }
-// loadData({startYear:2020, endYear:2021})
+
 
 //paginate_button

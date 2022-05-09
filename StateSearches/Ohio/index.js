@@ -73,7 +73,7 @@ const getOfficeDistrictCsv = function(callData, callback){
   })
 }
 
-const getMoney = function(callData, callback){
+const getFinanceData = function(callData, callback){
   getCandidateCoverPage({year:callData.year, election_type:callData.election_type}, (e, money_object)=>{
     if(e) return e;
     getOfficeDistrictCsv({year:callData.year}, (e,district_object)=>{
@@ -101,7 +101,7 @@ const getMoney = function(callData, callback){
 }
 
 const loadData = async function(callData){
-  await getMoney({year:callData.year, election_type: callData.election_type}, async (e, money)=>{
+  await getFinanceData({year:callData.year, election_type: callData.election_type}, async (e, money)=>{
     if(e) return e;
     await loader.loadFinanceArray(money);
     return money;
@@ -110,5 +110,5 @@ const loadData = async function(callData){
 
 // loadData({year:2020, election_type:'General'})
 module.exports = {
-  loadData
+  getFinanceData
 }
