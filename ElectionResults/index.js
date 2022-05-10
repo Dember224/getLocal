@@ -31,6 +31,38 @@ function getCandidatesInformation(td,$) {
 
 let allElectionYears;
 
+function getStateAndLevel(label) {
+    label = label.toLowerCase().trim();
+    if(label.indexOf("list of") == 0) return null;
+
+    // :'(
+    if(label.indexOf('washington, d.c') == 0) return null;
+
+    const state = STATES.find(s => label.indexOf(s.toLowerCase()) == 0)?.toLowerCase();
+    if(!state) {
+        console.log("Did not recognize state:",label);
+        return null;
+    }
+
+    // if it's just the name of the state, it's not a level
+    if(state == label) return null;
+    if(label.indexOf('state legislature') != -1) return null;
+
+    let level;
+    if(label.indexOf(state + ' state senate') == 0) level = 'senate';
+    else if(label.indexOf(state + ' house') == 0) level = 'house';
+    // california has a state assembly
+    else if(label.indexOf(state + ' state assembly') == 0) level = 'house';
+    // new jersey has a general assembly
+    else if(label.indexOf(state + ' general assembly') == 0) level = 'house';
+    else throw new Error(`Failed to determine level from '${label}'`);
+
+    return {
+        state,
+        level
+    }
+}
+
 // To navigate to this - go to https://ballotpedia.org/State_legislative_elections
 // Select the year and then select the state
 // Or pick and state and go from there
@@ -50,25 +82,12 @@ async function getAllLegistlatureElections() {
         const label = x.text().trim().toLowerCase();
         if(!label || label != x.attr('title')?.trim()?.toLowerCase()) return null;
 
-        if(label.indexOf("list of") == 0) return null;
-
-        const state = STATES.find(s => label.indexOf(s.toLowerCase()) == 0)?.toLowerCase();
-        if(!state) {
-            console.log("Did not recognize state:",label);
-            return null;
-        }
+        const sl = getStateAndLevel(label);
+        if(!sl) return null;
+        const {state,level} = sl;
 
         const year = label.slice(-4);
         if(!year.match(/\d\d\d\d/)) throw new Error(year+" does not match YYYY");
-
-        let level;
-        if(label.indexOf(state + ' state senate') == 0) level = 'senate';
-        else if(label.indexOf(state + ' house') == 0) level = 'house';
-        // california has a state assembly
-        else if(label.indexOf(state + ' state assembly') == 0) level = 'house';
-        // new jersey has a general assembly
-        else if(label.indexOf(state + ' general assembly') == 0) level = 'house';
-        else throw new Error(`Failed to determine level from '${label}'`);
 
         return {
             state,
@@ -163,19 +182,58 @@ async function getStateElectionResults({state,year,level}) {
     return extractElectionData(info);
 }
 
+let legislatureLinks;
+// https://ballotpedia.org/States
+async function getStateLegislatureLinks() {
+    if(legislatureLinks) return legislatureLinks;
+    const rawContent = await axios.get(`${BALLOTPEDIA_URI}/States`);
+    console.log('Processing');
+    let $ = cheerio.load(rawContent.data);
+    const links = $('a').toArray().map(a => {
+        const label = $(a).text().toLowerCase().trim();
+        console.log('label:',label);
+        const sl = getStateAndLevel(label);
+        if(!sl) return null;
+        return {
+            ... sl,
+            href: $(a).attr('href')
+        };
+    }).filter(x=>!!x);
+    return legislatureLinks = links;
+}
+
+async function getStateDistrictList({state,level}) {
+    const all = await getStateLegislatureLinks();
+    const match = all.find(x => x.state == state && x.level == level);
+    if(!match) throw new Error(`Failed to get value for (${state}, ${level})`);
+
+    const {href}=match;
+    const data = await axios.get(`${BALLOTPEDIA_URI}${href}`);
+    let $=cheerio.load(data);
+
+    let [table] = $('table#officeholder-table').toArray();
+    if(!table) throw new Error('Failed to get table');
+    table = $(table);
+    const headers = table.find('thead tr th').toArray(x=>$(x).text().trim());
+    const [of,n,p,d] = headers;
+}
+
 module.exports = {
     getStateElectionResults,
-    getAllLegistlatureElections
+    getAllLegistlatureElections,
+    getStateLegislatureLinks
 }
 
 async function getElectionResultsForState({state,year,level}) {
-    if(!year) year = '2022';
-    year = year.toString();
-    const parts = await getStateElectionResults({state,year, level});
-    console.log(JSON.stringify(parts,null,2));
+    // if(!year) year = '2022';
+    // year = year.toString();
+    // const parts = await getStateElectionResults({state,year, level});
+    // console.log(JSON.stringify(parts,null,2));
 
     // const all = await getAllStateSenateElectionYears();
     // console.log('all:',JSON.stringify(all,null,2));
+
+    console.log(JSON.stringify(await getStateLegislatureLinks()));
 
 }
 getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house'});
