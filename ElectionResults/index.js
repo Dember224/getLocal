@@ -366,7 +366,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     if(electionsIndex == -1) throw new Error('Failed to find Elections section');
     elements = elements.slice(electionsIndex+1);
 
-    const elections = [];
+    let elections = [];
     let current, section;
     elements.forEach(el => {
         el = $(el);
@@ -462,10 +462,15 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             });
 
             current[section] = results;
+            current.has_results = true;
         } else {
             console.log('Unexpected element: ',el.attr('class'),el.text());
         }
     });
+
+    // currently only handling the most recent type of results table
+    // it looks like the data was previously in a different format (before 2018?)
+    elections = elections.filter(x => x.has_results).map(x => ({...x, state, level, district}));
 
     return elections;
 };
