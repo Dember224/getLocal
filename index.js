@@ -1,10 +1,16 @@
+const yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+
+const argv = yargs(hideBin(process.argv)).argv
 const stateSearches = require('./StateSearches');
 const loadFinanceArray = require('./Loaders/uploadFinances').loadFinanceArray;
-const state = process.argv[3];
-const command = process.argv[2];
-const year = process.argv[4] == undefined ? new Date().getFullYear() : process.argv[4] ;
-const office = process.argv[5];
-const report = process.argv[6]
+const state = argv.state;
+const command = argv.command;
+const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
+const office = argv.office;
+const report = argv.report;
+
+//OK eff parsing an array to try and figure this out. Check for modules.
 
 const callData = {
   year,
