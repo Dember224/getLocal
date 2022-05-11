@@ -7,11 +7,11 @@ STATES.forEach(x => STATE_MAP[x] = 1);
 const BALLOTPEDIA_URI = 'https://ballotpedia.org';
 
 function makeGet(uri) {
-    if(uri.indexOf(http) != 0) {
+    if(uri.indexOf('http') != 0) {
         if(uri[0] != '/') uri = '/'+uri;
         uri = BALLOTPEDIA_URI + uri;
     }
-    return axios.get()
+    return axios.get(uri);
 }
 
 function checkLevel(level) {
@@ -61,7 +61,6 @@ function getStateAndLevel(label) {
 
     const state = STATES.find(s => label.indexOf(s.toLowerCase()) == 0)?.toLowerCase();
     if(!state) {
-        console.log("Did not recognize state:",label);
         return null;
     }
 
@@ -208,11 +207,9 @@ let legislatureLinks;
 async function getStateLegislatureLinks() {
     if(legislatureLinks) return legislatureLinks;
     const rawContent = await axios.get(`${BALLOTPEDIA_URI}/States`);
-    console.log('Processing');
     let $ = cheerio.load(rawContent.data);
     const links = $('a').toArray().map(a => {
         const label = $(a).text().toLowerCase().trim();
-        console.log('label:',label);
         const sl = getStateAndLevel(label);
         if(!sl) return null;
         return {
@@ -269,7 +266,7 @@ async function getStateDistrictList({state,level}) {
             office,
 
             district,
-            district_href: href,
+            district_href: office.href,
 
             incumbent: name.label,
             incumbent_href: name.href,
@@ -295,12 +292,117 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     const match = districtList.find(x => x.state == state && x.district == district);
     if(!match) throw new Error(`Invalid state/distrct: ${state}/${district}`);
 
+    console.log('match.district_href:',match.district_href);
+
     const resp = await makeGet(match.district_href);
     let $ = cheerio.load(resp.data);
 
-    const elements = $('h2 span#Elections,h3 span.mw-headline,div.electionsectionheading,div.votebox-scroll-container');
+    const sections = $('div.electionsectionheading');
+    if(!sections.length) throw new Error('No div.electionsectionheading');
 
-    return match;
+    const containers = $('div.votebox-scroll-container');
+    if(!containers.length) throw new Error('No div.votebox-scroll-container');
+
+    let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline')
+        .toArray();
+        
+    const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
+    if(electionsIndex == -1) throw new Error('Failed to find Elections section');
+    elements = elements.slice(electionsIndex+1);
+
+    const elections = [];
+    let current, section;
+    elements.forEach(el => {
+        el = $(el);
+        const id = el.attr('id');
+        if(el.hasClass('mw-headline')) {
+            // this is the start of a year election section
+            if(id.match(/^\d\d\d\d$/)) {
+                console.log('Processing',id);
+                current = {
+                    year: parseInt(id)
+                };
+                section = null;
+                elections.push(current);
+                return;
+            }
+        }
+
+        // if no current, we haven't started yet
+        if(!current) {
+            console.log('No Current');
+            return;
+        }
+
+        console.log();
+
+        if(el.hasClass('electionsectionheading')) {
+            const title = el.text().trim().toLowerCase();
+            console.log('Processing scroll-container',title);
+
+            if(title == 'general election') section = 'general';
+            else if(title == 'democratic primary election') section = 'democratic_primary';
+            else if(title == 'republican primary election') section = 'republican_primary';
+            else throw new Error(`Failed to match title '${title}'`);
+        } else if(el.hasClass('votebox-scroll-container')) {
+            console.log('Processing scroll-container');
+
+            if(current[section]) throw new Error('Found second section with '+section);
+
+            const table = el.find('div.results_table_container table.results_table');
+            if(!table.length) throw new Error('Failed to find results table');
+
+            const headers = table.find('tr.non_result_row td').toArray().map(x => $(x).text().trim().toLowerCase());
+
+            let expected;
+            // there are 2 headers when the election has not happened yet
+            if(headers.length == 2) expected = ['','candidate'];
+            else expected = [
+                '',
+                'candidate',
+                '%',
+                'votes'
+            ];
+            const invalid = expected.filter((x,i) => headers[i] != x);
+            if(invalid.length) throw new Error('Unexpected headers: '+headers.join(', '));
+
+            const rows = table.find('tr.results_row').toArray();
+            if(!rows.length) {
+                console.log(table.text());
+                console.log('No rows for',current.year,section);
+            }
+
+            const results = rows.map(row => {
+                row = $(row);
+                const tds = row.find('td').toArray().map($);
+                if(tds.length != expected.length + 1) throw new Error('Unexpected elements length - stopping');
+                const [,,candidateRaw,pct,votesRaw] = tds;
+                
+                // the raw value has commas, so just pull out digits
+                const votes = parseInt($(votesRaw).text().replace(/[^\d]/g, ''));
+                const candidateLink = candidateRaw.find('a');
+                const candidateName = candidateLink.text().trim();
+                const candidateHref = candidateLink.attr('href');
+
+                let party;
+                if(candidateRaw.text().slice(-3) == '(R)') party='republican';
+                else if(candidateRaw.text().slice(-3) == 'D') party='democratic';
+
+                return {
+                    votes,
+                    party,
+                    candidate_name: candidateName,
+                    candidate_href: candidateHref
+                }
+            });
+
+            current[section] = results;
+        } else {
+            console.log('Weird: ',el.attr('class'),el.text());
+        }
+    });
+
+    return elections;
 };
 
 module.exports = {
