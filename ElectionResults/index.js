@@ -6,6 +6,27 @@ const STATE_MAP = {};
 STATES.forEach(x => STATE_MAP[x] = 1);
 const BALLOTPEDIA_URI = 'https://ballotpedia.org';
 
+function makeGet(uri) {
+    if(uri.indexOf(http) != 0) {
+        if(uri[0] != '/') uri = '/'+uri;
+        uri = BALLOTPEDIA_URI + uri;
+    }
+    return axios.get()
+}
+
+function checkLevel(level) {
+    level = level.toLowerCase();
+    if(level != 'senate' && level != 'house') throw new Error('level must be house or senate');
+    return level;
+}
+
+function checkDistrict(district) {
+    if(district == parseInt(district)) return district;
+    let m = district.toString().match(/[Dd]istrict\s+(\d+)/);
+    if(!m) throw new Error('Invalid district '+district);
+    return m[1];
+}
+
 // Currently ignores candidates that did not make the ballot
 function getCandidatesInformation(td,$) {
     const candidates = td.find('span.candidate').toArray();
@@ -203,20 +224,84 @@ async function getStateLegislatureLinks() {
 }
 
 async function getStateDistrictList({state,level}) {
+    state = state.toLowerCase();
     const all = await getStateLegislatureLinks();
     const match = all.find(x => x.state == state && x.level == level);
     if(!match) throw new Error(`Failed to get value for (${state}, ${level})`);
 
+    console.log('loading for',match);
+
     const {href}=match;
-    const data = await axios.get(`${BALLOTPEDIA_URI}${href}`);
-    let $=cheerio.load(data);
+    const resp = await axios.get(`${BALLOTPEDIA_URI}${href}`);
+    let $=cheerio.load(resp.data);
 
     let [table] = $('table#officeholder-table').toArray();
     if(!table) throw new Error('Failed to get table');
     table = $(table);
-    const headers = table.find('thead tr th').toArray(x=>$(x).text().trim());
-    const [of,n,p,d] = headers;
+    const headers = table.find('thead tr th').toArray().map(x=>$(x).text().trim());
+
+    const invalid = [
+        'Office',
+        'Name',
+        'Party',
+        'Date assumed office'
+    ].filter((x,i) => {
+        if(headers[i] != x) return true;
+        return false;
+    });
+    if(invalid.length) throw new Error('Invalid headers: '+headers.join(', '));
+
+    const districts = table.find('tbody tr').toArray().map(tr => {
+        tr=$(tr);
+        const [office,name,party,date] = tr.find('td').toArray().map(td => {
+            td = $(td);
+            return {
+                label: td.text().trim(),
+                href: td.find('a').attr('href')
+            };
+        });
+
+        // const district = office.label.match(/[Dd]istrict (\d+)/)?.[1];
+        // if(!district) throw new Error('Failed to find district in '+office.label);
+        const district = checkDistrict(office.label);
+
+        return {
+            office,
+
+            district,
+            district_href: href,
+
+            incumbent: name.label,
+            incumbent_href: name.href,
+
+            state,
+            level
+        }
+    });
+
+    return districts;
 }
+
+// For example:
+// https://ballotpedia.org/Pennsylvania_House_of_Representatives_District_49
+// Build the primary/general elections by iterating through the top level elements
+// and grouping by the year
+async function getStateDistrictElectionHistory({state,level,district}) {
+    district = checkDistrict(district);
+    state = state.toLowerCase();
+    level = checkLevel(level);
+
+    const districtList = await getStateDistrictList({state,level});
+    const match = districtList.find(x => x.state == state && x.district == district);
+    if(!match) throw new Error(`Invalid state/distrct: ${state}/${district}`);
+
+    const resp = await makeGet(match.district_href);
+    let $ = cheerio.load(resp.data);
+
+    const elements = $('h2 span#Elections,h3 span.mw-headline,div.electionsectionheading,div.votebox-scroll-container');
+
+    return match;
+};
 
 module.exports = {
     getStateElectionResults,
@@ -224,7 +309,7 @@ module.exports = {
     getStateLegislatureLinks
 }
 
-async function getElectionResultsForState({state,year,level}) {
+async function getElectionResultsForState({state,year,level,district}) {
     // if(!year) year = '2022';
     // year = year.toString();
     // const parts = await getStateElectionResults({state,year, level});
@@ -233,7 +318,13 @@ async function getElectionResultsForState({state,year,level}) {
     // const all = await getAllStateSenateElectionYears();
     // console.log('all:',JSON.stringify(all,null,2));
 
-    console.log(JSON.stringify(await getStateLegislatureLinks()));
+    // console.log(JSON.stringify(await getStateLegislatureLinks()));
+
+    console.log(JSON.stringify(await getStateDistrictElectionHistory({
+        state,
+        level,
+        district
+    }), null, 2));
 
 }
-getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house'});
+getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
