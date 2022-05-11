@@ -1,17 +1,67 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const path = require('path');
+const fs = require('fs').promises;
 
 const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 const STATE_MAP = {};
 STATES.forEach(x => STATE_MAP[x] = 1);
 const BALLOTPEDIA_URI = 'https://ballotpedia.org';
 
-function makeGet(uri) {
+const FILE_CACHE_PATH = path.join(__dirname, '/file-cache');
+
+const qProms = [];
+async function queuedFn(fn) {
+    let external;
+    const prom = new Promise((res,rej) => {
+        external = res;
+    });
+    if(qProms.length) {
+        qProms.push(external);
+        await prom;
+    }
+
+    const result = await fn();
+    const next = qProms.shift();
+    if(next) next();
+
+    return result;
+}
+
+async function sleep(time) {
+    console.log('sleeping',time);
+    await new Promise((res,rej) => {
+        setTimeout(res, time);
+    });
+}
+
+async function makeGetInternal(uri) {
+    uri = uri.replace(BALLOTPEDIA_URI,'');
+    const filePath = path.join(FILE_CACHE_PATH,uri);
+
+    try {
+        const data = await fs.readFile(filePath)
+        console.log('Using Cache File',filePath);
+        return data;
+    } catch(e) {
+        console.error('cache miss', filePath);
+    }
+
     if(uri.indexOf('http') != 0) {
         if(uri[0] != '/') uri = '/'+uri;
         uri = BALLOTPEDIA_URI + uri;
     }
-    return axios.get(uri);
+
+    await sleep((5+Math.random()) * 1000)
+
+    const response = await axios.get(uri);
+    
+    await fs.writeFile(filePath, response.data);
+    return response.data;
+}
+
+async function makeGet(uri) {
+    return queuedFn(() => makeGetInternal(uri));
 }
 
 function checkLevel(level) {
@@ -94,8 +144,8 @@ async function getAllLegistlatureElections() {
 
     console.log("Getting election links");
 
-    const content = await axios.get(`${BALLOTPEDIA_URI}/State_legislative_elections`);
-    let $ = cheerio.load(content.data);
+    const content = await makeGet(`${BALLOTPEDIA_URI}/State_legislative_elections`);
+    let $ = cheerio.load(content);
 
     const allLinks = $('a').toArray().map(x => {
         x = $(x);
@@ -131,9 +181,9 @@ async function extractElectionData({state,year,href}) {
     state = state.toLowerCase();
     state = `${state[0].toUpperCase()}${state.slice(1)}`;
     if(href[0] != '/') href = '/' + href;
-    const rawContent = await axios.get(`${BALLOTPEDIA_URI}${href}`);
+    const rawContent = await makeGet(`${BALLOTPEDIA_URI}${href}`);
     // console.log('Raw: ',rawContent);
-    let $ = cheerio.load(rawContent.data);
+    let $ = cheerio.load(rawContent);
 
     const tables = $('table.candidateListTablePartisan').toArray();
     if(!tables.length) throw new Error('Failed to get candidate list tables');
@@ -206,8 +256,8 @@ let legislatureLinks;
 // https://ballotpedia.org/States
 async function getStateLegislatureLinks() {
     if(legislatureLinks) return legislatureLinks;
-    const rawContent = await axios.get(`${BALLOTPEDIA_URI}/States`);
-    let $ = cheerio.load(rawContent.data);
+    const rawContent = await makeGet(`${BALLOTPEDIA_URI}/States`);
+    let $ = cheerio.load(rawContent);
     const links = $('a').toArray().map(a => {
         const label = $(a).text().toLowerCase().trim();
         const sl = getStateAndLevel(label);
@@ -220,17 +270,23 @@ async function getStateLegislatureLinks() {
     return legislatureLinks = links;
 }
 
+const stateDistrictList = {};
 async function getStateDistrictList({state,level}) {
     state = state.toLowerCase();
+    level = checkLevel(level);
+    const key = `${state}-${level}`;
+
+    if(stateDistrictList[key]) return stateDistrictList[key];
+
     const all = await getStateLegislatureLinks();
     const match = all.find(x => x.state == state && x.level == level);
     if(!match) throw new Error(`Failed to get value for (${state}, ${level})`);
 
-    console.log('loading for',match);
+    console.log('loading for',match.state);
 
     const {href}=match;
-    const resp = await axios.get(`${BALLOTPEDIA_URI}${href}`);
-    let $=cheerio.load(resp.data);
+    const resp = await makeGet(`${BALLOTPEDIA_URI}${href}`);
+    let $=cheerio.load(resp);
 
     let [table] = $('table#officeholder-table').toArray();
     if(!table) throw new Error('Failed to get table');
@@ -276,7 +332,7 @@ async function getStateDistrictList({state,level}) {
         }
     });
 
-    return districts;
+    return stateDistrictList[key] = districts;
 }
 
 // For example:
@@ -295,7 +351,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     console.log('match.district_href:',match.district_href);
 
     const resp = await makeGet(match.district_href);
-    let $ = cheerio.load(resp.data);
+    let $ = cheerio.load(resp);
 
     const sections = $('div.electionsectionheading');
     if(!sections.length) throw new Error('No div.electionsectionheading');
@@ -320,7 +376,18 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             if(id.match(/^\d\d\d\d$/)) {
                 console.log('Processing',id);
                 current = {
-                    year: parseInt(id)
+                    year: parseInt(id),
+                    special: false
+                };
+                section = null;
+                elections.push(current);
+                return;
+            }
+            
+            if(id == 'Special_election') {
+                current = {
+                    year: current.year,
+                    special: true
                 };
                 section = null;
                 elections.push(current);
@@ -330,11 +397,9 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
         // if no current, we haven't started yet
         if(!current) {
-            console.log('No Current');
+            console.log('No Current, skipping');
             return;
         }
-
-        console.log();
 
         if(el.hasClass('electionsectionheading')) {
             const title = el.text().trim().toLowerCase();
@@ -398,17 +463,28 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
             current[section] = results;
         } else {
-            console.log('Weird: ',el.attr('class'),el.text());
+            console.log('Unexpected element: ',el.attr('class'),el.text());
         }
     });
 
     return elections;
 };
 
+async function getStateElectionHistoryForLevel({state,level}) {
+    const list = await getStateDistrictList({state,level});
+    const all = [];
+    for(let i in list) {
+        const parts = await getStateDistrictElectionHistory(list[i]);
+        all.push(parts);
+    }
+    return all;
+}
+
 module.exports = {
     getStateElectionResults,
     getAllLegistlatureElections,
-    getStateLegislatureLinks
+    getStateLegislatureLinks,
+    getStateDistrictElectionHistory
 }
 
 async function getElectionResultsForState({state,year,level,district}) {
@@ -422,7 +498,13 @@ async function getElectionResultsForState({state,year,level,district}) {
 
     // console.log(JSON.stringify(await getStateLegislatureLinks()));
 
-    console.log(JSON.stringify(await getStateDistrictElectionHistory({
+    // console.log(JSON.stringify(await getStateDistrictElectionHistory({
+    //     state,
+    //     level,
+    //     district
+    // }), null, 2));
+
+    console.log(JSON.stringify(await getStateElectionHistoryForLevel({
         state,
         level,
         district
