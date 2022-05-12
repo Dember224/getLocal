@@ -12,7 +12,6 @@ const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
 const office = argv.office;
 const report = argv.report;
 
-//OK eff parsing an array to try and figure this out. Check for modules.
 
 const callData = {
   year,
@@ -33,11 +32,13 @@ if(command == 'getFinanceData'){
     loadFinanceArray(r);
   })
 } else if ( command == 'getStateElectionResults') {
-  getElectionResults[command]({state, year, level:office})
+  getElectionResults[command]({state, year, level:office}).then((results)=>{
+    console.dir(JSON.stringify(results,null, 2))
+  })
 } else if (command == 'getAllLegistlatureElections'){
   getElectionResults[command];
 } else if (command == 'getStateLegislatureLinks'){
   getElectionResults[command];
 } else {
-  Throw new Error('The index file does not recognize your command.')
+  throw new Error('The index file does not recognize your command.')
 }

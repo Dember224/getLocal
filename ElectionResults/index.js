@@ -173,7 +173,7 @@ async function extractElectionData({state,year,href}) {
 async function getStateElectionResults({state,year,level}) {
     if(level != 'senate' && level != 'house') throw new Error('level must be house or senate');
     const allStateElectionYears = await getAllLegistlatureElections();
-    
+
     state = state.toLowerCase();
 
     const info = allStateElectionYears.find(x => x.state == state && x.year == year && x.level == level);
@@ -236,4 +236,4 @@ async function getElectionResultsForState({state,year,level}) {
     console.log(JSON.stringify(await getStateLegislatureLinks()));
 
 }
-getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house'});
+// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house'});
