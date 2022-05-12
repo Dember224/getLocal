@@ -11,6 +11,7 @@ const command = argv.command;
 const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
 const office = argv.office;
 const report = argv.report;
+const election_type = argv.election_type
 
 
 const callData = {
@@ -22,7 +23,7 @@ const callData = {
 
 //if else becasue switch statements are for cowards.
 if(command == 'getFinanceData'){
-  stateSearches[state][command](callData, (e,r)=>{
+  stateSearches[state][command]({year, election_type, office}, (e,r)=>{
     if(e) console.log(e);
     console.log(r);
   })

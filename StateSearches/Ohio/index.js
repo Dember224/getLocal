@@ -92,7 +92,7 @@ const getFinanceData = function(callData, callback){
         }
       }).filter(x=>{
         if(x!== undefined){
-          return x.party === 'DEMOCRAT'
+          return x
         }
       })
       return callback(null, the_cash)
