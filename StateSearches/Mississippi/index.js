@@ -343,9 +343,9 @@ const loadMississippiFinances = function(callData){
   })
 }
 
-loadMississippiFinances({year:2019, election_type:"General"})
+// loadMississippiFinances({year:2019, election_type:"General"})
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{
 //   if (e) return e;
 //   console.log(r)
 // })
-//Can't use any of this. Mississippi's data is too effed. Have to revisit. 
+//Can't use any of this. Mississippi's data is too effed. Have to revisit.

@@ -97,7 +97,7 @@ const getMoney = function(callData, callback){
   })
 };
 
-const getAllMoney = function(callData, callback){
+const getFinanceData = function(callData, callback){
   let count = 0;
   getCandidates({year:callData.year}, (e,candidate_array)=>{
     if(e) return e;
@@ -129,7 +129,7 @@ const getAllMoney = function(callData, callback){
 }
 
 const loadData = async function(callData){
-  await getAllMoney({year:callData.year, election_type:callData.election_type}, async (e,money_object)=>{
+  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_object)=>{
     if(e) return e;
     await loader.loadFinanceArray(money_object);
     return money_object;
@@ -137,5 +137,5 @@ const loadData = async function(callData){
 }
 // loadData({year:2020, election_type:'General'})
 module.exports = {
-  loadData
+  getFinanceData
 }

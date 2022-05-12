@@ -224,7 +224,7 @@ const checkAllDistricts = function(callData, callback){
   })
 }
 
-const getAllMoney = function(callData, callback){
+const getFinanceData = function(callData, callback){
   async.autoInject({
     getHouseData:(cb)=>{
       checkAllDistricts({year:callData.year, office:'STATE REPRESENTATIVE', election_type:callData.election_type}, (e,money_array)=>{
@@ -254,7 +254,7 @@ const getAllMoney = function(callData, callback){
 // getAllMoney({year:2018, election_type:'primary'})
 
 const loadData = function(callData){
-  getAllMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+  getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
     if(e) return e;
     loader.loadFinanceArray(money_array);
     return money_array;
@@ -265,7 +265,7 @@ const loadData = function(callData){
 
 
 module.exports = {
-  loadData
+  getFinanceData
 }
 // const loadSenateData = async function(callData){
 //   await checkAllDistricts({year:callData.year, office:callData.office, election_type:callData.election_type}, (e,money_array)=>{

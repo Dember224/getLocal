@@ -143,7 +143,7 @@ if(parse_money.split('\n').filter(x=>{
 // })
 // getCandidates({election_type:'primary', election_year:2020})
 
-const getAllMoney = function(callData, callback){
+const getFinanceData = function(callData, callback){
   getCandidates({election_type:'primary', election_year:2020}, (e, candidate_array)=>{
     if(e) return e;
     let count = 1;
@@ -182,7 +182,7 @@ const getAllMoney = function(callData, callback){
 
 
 const loadData = async function(callData){
-  await getAllMoney({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
+  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
     if(e) return e;
     await loader.loadFinanceArray(money_array);
     return money_array;
@@ -194,5 +194,5 @@ const loadData = async function(callData){
 // })
 // loadData({year:2020,election_type:'primary'})
 module.exports={
-  loadData
+  getFinanceData
 }

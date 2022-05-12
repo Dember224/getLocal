@@ -280,7 +280,7 @@ const getMoney = function(callData, callback){
   })
 }
 
-const get_all_money = function(callData, callback){
+const getFinanceData = function(callData, callback){
   getCandidates({office:callData.office, year:callData.year}, (e,candidate_array)=>{
     if(e) return e;
     async.mapSeries(candidate_array, (candidate_object, cb)=>{
@@ -302,7 +302,7 @@ const get_all_money = function(callData, callback){
 };
 
 const loadData = async function(callData){
-  await get_all_money({report: callData.report, year: callData.year, office: callData.office}, (e, money_array)=>{
+  await getFinanceData({report: callData.report, year: callData.year, office: callData.office}, (e, money_array)=>{
     if(e) return e;
     loader.loadFinanceArray(money_array);
     return money_array;
@@ -317,5 +317,5 @@ const loadData = async function(callData){
 // loadData({report:'December 31st - Election Year', year:2020, office: "State Representative"})
 //you have to use the weird date, and name of the year format commented on the line immediately preceeding this one. You can get the refrence from Georgia's UI.
 module.exports={
-  loadData
+  getFinanceData
 }

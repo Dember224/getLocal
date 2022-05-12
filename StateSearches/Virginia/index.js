@@ -64,11 +64,19 @@ function sortOffice(office_name){
 const readReportCsv = function(callData, callback){
   const results = [];
   const month = callData.month<10? `0${callData.month}` : callData.month;
-  got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/Report.csv`)
+  const endpoint = `https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/Report.csv`;
+  got.stream(endpoint)
   .pipe(csv())
-  .on('data', (data) => results.push(data))
+  .on('data', (data) =>{
+    try{
+      results.push(data)
+    } catch(e) {
+      return callback(e);
+    }
+  })
   .on('end', () => {
-    const report_array = results.map(x=>{
+    try {
+      const report_array = results.map(x=>{
       const report_object = {
         name: x.CandidateName.replace(/(Mr|MR|Ms|Miss|Mrs|Dr|Sir|Senator|Hon.|Rev.|Delegate)(\.?)\s/,""),
         report_id:x.ReportId,
@@ -87,6 +95,9 @@ const readReportCsv = function(callData, callback){
         return x
       }
     }));
+  } catch(e) {
+    return callback(e);
+  }
   });
 }
 
@@ -95,17 +106,28 @@ const readScheduleHCsv = function(callData, callback){
   const month = callData.month<10? `0${callData.month}` : callData.month;
   got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/ScheduleH.csv`)
     .pipe(csv())
-    .on('data', (data) => results.push(data))
+    .on('data', (data) =>{
+      try {
+        results.push(data)
+      } catch(error) {
+        return callback(error)
+      }
+    })
     .on('end', () => {
-      const report_array = results.map(x=>{
-        const report_object = {
-          contributions: x.TotalReceiptsThisElectionCycle,
-          expenditures:x.TotalDisbursements,
-          report_id:x.ReportId
-        }
-        return report_object
-      })
-      return callback(null, report_array)
+      try{
+        const report_array = results.map(x=>{
+          const report_object = {
+            contributions: x.TotalReceiptsThisElectionCycle,
+            expenditures:x.TotalDisbursements,
+            report_id:x.ReportId
+          }
+          return report_object
+        })
+        return callback(null, report_array)
+      } catch(error) {
+        return callback(error)
+      }
+
     });
 }
 
@@ -153,16 +175,26 @@ const getCommiteeRecords = function(callData){
   const month = callData.month<10? `0${callData.month}` : callData.month;
   got.stream(`https://apps.elections.virginia.gov/SBE_CSV/CF/${callData.year}_${month}/Report.csv`)
   .pipe(csv())
-  .on('data', (data) => results.push(data))
+  .on('data', (data) => {
+    try {
+      results.push(data)
+    } catch(e) {
+      return callback(e);
+    }
+  })
   .on('end', () => {
-    const committee_records = results.filter(x=>{
+    try {
+      const committee_records = results.filter(x=>{
       return x.CandidateName === '';
     })
     console.log(committee_records)
+  } catch(e) {
+    console.log(e)
+  }
   })
 }
 
-const checkAllMonths = async function(callData, callback){
+const getFinanceData = async function(callData, callback){
   async.map([1,2,3,4,5,6,7,8,9,10,11,12], (month,cb)=>{
     getMoney({year: callData.year, election_type:callData.election_type, month}, (e, money_object)=>{
       if(e) return e;
@@ -196,15 +228,16 @@ const checkAllMonths = async function(callData, callback){
 // getCommiteeRecords({year:2019})
 // checkAllMonths({year:2019, election_type:'General'})
 
-const loadData = async function(callData){
-  await checkAllMonths({year:callData.year, election_type:callData.election_type}, async(e,money_object)=>{
+const loadData = function(callData){
+  getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_object)=>{
     if(e) return e;
-    await loader.loadFinanceArray(money_object);
+    loader.loadFinanceArray(money_object);
+    console.log(money_object)
     return money_object;
   });
 }
 // loadData({year:2019, election_type:"General"})
 // getCandidateNames({election_type:'General', office:'House of Delegates', year: 2019}); //The offices are State Senate and House of Delegates case sensitive
 module.exports = {
-  loadData
+  getFinanceData
 }
