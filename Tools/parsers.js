@@ -47,6 +47,10 @@ const partyParser = function(party){
     return 'democrat';
   } else if(lower_party.match(/rep/) ){
     return 'republican';
+  } else if (lower_party.match(/lib/)){
+    return 'libertarian';
+  } else if (lower_party.match(/gre/)){
+    return 'green';
   } else {
     return lower_party
   }
@@ -72,7 +76,7 @@ const parseExcelFileEndpoint = function(url, callback){
             return return_object
           }
         }) //This process for objectifying the data will totally break on a larger Excel file, but should be fine for a few thousand records.
-        //Don't use on things like a full xlx database download. 
+        //Don't use on things like a full xlx database download.
         return callback(null, return_array)
     })
     .catch((e)=>{
