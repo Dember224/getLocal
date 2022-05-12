@@ -1,10 +1,81 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const path = require('path');
+const fs = require('fs').promises;
 
 const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 const STATE_MAP = {};
 STATES.forEach(x => STATE_MAP[x] = 1);
 const BALLOTPEDIA_URI = 'https://ballotpedia.org';
+
+const FILE_CACHE_PATH = path.join(__dirname, '/file-cache');
+
+const qProms = [];
+async function queuedFn(fn) {
+    let external;
+    const prom = new Promise((res,rej) => {
+        external = res;
+    });
+    if(qProms.length) {
+        qProms.push(external);
+        await prom;
+    }
+
+    const result = await fn();
+    const next = qProms.shift();
+    if(next) next();
+
+    return result;
+}
+
+async function sleep(time) {
+    console.log('sleeping',time);
+    await new Promise((res,rej) => {
+        setTimeout(res, time);
+    });
+}
+
+async function makeGetInternal(uri) {
+    uri = uri.replace(BALLOTPEDIA_URI,'');
+    const filePath = path.join(FILE_CACHE_PATH,uri);
+
+    try {
+        const data = await fs.readFile(filePath)
+        console.log('Using Cache File',filePath);
+        return data;
+    } catch(e) {
+        console.error('cache miss', filePath);
+    }
+
+    if(uri.indexOf('http') != 0) {
+        if(uri[0] != '/') uri = '/'+uri;
+        uri = BALLOTPEDIA_URI + uri;
+    }
+
+    await sleep((5+Math.random()) * 1000)
+
+    const response = await axios.get(uri);
+    
+    await fs.writeFile(filePath, response.data);
+    return response.data;
+}
+
+async function makeGet(uri) {
+    return queuedFn(() => makeGetInternal(uri));
+}
+
+function checkLevel(level) {
+    level = level.toLowerCase();
+    if(level != 'senate' && level != 'house') throw new Error('level must be house or senate');
+    return level;
+}
+
+function checkDistrict(district) {
+    if(district == parseInt(district)) return district;
+    let m = district.toString().match(/[Dd]istrict\s+(\d+)/);
+    if(!m) throw new Error('Invalid district '+district);
+    return m[1];
+}
 
 // Currently ignores candidates that did not make the ballot
 function getCandidatesInformation(td,$) {
@@ -40,7 +111,6 @@ function getStateAndLevel(label) {
 
     const state = STATES.find(s => label.indexOf(s.toLowerCase()) == 0)?.toLowerCase();
     if(!state) {
-        console.log("Did not recognize state:",label);
         return null;
     }
 
@@ -74,8 +144,8 @@ async function getAllLegistlatureElections() {
 
     console.log("Getting election links");
 
-    const content = await axios.get(`${BALLOTPEDIA_URI}/State_legislative_elections`);
-    let $ = cheerio.load(content.data);
+    const content = await makeGet(`${BALLOTPEDIA_URI}/State_legislative_elections`);
+    let $ = cheerio.load(content);
 
     const allLinks = $('a').toArray().map(x => {
         x = $(x);
@@ -111,9 +181,9 @@ async function extractElectionData({state,year,href}) {
     state = state.toLowerCase();
     state = `${state[0].toUpperCase()}${state.slice(1)}`;
     if(href[0] != '/') href = '/' + href;
-    const rawContent = await axios.get(`${BALLOTPEDIA_URI}${href}`);
+    const rawContent = await makeGet(`${BALLOTPEDIA_URI}${href}`);
     // console.log('Raw: ',rawContent);
-    let $ = cheerio.load(rawContent.data);
+    let $ = cheerio.load(rawContent);
 
     const tables = $('table.candidateListTablePartisan').toArray();
     if(!tables.length) throw new Error('Failed to get candidate list tables');
@@ -186,12 +256,10 @@ let legislatureLinks;
 // https://ballotpedia.org/States
 async function getStateLegislatureLinks() {
     if(legislatureLinks) return legislatureLinks;
-    const rawContent = await axios.get(`${BALLOTPEDIA_URI}/States`);
-    console.log('Processing');
-    let $ = cheerio.load(rawContent.data);
+    const rawContent = await makeGet(`${BALLOTPEDIA_URI}/States`);
+    let $ = cheerio.load(rawContent);
     const links = $('a').toArray().map(a => {
         const label = $(a).text().toLowerCase().trim();
-        console.log('label:',label);
         const sl = getStateAndLevel(label);
         if(!sl) return null;
         return {
@@ -202,29 +270,229 @@ async function getStateLegislatureLinks() {
     return legislatureLinks = links;
 }
 
+const stateDistrictList = {};
 async function getStateDistrictList({state,level}) {
+    state = state.toLowerCase();
+    level = checkLevel(level);
+    const key = `${state}-${level}`;
+
+    if(stateDistrictList[key]) return stateDistrictList[key];
+
     const all = await getStateLegislatureLinks();
     const match = all.find(x => x.state == state && x.level == level);
     if(!match) throw new Error(`Failed to get value for (${state}, ${level})`);
 
+    console.log('loading for',match.state);
+
     const {href}=match;
-    const data = await axios.get(`${BALLOTPEDIA_URI}${href}`);
-    let $=cheerio.load(data);
+    const resp = await makeGet(`${BALLOTPEDIA_URI}${href}`);
+    let $=cheerio.load(resp);
 
     let [table] = $('table#officeholder-table').toArray();
     if(!table) throw new Error('Failed to get table');
     table = $(table);
-    const headers = table.find('thead tr th').toArray(x=>$(x).text().trim());
-    const [of,n,p,d] = headers;
+    const headers = table.find('thead tr th').toArray().map(x=>$(x).text().trim());
+
+    const invalid = [
+        'Office',
+        'Name',
+        'Party',
+        'Date assumed office'
+    ].filter((x,i) => {
+        if(headers[i] != x) return true;
+        return false;
+    });
+    if(invalid.length) throw new Error('Invalid headers: '+headers.join(', '));
+
+    const districts = table.find('tbody tr').toArray().map(tr => {
+        tr=$(tr);
+        const [office,name,party,date] = tr.find('td').toArray().map(td => {
+            td = $(td);
+            return {
+                label: td.text().trim(),
+                href: td.find('a').attr('href')
+            };
+        });
+
+        // const district = office.label.match(/[Dd]istrict (\d+)/)?.[1];
+        // if(!district) throw new Error('Failed to find district in '+office.label);
+        const district = checkDistrict(office.label);
+
+        return {
+            office,
+
+            district,
+            district_href: office.href,
+
+            incumbent: name.label,
+            incumbent_href: name.href,
+
+            state,
+            level
+        }
+    });
+
+    return stateDistrictList[key] = districts;
+}
+
+// For example:
+// https://ballotpedia.org/Pennsylvania_House_of_Representatives_District_49
+// Build the primary/general elections by iterating through the top level elements
+// and grouping by the year
+async function getStateDistrictElectionHistory({state,level,district}) {
+    district = checkDistrict(district);
+    state = state.toLowerCase();
+    level = checkLevel(level);
+
+    const districtList = await getStateDistrictList({state,level});
+    const match = districtList.find(x => x.state == state && x.district == district);
+    if(!match) throw new Error(`Invalid state/distrct: ${state}/${district}`);
+
+    console.log('match.district_href:',match.district_href);
+
+    const resp = await makeGet(match.district_href);
+    let $ = cheerio.load(resp);
+
+    const sections = $('div.electionsectionheading');
+    if(!sections.length) throw new Error('No div.electionsectionheading');
+
+    const containers = $('div.votebox-scroll-container');
+    if(!containers.length) throw new Error('No div.votebox-scroll-container');
+
+    let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline')
+        .toArray();
+        
+    const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
+    if(electionsIndex == -1) throw new Error('Failed to find Elections section');
+    elements = elements.slice(electionsIndex+1);
+
+    let elections = [];
+    let current, section;
+    elements.forEach(el => {
+        el = $(el);
+        const id = el.attr('id');
+        if(el.hasClass('mw-headline')) {
+            // this is the start of a year election section
+            if(id.match(/^\d\d\d\d$/)) {
+                console.log('Processing',id);
+                current = {
+                    year: parseInt(id),
+                    special: false
+                };
+                section = null;
+                elections.push(current);
+                return;
+            }
+            
+            if(id == 'Special_election') {
+                current = {
+                    year: current.year,
+                    special: true
+                };
+                section = null;
+                elections.push(current);
+                return;
+            }
+        }
+
+        // if no current, we haven't started yet
+        if(!current) {
+            console.log('No Current, skipping');
+            return;
+        }
+
+        if(el.hasClass('electionsectionheading')) {
+            const title = el.text().trim().toLowerCase();
+            console.log('Processing scroll-container',title);
+
+            if(title == 'general election') section = 'general';
+            else if(title == 'democratic primary election') section = 'democratic_primary';
+            else if(title == 'republican primary election') section = 'republican_primary';
+            else throw new Error(`Failed to match title '${title}'`);
+        } else if(el.hasClass('votebox-scroll-container')) {
+            console.log('Processing scroll-container');
+
+            if(current[section]) throw new Error('Found second section with '+section);
+
+            const table = el.find('div.results_table_container table.results_table');
+            if(!table.length) throw new Error('Failed to find results table');
+
+            const headers = table.find('tr.non_result_row td').toArray().map(x => $(x).text().trim().toLowerCase());
+
+            let expected;
+            // there are 2 headers when the election has not happened yet
+            if(headers.length == 2) expected = ['','candidate'];
+            else expected = [
+                '',
+                'candidate',
+                '%',
+                'votes'
+            ];
+            const invalid = expected.filter((x,i) => headers[i] != x);
+            if(invalid.length) throw new Error('Unexpected headers: '+headers.join(', '));
+
+            const rows = table.find('tr.results_row').toArray();
+            if(!rows.length) {
+                console.log(table.text());
+                console.log('No rows for',current.year,section);
+            }
+
+            const results = rows.map(row => {
+                row = $(row);
+                const tds = row.find('td').toArray().map($);
+                if(tds.length != expected.length + 1) throw new Error('Unexpected elements length - stopping');
+                const [,,candidateRaw,pct,votesRaw] = tds;
+                
+                // the raw value has commas, so just pull out digits
+                const votes = parseInt($(votesRaw).text().replace(/[^\d]/g, ''));
+                const candidateLink = candidateRaw.find('a');
+                const candidateName = candidateLink.text().trim();
+                const candidateHref = candidateLink.attr('href');
+
+                let party;
+                if(candidateRaw.text().slice(-3) == '(R)') party='republican';
+                else if(candidateRaw.text().slice(-3) == 'D') party='democratic';
+
+                return {
+                    votes,
+                    party,
+                    candidate_name: candidateName,
+                    candidate_href: candidateHref
+                }
+            });
+
+            current[section] = results;
+            current.has_results = true;
+        } else {
+            console.log('Unexpected element: ',el.attr('class'),el.text());
+        }
+    });
+
+    // currently only handling the most recent type of results table
+    // it looks like the data was previously in a different format (before 2018?)
+    elections = elections.filter(x => x.has_results).map(x => ({...x, state, level, district}));
+
+    return elections;
+};
+
+async function getStateElectionHistoryForLevel({state,level}) {
+    const list = await getStateDistrictList({state,level});
+    const all = [];
+    for(let i in list) {
+        const parts = await getStateDistrictElectionHistory(list[i]);
+        all.push(parts);
+    }
+    return all;
 }
 
 module.exports = {
     getStateElectionResults,
     getAllLegistlatureElections,
-    getStateLegislatureLinks
+    getStateLegislatureLinks,
+    getStateDistrictElectionHistory
 }
 
-async function getElectionResultsForState({state,year,level}) {
+async function getElectionResultsForState({state,year,level,district}) {
     // if(!year) year = '2022';
     // year = year.toString();
     // const parts = await getStateElectionResults({state,year, level});
@@ -233,7 +501,19 @@ async function getElectionResultsForState({state,year,level}) {
     // const all = await getAllStateSenateElectionYears();
     // console.log('all:',JSON.stringify(all,null,2));
 
-    console.log(JSON.stringify(await getStateLegislatureLinks()));
+    // console.log(JSON.stringify(await getStateLegislatureLinks()));
+
+    // console.log(JSON.stringify(await getStateDistrictElectionHistory({
+    //     state,
+    //     level,
+    //     district
+    // }), null, 2));
+
+    console.log(JSON.stringify(await getStateElectionHistoryForLevel({
+        state,
+        level,
+        district
+    }), null, 2));
 
 }
-// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house'});
+// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
