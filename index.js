@@ -40,6 +40,10 @@ if(command == 'getFinanceData'){
   getElectionResults[command];
 } else if (command == 'getStateLegislatureLinks'){
   getElectionResults[command];
+} else if(command == 'getStateDistrictElectionHistory'){
+  getElectionResults[command]({state, level:office}).then((results)=>{
+    console.log(results)
+  })
 } else {
   throw new Error('The index file does not recognize your command.')
 }
