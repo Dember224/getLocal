@@ -3,6 +3,18 @@ const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../../Loaders/uploadFinances.js');
 
+
+const party_object = {
+  'Constitution': 20,
+  'Democrat':2,
+  'Independent':19,
+  'Libertarian':22,
+  'Republican':5,
+  "The People's Party":23,
+  "Write-In": 21
+}
+
+const party_list = Object.keys(party_object);
 //Republicans are still being rendered here.
 //Changing the party on the request call doesn't seem to be doing anything.
 //Will have to find a way to filter out the republicans later.
@@ -27,7 +39,7 @@ const getSearchSettings = function(callData,callback){
     const form_html = $(".md-form").html();
     const election_number = $(`option:contains(\'${election}')`).attr('value');
     const office_number = $(`option:contains(\'${office}')`).attr('value');
-    const party_number =  $(`option:contains(\'${party}')`).attr('value');
+    const party_number =  party_object[party]
 
     const search_object = {
       election:election_number,
@@ -59,7 +71,7 @@ const getFirstViewState = function(callData, callback){
 
     const election_number = $(`option:contains(\'${election}')`).attr('value');
     const office_number = $(`option:contains(\'${office}')`).attr('value');
-    const party_number =  $(`option:contains(\'${party}')`).attr('value');
+    const party_number =  party_object[party]
     const state_object = {
       viewstate,
       event_validation,
@@ -92,7 +104,7 @@ const getOfficeId = function (callData, callback){
         '__EVENTVALIDATION': state_object.event_validation,
         '_ctl0:Content:ddlElection': 0,
         '_ctl0:Content:ddlOffice': state_object.office_number,
-        '_ctl0:Content:ddlParty:ucddlParty': '-1',
+        '_ctl0:Content:ddlParty:ucddlParty': party_object[callData.party],
         '_ctl0:Content:ddlYearToShow': 0
       },
       method:'POST',
@@ -125,7 +137,7 @@ const getOfficeId = function (callData, callback){
 
 const getCandidateMoney = function(callData, callback){
 
-  getOfficeId({year:callData.year, office:callData.office, party:'Democrat', district:callData.district}, (e, search_object)=>{
+  getOfficeId({year:callData.year, office:callData.office, party:callData.party, district:callData.district}, (e, search_object)=>{
     if(e) return e;
     const district = callData.district
     request({
@@ -133,7 +145,7 @@ const getCandidateMoney = function(callData, callback){
       form:{
         "_ctl0:Content:ddlElection":search_object.election_number,
         "_ctl0:Content:ddlOffice":search_object.office_number,
-        "_ctl0:Content:ddlParty:ucddlParty":2,
+        "_ctl0:Content:ddlParty:ucddlParty":party_object[callData.party],
         "_ctl0:Content:ddlDistrict":search_object.district_id,
         "_ctl0:Content:ddlYearToShow": callData.year,
         "_ctl0:Content:btnSearch": "Search",
@@ -166,7 +178,8 @@ const getCandidateMoney = function(callData, callback){
           money_object["district"] = callData.district;
           money_object["election_type"] = callData.election_type.trim();
           money_object["election_year"] = new Date('01/01/'+callData.year).toGMTString();
-          money_object["name_year"] = `${array[2].trim()}${callData.year}${callData.election_type}`
+          money_object["name_year"] = `${array[2].trim()}${callData.year}${callData.election_type}`;
+          money_object["party"] = callData.party
         }
 
         if(array[15]){
@@ -207,7 +220,7 @@ const checkAllDistricts = function(callData, callback){
   }
   const district_numbers = callData.office === "STATE SENATOR" ? range(1,43) : range(44,149)
   async.mapSeries(district_numbers, (district,cb)=>{
-    getCandidateMoney({year:callData.year, office:callData.office, district:district, election_type: callData.election_type}, (e,money_object)=>{
+    getCandidateMoney({year:callData.year, office:callData.office, district:district, election_type: callData.election_type, party:callData.party}, (e,money_object)=>{
       if(e) return e;
       return cb(null, money_object);
     })
@@ -224,16 +237,16 @@ const checkAllDistricts = function(callData, callback){
   })
 }
 
-const getFinanceData = function(callData, callback){
+const getBothChamberData = function(callData, callback){
   async.autoInject({
     getHouseData:(cb)=>{
-      checkAllDistricts({year:callData.year, office:'STATE REPRESENTATIVE', election_type:callData.election_type}, (e,money_array)=>{
+      checkAllDistricts({year:callData.year, office:'STATE REPRESENTATIVE', election_type:callData.election_type, party: callData.party}, (e,money_array)=>{
         if(e) return cb(e);
         return cb(null, money_array);
       })
     },
     getSenateData:(cb)=>{
-      checkAllDistricts({year:callData.year, office:'STATE SENATOR', election_type: callData.election_type}, (e,money_array)=>{
+      checkAllDistricts({year:callData.year, office:'STATE SENATOR', election_type: callData.election_type, party:callData.party}, (e,money_array)=>{
         if(e) return cb(e)
         return cb(null, money_array);
       })
@@ -248,6 +261,25 @@ const getFinanceData = function(callData, callback){
       return_array.push(x)
     })
     return callback(null, return_array)
+  })
+}
+
+const getFinanceData = function(callData, callback){
+  async.mapSeries(party_list, (party, cb)=>{
+    getBothChamberData({year:callData.year, election_type: callData.election_type, party}, (e, sub_finance_array)=>{
+      if(e) return cb(e);
+      console.log(sub_finance_array, party)
+      return cb(null, sub_finance_array);
+    })
+  }, (e,finance_array)=>{
+    if(e) return callback(e);
+    const return_array = [];
+    finance_array.map(x=>{
+      x.map(y=>{
+        return_array.push(y)
+      })
+    })
+    return callback(null, return_array);
   })
 }
 
