@@ -516,4 +516,4 @@ async function getElectionResultsForState({state,year,level,district}) {
     }), null, 2));
 
 }
-// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
+getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
