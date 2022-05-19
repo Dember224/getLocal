@@ -105,10 +105,10 @@ const getAllStatesCensusData = function(callData, callback){
   })
 
 }
-getAllStatesCensusData({office:'representative', district:'*'}, (e,r)=>{
-  if(e) return e;
-  console.log(r)
-})
+// getAllStatesCensusData({office:'representative', district:'*'}, (e,r)=>{
+//   if(e) return e;
+//   console.log(r)
+// })
 // getDistrictCensusData({office:'representative', district:'*', state:'Maine'}, (e,r)=>{
 //   if(e) console.log(e);
 //   console.log(r);
