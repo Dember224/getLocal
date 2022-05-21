@@ -6,6 +6,7 @@ const async = require('async');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const loader = require('../../Loaders/uploadFinances.js');
+const partyParser = require('../../Tools/parsers.js').partyParser;
 
 function getOffice(office_name){
   if(office_name ==='SEN'){
@@ -85,7 +86,7 @@ const getMoney = async function(callData, callback){
   await page.goto(`https://cal-access.sos.ca.gov${callData.uri}`);
   let bodyHTML = await page.evaluate(() => document.body.innerHTML);
   const $ = cheerio.load(bodyHTML);
-  const party = $('.hdr15').text();
+  const party = partyParser($('.hdr15').text());
   const year = callData.year;
   const election_type_upper = callData.election_type.toUpperCase()
   const district_element = $(`tr:contains("${year} ${election_type_upper}")`).html() ? $(`tr:contains("${year} ${election_type_upper}")`).html().split('table').map(x=>{
@@ -126,7 +127,8 @@ if(parse_money.split('\n').filter(x=>{
     state:'California',
     election_type: callData.election_type,
     contributions,
-    expenditures
+    expenditures,
+    party
   }
 
   return callback(null, return_object)

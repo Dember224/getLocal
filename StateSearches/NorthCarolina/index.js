@@ -4,6 +4,7 @@ const csv = require('csv-parser');
 const cheerio = require('cheerio');
 const async = require('async');
 const loader = require('../../Loaders/uploadFinances.js');
+const partyParser = require('../../Tools/parsers').partyParser
 
 function getOffice(contest_name){
   if(contest_name.includes('NC STATE SENATE')){
@@ -22,10 +23,8 @@ const getCandidateList = function(callData, callback){
     .on('data', (data) => results.push(data))
     .on('end', () => {
       let filtered_results = results.filter(x=>{
-        if(x.party_candidate ==='DEM'){
-          if(x.contest_name.includes('NC HOUSE OF REPRESENTATIVES') || x.contest_name.includes('NC STATE SENATE')){
-            return x;
-          }
+        if(x.contest_name.includes('NC HOUSE OF REPRESENTATIVES') || x.contest_name.includes('NC STATE SENATE')){
+          return x;
         }
       })
       filtered_results = filtered_results.map(x=>{
@@ -36,7 +35,8 @@ const getCandidateList = function(callData, callback){
           election_year: new Date('01/01/'+callData.year).toGMTString(),
           election_type: callData.election_type,
           state:'North Carolina',
-          asOf: new Date()
+          asOf: new Date(),
+          party: partyParser(x.party_candidate)
         };
         return return_object;
       })
