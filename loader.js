@@ -3,7 +3,7 @@ const [,, loadType, state, year] = process.argv;
 async function loadElectionResults(storage) {
     const elections = require('./ElectionResults/pull');
     const upper = await elections.getStateElectionHistoryForLevel({state,level:'upper'});
-    const lower = []; // await elections.getStateElectionHistoryForLevel({state,level:'lower'});
+    const lower = await elections.getStateElectionHistoryForLevel({state,level:'lower'});
 
     const all = [];
     upper.concat(lower).forEach(x => x.forEach(y => all.push(y)));

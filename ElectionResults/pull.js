@@ -366,7 +366,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     const containers = $('div.votebox-scroll-container');
     if(!containers.length) throw new Error('No div.votebox-scroll-container');
 
-    let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline')
+    let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline, p')
         .toArray();
         
     const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
@@ -422,7 +422,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             return;
         }
 
-        if(el.hasClass('electionsectionheading')) {
+        if(el[0].tagName == 'div' && el.hasClass('electionsectionheading')) {
             const title = el.text().trim().toLowerCase();
             console.log('Processing scroll-container',title);
 
@@ -431,7 +431,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             else if(title == 'republican primary election') section = 'republican_primary';
 
             else throw new Error(`Failed to match title '${title}'`);
-        } else if(el.hasClass('votebox-scroll-container')) {
+        } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
             console.log('Processing scroll-container');
 
             if(current[section]) throw new Error('Found second section with '+section);
@@ -492,8 +492,16 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
             current[section] = results;
             current.has_results = true;
+        } else if(section == 'general' && !current.general_date) {
+            const resultsText = el.text().trim();
+            console.log('trying for date:', resultsText);
+            const [,dateRaw] = resultsText.match(/general.+on\s+(\w+\s+\d+,\s+\d+)\./) || [];
+            if(dateRaw) {
+                const date = moment(dateRaw, "MMMM D, YYYY");
+                current[`${section}_date`] = date;
+            }
         } else {
-            console.log('Unexpected element: ',el.attr('class'),el.text());
+            console.log('ignoring element:',el.attr('class'),el.text().trim().slice(0,100));
         }
     });
 
@@ -535,16 +543,16 @@ async function getElectionResultsForState({state,year,level,district}) {
 
     // console.log(JSON.stringify(await getStateLegislatureLinks()));
 
-    // console.log(JSON.stringify(await getStateDistrictElectionHistory({
-    //     state,
-    //     level,
-    //     district
-    // }), null, 2));
-
-    console.log(JSON.stringify(await getStateElectionHistoryForLevel({
+    console.log(JSON.stringify(await getStateDistrictElectionHistory({
         state,
         level,
         district
     }), null, 2));
+
+    // console.log(JSON.stringify(await getStateElectionHistoryForLevel({
+    //     state,
+    //     level,
+    //     district
+    // }), null, 2));
 }
-// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
+// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 10'});

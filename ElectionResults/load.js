@@ -25,19 +25,7 @@ function getChamberLevel(level) {
 }
 ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
     for(const election of results) {
-        // let {
-        //     year,
-        //     special,
-        //     general,
-        //     democratic_primary=[],
-        //     republican_primary=[],
-        //     state,
-        //     level,
-        //     district,
-        //     date
-        // } = election;
-
-        console.log("Looking up",election.state,election.chamber);
+        // console.log("Looking up",election.state,election.chamber);
         const stateName = election.state
         const state = await this.State.findOne({
             where: {
@@ -70,7 +58,10 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
         });
 
         const {year, general_date} = election;
-        if(!general_date) throw new Error('General Date Missing');
+        if(!general_date) {
+            console.log(JSON.stringify(election, null, 2));
+            throw new Error('General Date Missing');
+        }
         const [generalElection] = await this.Election.findOrCreate({
             where: {
                 year,
