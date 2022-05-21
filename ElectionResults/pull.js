@@ -1,7 +1,9 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { async } = require('node-stream-zip');
 const path = require('path');
 const fs = require('fs').promises;
+const moment = require('moment');
 
 const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 const STATE_MAP = {};
@@ -66,7 +68,11 @@ async function makeGet(uri) {
 
 function checkLevel(level) {
     level = level.toLowerCase();
-    if(level != 'senate' && level != 'house') throw new Error('level must be house or senate');
+
+    if(level == 'upper') level = 'senate';
+    if(level == 'lower') level = 'house';
+
+    if(level != 'senate' && level != 'house') throw new Error('level must be house or senate, was: '+level);
     return level;
 }
 
@@ -348,9 +354,10 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     const match = districtList.find(x => x.state == state && x.district == district);
     if(!match) throw new Error(`Invalid state/distrct: ${state}/${district}`);
 
-    console.log('match.district_href:',match.district_href);
+    const {district_href} = match;
+    console.log('match.district_href:', district_href);
 
-    const resp = await makeGet(match.district_href);
+    const resp = await makeGet(district_href);
     let $ = cheerio.load(resp);
 
     const sections = $('div.electionsectionheading');
@@ -384,10 +391,24 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 return;
             }
             
-            if(id == 'Special_election') {
+            if(id == 'Special_election' || id=='Special') {
+                console.log('Processing special:',id);
                 current = {
                     year: current.year,
                     special: true
+                };
+                section = null;
+                elections.push(current);
+                return;
+            }
+
+            // if a special election happens the same year as a general, 
+            // sometimes it will be shown first
+            if(id == 'Regular_election' || id=='Regular') {
+                console.log('Processing regular:',id);
+                current = {
+                    year: current.year,
+                    special: false
                 };
                 section = null;
                 elections.push(current);
@@ -408,6 +429,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             if(title == 'general election') section = 'general';
             else if(title == 'democratic primary election') section = 'democratic_primary';
             else if(title == 'republican primary election') section = 'republican_primary';
+
             else throw new Error(`Failed to match title '${title}'`);
         } else if(el.hasClass('votebox-scroll-container')) {
             console.log('Processing scroll-container');
@@ -416,6 +438,13 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
             const table = el.find('div.results_table_container table.results_table');
             if(!table.length) throw new Error('Failed to find results table');
+
+            const resultsText = el.find('.results_text').text().trim();
+            const [,dateRaw] = resultsText.match(/on\s+(\w+\s+\d+,\s+\d+)\./) || [];
+            
+            if(!dateRaw) throw new Error("Failed to extract date from "+resultsText);
+            const date = moment(dateRaw, "MMMM D, YYYY");
+            current[`${section}_date`] = date;
 
             const headers = table.find('tr.non_result_row td').toArray().map(x => $(x).text().trim().toLowerCase());
 
@@ -450,14 +479,14 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 const candidateHref = candidateLink.attr('href');
 
                 let party;
-                if(candidateRaw.text().slice(-3) == '(R)') party='republican';
-                else if(candidateRaw.text().slice(-3) == 'D') party='democratic';
+                if(candidateRaw.text().trim().slice(-3) == '(R)') party='republican';
+                else if(candidateRaw.text().trim().slice(-3) == '(D)') party='democratic';
 
                 return {
                     votes,
                     party,
                     candidate_name: candidateName,
-                    candidate_href: candidateHref
+                    candidate_href: candidateHref,
                 }
             });
 
@@ -470,7 +499,9 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
     // currently only handling the most recent type of results table
     // it looks like the data was previously in a different format (before 2018?)
-    elections = elections.filter(x => x.has_results).map(x => ({...x, state, level, district}));
+    elections = elections
+        .filter(x => x.has_results)
+        .map(x => ({...x, state, level, district, district_href}));
 
     return elections;
 };
@@ -489,7 +520,8 @@ module.exports = {
     getStateElectionResults,
     getAllLegistlatureElections,
     getStateLegislatureLinks,
-    getStateDistrictElectionHistory
+    getStateDistrictElectionHistory,
+    getStateElectionHistoryForLevel
 }
 
 async function getElectionResultsForState({state,year,level,district}) {
@@ -514,6 +546,5 @@ async function getElectionResultsForState({state,year,level,district}) {
         level,
         district
     }), null, 2));
-
 }
-getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});
+// getElectionResultsForState({state:'Pennsylvania', year:2020, level: 'house', district:'district 49'});

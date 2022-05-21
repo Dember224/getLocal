@@ -33,8 +33,10 @@
     "js-file-downloader": "^1.1.24",
     "js-file-downloader-temp": "^1.1.8",
     "jszip": "^3.6.0",
+    "moment": "^2.29.3",
     "node-stream-zip": "^1.15.0",
     "node-xlsx": "^0.21.0",
+    "parse-full-name": "^1.2.6",
     "pdf-parse": "^1.1.1",
     "pg": "^8.7.3",
     "pg-format": "^1.0.4",
@@ -50,6 +52,7 @@
     "taiko": "^1.2.5",
     "tmp": "^0.2.1",
     "unzipper": "^0.10.11",
+    "usa-state-legislatures": "^1.0.4",
     "webpack": "^4.44.2",
     "yargs": "^17.4.1"
   },
