@@ -1,0 +1,933 @@
+[
+  {
+    "abbreviation": "AL",
+    "name": "Alabama",
+    "state_id": "01",
+    "fips_code": "01",
+    "chambers": [
+      {
+        "chamber_id": 2,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 3,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "AK",
+    "name": "Alaska",
+    "state_id": "02",
+    "fips_code": "02",
+    "chambers": [
+      {
+        "chamber_id": 4,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 5,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "AS",
+    "name": "American Samoa",
+    "state_id": "03",
+    "fips_code": "03"
+  },
+  {
+    "abbreviation": "AZ",
+    "name": "Arizona",
+    "state_id": "04",
+    "fips_code": "04",
+    "chambers": [
+      {
+        "chamber_id": 8,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 9,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "AR",
+    "name": "Arkansas",
+    "state_id": "05",
+    "fips_code": "05",
+    "chambers": [
+      {
+        "chamber_id": 10,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 11,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "CA",
+    "name": "California",
+    "state_id": "06",
+    "fips_code": "06",
+    "chambers": [
+      {
+        "chamber_id": 12,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 13,
+        "level": "lower",
+        "name": "State Assembly"
+      }
+    ]
+  },
+  {
+    "abbreviation": "CZ",
+    "name": "Canal Zone",
+    "state_id": "07",
+    "fips_code": "07"
+  },
+  {
+    "abbreviation": "CO",
+    "name": "Colorado",
+    "state_id": "08",
+    "fips_code": "08",
+    "chambers": [
+      {
+        "chamber_id": 16,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 17,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "CT",
+    "name": "Connecticut",
+    "state_id": "09",
+    "fips_code": "09",
+    "chambers": [
+      {
+        "chamber_id": 18,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 19,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "DE",
+    "name": "Delaware",
+    "state_id": "10",
+    "fips_code": "10",
+    "chambers": [
+      {
+        "chamber_id": 20,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 21,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "DC",
+    "name": "District Of Columbia",
+    "state_id": "11",
+    "fips_code": "11"
+  },
+  {
+    "abbreviation": "FL",
+    "name": "Florida",
+    "state_id": "12",
+    "fips_code": "12",
+    "chambers": [
+      {
+        "chamber_id": 24,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 25,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "GA",
+    "name": "Georgia",
+    "state_id": "13",
+    "fips_code": "13",
+    "chambers": [
+      {
+        "chamber_id": 26,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 27,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "GU",
+    "name": "Guam",
+    "state_id": "14",
+    "fips_code": "14"
+  },
+  {
+    "abbreviation": "HI",
+    "name": "Hawaii",
+    "state_id": "15",
+    "fips_code": "15",
+    "chambers": [
+      {
+        "chamber_id": 30,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 31,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "16",
+    "name": "Idaho",
+    "state_id": "16",
+    "fips_code": "16",
+    "chambers": [
+      {
+        "chamber_id": 32,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 33,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "IL",
+    "name": "Illinois",
+    "state_id": "17",
+    "fips_code": "17",
+    "chambers": [
+      {
+        "chamber_id": 34,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 35,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "IN",
+    "name": "Indiana",
+    "state_id": "18",
+    "fips_code": "18",
+    "chambers": [
+      {
+        "chamber_id": 36,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 37,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "IA",
+    "name": "Iowa",
+    "state_id": "19",
+    "fips_code": "19",
+    "chambers": [
+      {
+        "chamber_id": 38,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 39,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "KS",
+    "name": "Kansas",
+    "state_id": "20",
+    "fips_code": "20",
+    "chambers": [
+      {
+        "chamber_id": 40,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 41,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "KY",
+    "name": "Kentucky",
+    "state_id": "21",
+    "fips_code": "21",
+    "chambers": [
+      {
+        "chamber_id": 42,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 43,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "LA",
+    "name": "Louisiana",
+    "state_id": "22",
+    "fips_code": "22",
+    "chambers": [
+      {
+        "chamber_id": 44,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 45,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "ME",
+    "name": "Maine",
+    "state_id": "23",
+    "fips_code": "23",
+    "chambers": [
+      {
+        "chamber_id": 46,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 47,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MD",
+    "name": "Maryland",
+    "state_id": "24",
+    "fips_code": "24",
+    "chambers": [
+      {
+        "chamber_id": 48,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 49,
+        "level": "lower",
+        "name": "House of Delegates"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MA",
+    "name": "Massachusetts",
+    "state_id": "25",
+    "fips_code": "25",
+    "chambers": [
+      {
+        "chamber_id": 50,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 51,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MI",
+    "name": "Michigan",
+    "state_id": "26",
+    "fips_code": "26",
+    "chambers": [
+      {
+        "chamber_id": 52,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 53,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MN",
+    "name": "Minnesota",
+    "state_id": "27",
+    "fips_code": "27",
+    "chambers": [
+      {
+        "chamber_id": 54,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 55,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MS",
+    "name": "Mississippi",
+    "state_id": "28",
+    "fips_code": "28",
+    "chambers": [
+      {
+        "chamber_id": 56,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 57,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MO",
+    "name": "Missouri",
+    "state_id": "29",
+    "fips_code": "29",
+    "chambers": [
+      {
+        "chamber_id": 58,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 59,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "MT",
+    "name": "Montana",
+    "state_id": "30",
+    "fips_code": "30",
+    "chambers": [
+      {
+        "chamber_id": 60,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 61,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NE",
+    "name": "Nebraska",
+    "state_id": "31",
+    "fips_code": "31",
+    "chambers": [
+      {
+        "chamber_id": 62,
+        "level": "upper",
+        "name": "Legislature"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NV",
+    "name": "Nevada",
+    "state_id": "32",
+    "fips_code": "32",
+    "chambers": [
+      {
+        "chamber_id": 64,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 65,
+        "level": "lower",
+        "name": "Assembly"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NH",
+    "name": "New Hampshire",
+    "state_id": "33",
+    "fips_code": "33",
+    "chambers": [
+      {
+        "chamber_id": 66,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 67,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NJ",
+    "name": "New Jersey",
+    "state_id": "34",
+    "fips_code": "34",
+    "chambers": [
+      {
+        "chamber_id": 68,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 69,
+        "level": "lower",
+        "name": "General Assembly"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NM",
+    "name": "New Mexico",
+    "state_id": "35",
+    "fips_code": "35",
+    "chambers": [
+      {
+        "chamber_id": 70,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 71,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NY",
+    "name": "New York",
+    "state_id": "36",
+    "fips_code": "36",
+    "chambers": [
+      {
+        "chamber_id": 72,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 73,
+        "level": "lower",
+        "name": "State Assembly"
+      }
+    ]
+  },
+  {
+    "abbreviation": "NC",
+    "name": "North Carolina",
+    "state_id": "37",
+    "fips_code": "37",
+    "chambers": [
+      {
+        "chamber_id": 74,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 75,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "ND",
+    "name": "North Dakota",
+    "state_id": "38",
+    "fips_code": "38",
+    "chambers": [
+      {
+        "chamber_id": 76,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 77,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "OH",
+    "name": "Ohio",
+    "state_id": "39",
+    "fips_code": "39",
+    "chambers": [
+      {
+        "chamber_id": 78,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 79,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "OK",
+    "name": "Oklahoma",
+    "state_id": "40",
+    "fips_code": "40",
+    "chambers": [
+      {
+        "chamber_id": 80,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 81,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "OR",
+    "name": "Oregon",
+    "state_id": "41",
+    "fips_code": "41",
+    "chambers": [
+      {
+        "chamber_id": 82,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 83,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "PA",
+    "name": "Pennsylvania",
+    "state_id": "42",
+    "fips_code": "42",
+    "chambers": [
+      {
+        "chamber_id": 84,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 85,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "RI",
+    "name": "Rhode Island",
+    "state_id": "44",
+    "fips_code": "44",
+    "chambers": [
+      {
+        "chamber_id": 88,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 89,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "SC",
+    "name": "South Carolina",
+    "state_id": "45",
+    "fips_code": "45",
+    "chambers": [
+      {
+        "chamber_id": 90,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 91,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "SD",
+    "name": "South Dakota",
+    "state_id": "46",
+    "fips_code": "46",
+    "chambers": [
+      {
+        "chamber_id": 92,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 93,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "TN",
+    "name": "Tennessee",
+    "state_id": "47",
+    "fips_code": "47",
+    "chambers": [
+      {
+        "chamber_id": 94,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 95,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "TX",
+    "name": "Texas",
+    "state_id": "48",
+    "fips_code": "48",
+    "chambers": [
+      {
+        "chamber_id": 96,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 97,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "UT",
+    "name": "Utah",
+    "state_id": "49",
+    "fips_code": "49",
+    "chambers": [
+      {
+        "chamber_id": 98,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 99,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "VT",
+    "name": "Vermont",
+    "state_id": "50",
+    "fips_code": "50",
+    "chambers": [
+      {
+        "chamber_id": 100,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 101,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "VA",
+    "name": "Virginia",
+    "state_id": "51",
+    "fips_code": "51",
+    "chambers": [
+      {
+        "chamber_id": 102,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 103,
+        "level": "lower",
+        "name": "House of Delegates"
+      }
+    ]
+  },
+  {
+    "abbreviation": "VI",
+    "name": "Virgin Islands",
+    "state_id": "52",
+    "fips_code": "52"
+  },
+  {
+    "abbreviation": "WA",
+    "name": "Washington",
+    "state_id": "53",
+    "fips_code": "53",
+    "chambers": [
+      {
+        "chamber_id": 106,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 107,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "WV",
+    "name": "West Virginia",
+    "state_id": "54",
+    "fips_code": "54",
+    "chambers": [
+      {
+        "chamber_id": 108,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 109,
+        "level": "lower",
+        "name": "House of Delegates"
+      }
+    ]
+  },
+  {
+    "abbreviation": "WI",
+    "name": "Wisconsin",
+    "state_id": "55",
+    "fips_code": "55",
+    "chambers": [
+      {
+        "chamber_id": 110,
+        "level": "upper",
+        "name": "State Senate"
+      },
+      {
+        "chamber_id": 111,
+        "level": "lower",
+        "name": "State Assembly"
+      }
+    ]
+  },
+  {
+    "abbreviation": "WY",
+    "name": "Wyoming",
+    "state_id": "56",
+    "fips_code": "56",
+    "chambers": [
+      {
+        "chamber_id": 112,
+        "level": "upper",
+        "name": "Senate"
+      },
+      {
+        "chamber_id": 113,
+        "level": "lower",
+        "name": "House of Representatives"
+      }
+    ]
+  },
+  {
+    "abbreviation": "PR",
+    "name": "Puerto Rico",
+    "state_id": "72",
+    "fips_code": "72"
+  }
+]
