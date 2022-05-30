@@ -1,4 +1,6 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
+require('dotenv').config()
+const db_password = process.env.DB_PASSWORD
 
 const statesJson = require('./states.json');
 statesJson.forEach(x => {
@@ -6,7 +8,7 @@ statesJson.forEach(x => {
 })
 
 async function getModels() {
-    const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/postgres');
+    const sequelize = new Sequelize(`postgres://postgres:${db_password}@localhost:5432/postgres`);
 
     const State = sequelize.define("State", {
         state_id: {
@@ -22,7 +24,7 @@ async function getModels() {
     await State.bulkCreate(statesJson, {
         ignoreDuplicates: true
     });
-    
+
     const Chamber = sequelize.define("Chamber", {
         chamber_id: {
             type: DataTypes.INTEGER,
@@ -252,7 +254,7 @@ class StorageService {
         const state = getState(district);
         if(!state) throw new Error("Unable to determine state from district");
         const level = getChamberLevel(district);
-        
+
     }
 
     async saveElectionResult(result) {

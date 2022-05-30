@@ -3,8 +3,8 @@ const { hideBin } = require('yargs/helpers')
 
 const stateSearches = require('./StateSearches');
 const loadFinanceArray = require('./Loaders/uploadFinances').loadFinanceArray;
-const getElectionResults = require('./ElectionResults');
 const censusTools = require('./censusTools');
+const storage = require('./Storage');
 
 const argv = yargs(hideBin(process.argv)).argv
 const state = argv.state;
@@ -33,23 +33,13 @@ if(command == 'getFinanceData'){
     if(e) return e;
     loadFinanceArray(r);
   })
-} else if ( command == 'getStateElectionResults') {
-  getElectionResults[command]({state, year, level:office}).then((results)=>{
-    console.dir(JSON.stringify(results,null, 2))
-  })
-} else if (command == 'getAllLegistlatureElections'){
-  getElectionResults[command];
-} else if (command == 'getStateLegislatureLinks'){
-  getElectionResults[command];
-} else if(command == 'getStateDistrictElectionHistory'){
-  getElectionResults[command]({state, level:office}).then((results)=>{
-    console.log(results)
-  })
 } else if (command =='getDistrictCensusData'){
   censusTools[command]({office, district, state}, (e, r)=>{
     if(e) console.log(e);
     console.log(r)
   })
+} else if (command =='GetStorage'){
+  storage()
 } else {
   throw new Error('The index file does not recognize your command.')
 }
