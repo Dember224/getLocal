@@ -1,4 +1,4 @@
-#Setup
+# Setup
 
 Welcome to get Local. To setup go ahead and clone the repo located at:
 [GetLocal Repo](https://github.com/Dember224/getLocal.git)
