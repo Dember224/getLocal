@@ -8,7 +8,8 @@ statesJson.forEach(x => {
 })
 
 async function getModels() {
-    const sequelize = new Sequelize(`postgres://postgres:${db_password}@localhost:5432/postgres`);
+  const db_url = process.env.NODE_ENV === 'DEV' ? process.env.DB_URL_DEV : process.env.DB_URL_PROD;
+    const sequelize = new Sequelize(db_url);
 
     const State = sequelize.define("State", {
         state_id: {

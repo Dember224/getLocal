@@ -21,7 +21,7 @@ const callData = {
   office,
   report
 }
-
+//Need to add getStateElectionResults and the ELectionResults loader into this file to call from index.
 //if else becasue switch statements are for cowards.
 if(command == 'getFinanceData'){
   stateSearches[state][command](callData, (e,r)=>{
