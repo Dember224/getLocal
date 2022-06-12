@@ -84,7 +84,7 @@ async function getZip(year) {
     });
 
     zipResp.data.pipe(fs.createWriteStream(localZipName));
-    
+
     await new Promise((resolve, reject) => {
         zipResp.data.on('error', reject);
         zipResp.data.on('end', resolve);
