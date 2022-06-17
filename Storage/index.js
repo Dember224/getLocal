@@ -197,6 +197,31 @@ async function getModels() {
         expenditures: DataTypes.DECIMAL(10,2)
     });
 
+    const CandidateSearch = sequelize.define('CandidateSearch', {
+      candidacy_id: {
+          type: DataTypes.INTEGER,
+        },
+        candidate_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Candidate,
+                key: 'candidate_id'
+            }
+        },
+        first_name: DataTypes.STRING,
+        middle_name: DataTypes.STRING,
+        last_name: DataTypes.STRING,
+        party: DataTypes.STRING,
+        state_name: DataTypes.STRING,
+        district: DataTypes.INTEGER,
+        chamber_level:DataTypes.INTEGER,
+        year:DataTypes.INTEGER,
+        election_type:DataTypes.STRING
+
+    }, {
+  tableName: 'CandidateSearch'
+})
+
     // for now, just build it
     for(let name in sequelize.models) {
         console.log("Handling",name);
@@ -214,7 +239,8 @@ async function getModels() {
         Election,
         Candidate,
         Candidacy,
-        CampaignFinance
+        CampaignFinance,
+        CandidateSearch
     };
 }
 

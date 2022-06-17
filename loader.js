@@ -14,6 +14,7 @@ const ElectionResultsLoader = require('./ElectionResults/load');
 const elections = require('./ElectionResults/pull');
 const getStorage = require('./Storage');
 const stateSearches = require('./StateSearches');
+const CampaignFinanceLoader = require('./Finances/load')
 
 
 async function loadElectionResults(storage) {
@@ -37,23 +38,21 @@ const callData = {
   election_type
 }
 
-async function loadFinanceResults(){
+async function loadFinanceResults(storage){
   console.log('Finance results called')
-  result = stateSearches[state]['getFinanceData']()
+  result = stateSearches[state]['getFinanceData'](callData, async (e,r)=>{
+    if(e){
+      throw new Error("Error retrieving finance results message: "+ e)
+    } else {
+      await loader.loadCampaignFinances(r)
+    }
+  })
   isPromise = result?.then;
-  const loader = new CampaignFinanceLoader();
+  const loader = new CampaignFinanceLoader(storage);
 
   if(isPromise){
-    stateSearches[state]['getFinanceData'](callData).then(async (r)=>{
+    result.then(async (r)=>{
       await loader.loadCampaignFinances(r);
-    })
-  } else {
-    stateSearches[state]['getFinanceData'](callData, async (e,r)=>{
-      if(e){
-        throw new Error("Error retrieving finance results message: "+ e)
-      } else {
-        await loader.loadCampaignFinances(r)
-      }
     })
   }
 }
@@ -63,10 +62,10 @@ async function loader() {
     const storage = await getStorage()
     console.log('Promise pending', storage);
     if(isLoadTypeElections) {
-        await loadElectionResults(storage);
+        await loadElectionResults(storage.models);
     } else if(isLoadTypeFinance){
-      await loadElectionResults(storage);
-      await loadFinanceResults()
+      // await loadElectionResults(storage);
+      await loadFinanceResults(storage.models)
       } else {
           throw new Error("invalid loadType: "+loadType);
       }

@@ -57,7 +57,7 @@ async function makeGetInternal(uri) {
     await sleep((5+Math.random()) * 1000)
 
     const response = await axios.get(uri);
-    
+
     await fs.writeFile(filePath, response.data);
     return response.data;
 }
@@ -368,7 +368,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
     let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline, p')
         .toArray();
-        
+
     const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
     if(electionsIndex == -1) throw new Error('Failed to find Elections section');
     elements = elements.slice(electionsIndex+1);
@@ -390,7 +390,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 elections.push(current);
                 return;
             }
-            
+
             if(id == 'Special_election' || id=='Special') {
                 console.log('Processing special:',id);
                 current = {
@@ -402,7 +402,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 return;
             }
 
-            // if a special election happens the same year as a general, 
+            // if a special election happens the same year as a general,
             // sometimes it will be shown first
             if(id == 'Regular_election' || id=='Regular') {
                 console.log('Processing regular:',id);
@@ -429,6 +429,8 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             if(title == 'general election') section = 'general';
             else if(title == 'democratic primary election') section = 'democratic_primary';
             else if(title == 'republican primary election') section = 'republican_primary';
+            else if(title == 'green primary election') section = 'green_primary';
+            else if(title == 'libertarian primary election') section = 'libertarian_primary';
 
             else throw new Error(`Failed to match title '${title}'`);
         } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
@@ -441,7 +443,9 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
             const resultsText = el.find('.results_text').text().trim();
             const [,dateRaw] = resultsText.match(/on\s+(\w+\s+\d+,\s+\d+)\./) || [];
-            
+
+            if(resultsText == 'No candidate advanced from the primary.') return;
+
             if(!dateRaw) throw new Error("Failed to extract date from "+resultsText);
             const date = moment(dateRaw, "MMMM D, YYYY");
             current[`${section}_date`] = date;
@@ -471,7 +475,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 const tds = row.find('td').toArray().map($);
                 if(tds.length != expected.length + 1) throw new Error('Unexpected elements length - stopping');
                 const [,,candidateRaw,pct,votesRaw] = tds;
-                
+
                 // the raw value has commas, so just pull out digits
                 const votes = parseInt($(votesRaw).text().replace(/[^\d]/g, ''));
                 const candidateLink = candidateRaw.find('a');
