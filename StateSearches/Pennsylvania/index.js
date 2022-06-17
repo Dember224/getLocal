@@ -13,6 +13,7 @@ const {parseFullName} = require('parse-full-name');
 const { pbkdf2 } = require('crypto');
 
 // const PA_VOTER_SERVICES_URI = 'https://www.pavoterservices.pa.gov/ElectionInfo/FooterLinkReport.aspx?ID=1';
+const DATE = new Date().toISOString().split('T')[0];
 
 const DOS_PA_GOV = 'https://www.dos.pa.gov';
 const FULL_EXPORT_URI = '/VotingElections/CandidatesCommittees/CampaignFinance/Resources/Pages/FullCampaignFinanceExport.aspx';
@@ -72,7 +73,17 @@ const EXPECTED_COMMITTEE_HEADERS = [
 ];
 
 const COMMITTEE_LIST_EXPORT_URI = 'https://www.pavoterservices.pa.gov/ElectionInfo/FooterLinkReport.aspx?ID=1';
-async function getCommitteeList() {
+
+async function getCommitteeListFileName() {
+    const localListName = path.join(__dirname, `/tmp/CommitteeList_${DATE}.xls`);
+    try {
+        fs.accessSync(localListName)
+        console.log('Using Cache File',localListName);
+        return localListName;
+    } catch(e) {
+        console.error('cache miss', localListName);
+    }
+
     const transport = axios.create({withCredentials: true});
 
     const rawFile = await transport.get(COMMITTEE_LIST_EXPORT_URI);
@@ -100,7 +111,6 @@ async function getCommitteeList() {
         params.append(k,v);
     });
 
-    const localListName = path.join(__dirname, `/tmp/CommitteeList_${new Date().getTime()}.xls`);
     let resp;
     try {
         resp = await transport.post(COMMITTEE_LIST_EXPORT_URI, params, {
@@ -127,6 +137,12 @@ async function getCommitteeList() {
         resp.data.on('error', reject);
         resp.data.on('end', resolve);
     });
+    return localListName;
+}
+
+async function getCommitteeList() {
+    const localListName = await getCommitteeListFileName();
+    
     const data = xlsx.parse(localListName);
     if(data.length != 1) throw new Error('Expected single sheet, got: '+data.length);
 
@@ -155,9 +171,11 @@ async function getCommitteeList() {
         const report_id = raw['Committee Number'];
         const committee_name = raw['Committee Name'];
         const candidate_full_name = raw['Candidate Name'];
+        const candidate_id = raw['Candidate Number'];
 
         return {
             report_id,
+            candidate_id,
             committee_name,
             candidate_full_name,
             raw
@@ -168,9 +186,16 @@ async function getCommitteeList() {
     return comms;
 }
 
-async function getZip(year) {
-    if(!year.toString().match(/\d\d\d\d/)) throw new Error('year must be a 4 digit int');
-    if(parseInt(year) < 2022) throw new Error('year prior to 2022 not supported');
+async function downloadZipFile(year) {
+
+    const localZipName = path.join(__dirname, `/tmp/${year}_${DATE}.zip`);
+    try {
+        fs.accessSync(localZipName)
+        console.log('Using Cache File',localZipName);
+        return localZipName;
+    } catch(e) {
+        console.error('cache miss', localZipName);
+    }
 
     console.log("Checking ",`${DOS_PA_GOV}${FULL_EXPORT_URI}`);
     const result = await axios.get(`${DOS_PA_GOV}${FULL_EXPORT_URI}?p_SortBehavior=0&SortField=LinkFilenameNoMenu&SortDir=Desc`);
@@ -190,8 +215,6 @@ async function getZip(year) {
     if(!zipLink) throw new Error("Failed to find link for "+year);
 
     console.log('Pulling from:', zipLink);
-
-    const localZipName = path.join(__dirname, `/tmp/${year}_${new Date().getTime()}.zip`);
     
     const zipResp = await axios.get(`${DOS_PA_GOV}${zipLink}`, {
         responseType: 'stream'
@@ -203,8 +226,17 @@ async function getZip(year) {
         zipResp.data.on('error', reject);
         zipResp.data.on('end', resolve);
     });
-
+    
     console.log('zip downloaded to', localZipName);
+
+    return localZipName;
+}
+
+async function getZip(year) {
+    if(!year.toString().match(/\d\d\d\d/)) throw new Error('year must be a 4 digit int');
+    if(parseInt(year) < 2022) throw new Error('year prior to 2022 not supported');
+
+    const localZipName = await downloadZipFile(year);
 
     const zipRaw = await new Promise((resolve,reject) => {
         fs.readFile(localZipName, (e,d) => {
@@ -230,25 +262,55 @@ async function getCampaignFinance(params) {
         await getZip(params),
         await getCommitteeList()
     ]);
+
+    console.log(zipArr[0], comms[0]);
     
-    const results = zipArr.map(row => {
+    const mergedWithCommittee = zipArr.map(row => {
         if(!row.FILERID) {
             console.log('No FILERID: ', row);
         }
         if(row.FILERTYPE == 2) {
             const committee = comms.find(x=>x.report_id == row.REPORTID);
-            if(!committee) {
-                // console.log('Failed to find Committee: ' + row.FILERID);
-                // console.log(row);
-            } else {
-                console.log('found committee');
-            }
             row.committee = committee;
         }
         return row;
     });
 
-    return results;
+    const byCandidateId = {};
+    mergedWithCommittee.forEach(row => {
+        const {
+            committee,
+            REPORTID,
+            BEGINNING,
+            MONETARY,
+            DISTRICT:district,
+            PARTY,
+            FILERNAME
+        } = row;
+        const candidate_id = committee?.candidate_id ?? REPORTID;
+        const candidate_name = committee?.candidate_full_name ?? FILERNAME;
+        if(!candidate_id) throw new Error('missing candidate_id?');
+
+        const starting_amount = parseFloat(BEGINNING);
+        const raised = parseFloat(MONETARY);
+
+        const party = {
+            DEM: 'democratic',
+            REP: 'republican'
+        }[PARTY] ?? PARTY;
+
+        const entries = byCandidateId[candidate_id] = byCandidateId[candidate_id] ?? [];
+        entries.push({
+            candidate_id,
+            starting_amount,
+            raised,
+            district,
+            party,
+            candidate_name
+        });
+    });
+
+    return byCandidateId;
 }
 
 module.exports = {
