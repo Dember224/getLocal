@@ -1,4 +1,4 @@
-Create View CandidateSearch as
+Create  View CandidateSearch as
 Select
 c.candidacy_id,
 c.candidate_id,

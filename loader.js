@@ -62,7 +62,7 @@ async function loader() {
     const storage = await getStorage()
     console.log('Promise pending', storage);
     if(isLoadTypeElections) {
-        await loadElectionResults(storage.models);
+        await loadElectionResults(storage);
     } else if(isLoadTypeFinance){
       // await loadElectionResults(storage);
       await loadFinanceResults(storage.models)

@@ -5,8 +5,6 @@ const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers.js').partyParser
 
 const getFinanceData = function(callData,callback){
-  const startYear = callData.year;
-  const endYear = callData.year;
   request({
     uri:`https://seethemoney.az.gov/Reporting/GetTableData?Page=1&startYear=${callData.startYear}&endYear=${callData.endYear}&IsLessActive=false&ChartName=1&ShowAllYears=false`,
     json:true,
@@ -16,8 +14,8 @@ const getFinanceData = function(callData,callback){
     },
     qs:{
       Page: 1,
-      startYear: callData.startYear,
-      endYear: callData.endYear,
+      startYear: callData.year,
+      endYear: callData.year,
       IsLessActive: false,
       ChartName: 1,
       ShowAllYears: false,
@@ -37,12 +35,11 @@ const getFinanceData = function(callData,callback){
         contributions:x.Income,
         expenditures:x.Expense,
         asOf: new Date(),
-        election_year: new Date('01/01/'+callData.startYear).toGMTString(),
+        election_year: new Date('01/01/'+callData.year).toGMTString(),
         election_type: 'General',
-        name_year:`${x.EntityFirstName} ${x.EntityLastName}${callData.startYear}`,
+        name_year:`${x.EntityFirstName} ${x.EntityLastName}${callData.year}`,
         party: x.PartyName ? partyParser(x.PartyName) : x.PartyName
       }
-
       return money_object;
     });
     return callback(null, getTheMoney.filter(x=>{

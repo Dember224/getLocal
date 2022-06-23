@@ -426,11 +426,11 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             const title = el.text().trim().toLowerCase();
             console.log('Processing scroll-container',title);
 
-            if(title == 'general election') section = 'general';
-            else if(title == 'democratic primary election') section = 'democratic_primary';
-            else if(title == 'republican primary election') section = 'republican_primary';
-            else if(title == 'green primary election') section = 'green_primary';
-            else if(title == 'libertarian primary election') section = 'libertarian_primary';
+            if(title.includes('general')) section = 'general';
+            else if(title.includes('democratic')) section = 'democratic_primary';
+            else if(title.includes('republican')) section = 'republican_primary';
+            else if(title.includes('green')) section = 'green_primary';
+            else if(title.includes('libertarian')) section = 'libertarian_primary';
 
             else throw new Error(`Failed to match title '${title}'`);
         } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
@@ -444,7 +444,8 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             const resultsText = el.find('.results_text').text().trim();
             const [,dateRaw] = resultsText.match(/on\s+(\w+\s+\d+,\s+\d+)\./) || [];
 
-            if(resultsText == 'No candidate advanced from the primary.') return;
+            if(resultsText.indexOf('No candidate advanced from') == 0) return;
+
 
             if(!dateRaw) throw new Error("Failed to extract date from "+resultsText);
             const date = moment(dateRaw, "MMMM D, YYYY");

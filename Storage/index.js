@@ -191,7 +191,11 @@ async function getModels() {
     const CampaignFinance = sequelize.define('CampaignFinance', {
         candidacy_id: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            references: {
+              model:Candidacy,
+              key: 'candidacy_id'
+            }
         },
         contributions: DataTypes.DECIMAL(10,2),
         expenditures: DataTypes.DECIMAL(10,2)
@@ -200,6 +204,7 @@ async function getModels() {
     const CandidateSearch = sequelize.define('CandidateSearch', {
       candidacy_id: {
           type: DataTypes.INTEGER,
+          primaryKey: true
         },
         candidate_id: {
             type: DataTypes.INTEGER,
@@ -217,9 +222,9 @@ async function getModels() {
         chamber_level:DataTypes.INTEGER,
         year:DataTypes.INTEGER,
         election_type:DataTypes.STRING
-
     }, {
-  tableName: 'CandidateSearch'
+  tableName: 'CandidateSearch',
+  timestamps:false
 })
 
     // for now, just build it

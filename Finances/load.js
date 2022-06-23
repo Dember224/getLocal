@@ -11,12 +11,26 @@ function CampaignFinanceLoader(models){
   this.CandidateSearch = models.CandidateSearch;
 }
 
+function ProcessLevel(office){
+  let level = office.toLowerCase();
+  if(level.includes('house') || level.includes('lower') || level.includes('rep')) {
+    return 0;
+  } else if(typeof level == 'string'){
+    if(level.includes('senat') || level.includes('upper')){
+      return 1;
+    }
+  } else {
+    return -1;
+  }
+}
+
 CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_array) {
   const state_name = finance_array[0].state.toLowerCase();
 
   for(const finance_object of finance_array) {
     const candidate_full_name = finance_object.name;
-    const party = finance_object.party.toLowerCase()  == 'democrat' ? 'democratic' : finance_object.party.toLowerCase() ;
+    let party = `${finance_object.party}`
+    party = party.toLowerCase()  == 'democrat' ? 'democratic' : party.toLowerCase() ;
 
     const parsedName = parseFullName(candidate_full_name);
 
@@ -24,9 +38,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
     const election_year = election_date.getFullYear();
 
 
-    let level = finance_object.office;
-    if(level.includes('house') || level.includes('lower')) level = 0;
-    if(level.includes('senat') || level.includes('upper')) level = 1;
+    let level = ProcessLevel(finance_object.office)
 
     const candidateSearch = await this.CandidateSearch.findOne({
       where:{
@@ -34,21 +46,29 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         last_name:parsedName.last,
         party:party,
         state_name,
-        district:finance_object.district,
-        chamber_level:level,
+        district:finance_object.district ? finance_object.district : null,
+        chamber_level:level || null,
         year: election_year,
         election_type: finance_object.election_type.toLowerCase()
 
       }
     })
+    const contributions = finance_object.contributions ? finance_object.contributions : null;
+    const expenditures = finance_object.expenditures ? finance_object.expenditures : null;
 
-    const campaign_finance = await this.CampaignFinance.findOrCreate({
-      where: {
-        candidacy_id: candidateSearch.candidacy_id,
-        contributions: finance_object.contributions,
-        expenditures: finance_object.expenditures
-      }
-    })
+    if(candidateSearch){
+      const campaign_finance = await this.CampaignFinance.findOrCreate({
+        where: {
+          candidacy_id: candidateSearch.candidacy_id,
+        },
+        defaults:{
+          candidacy_id: candidateSearch.candidacy_id,
+          contributions: contributions,
+          expenditures:expenditures
+        }
+      })
+    }
+
 
 
   }
