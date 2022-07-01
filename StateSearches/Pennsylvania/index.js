@@ -11,6 +11,8 @@ const xlsx = require('node-xlsx');
 
 const {parseFullName} = require('parse-full-name');
 const { pbkdf2 } = require('crypto');
+const { filter } = require('jszip');
+const exp = require('constants');
 
 // const PA_VOTER_SERVICES_URI = 'https://www.pavoterservices.pa.gov/ElectionInfo/FooterLinkReport.aspx?ID=1';
 const DATE = new Date().toISOString().split('T')[0];
@@ -42,6 +44,69 @@ const FILER_HEADERS = [
     'MONETARY',
     'INKIND'
 ];
+
+const CONTRIB_HEADERS = [
+    'FILERID',
+    'REPORTID',
+    'TIMESTAMP',
+    'EYEAR',
+    'CYCLE',
+    'SECTION',
+    'CONTRIBUTOR',
+    'ADDRESS1',
+    'ADDRESS2',
+    'CITY',
+    'STATE',
+    'ZIPCODE',
+    'OCCUPATION',
+    'ENAME',
+    'EADDRESS1',
+    'EADDRESS2',
+    'ECITY',
+    'ESTATE',
+    'EZIPCODE',
+    'CONTDATE1',
+    'CONTAMT1',
+    'CONTDATE2',
+    'CONTAMT2',
+    'CONTDATE3',
+    'CONTAMT3',
+    'CONTDESC'
+];
+
+const DEBT_HEADERS = [
+    "FILERID",
+    "REPORTID",
+    "TIMESTAMP",
+    "EYEAR",
+    "CYCLE",
+    "DBTNAME",
+    "ADDRESS1",
+    "ADDRESS2",
+    "CITY",
+    "STATE",
+    "ZIPCODE",
+    "DBTDATE",
+    "DBTAMT",
+    "DBTDESC"
+]
+
+const EXPENSE_HEADERS = [
+    "FILERID",
+    "REPORTID",
+    "TIMESTAMP",
+    "EYEAR",
+    "CYCLE",
+    "EXPNAME",
+    "ADDRESS1",
+    "ADDRESS2",
+    "CITY",
+    "STATE",
+    "ZIPCODE",
+    "EXPDATE",
+    "EXPAMT",
+    "EXPDESC"
+]
 
 async function streamToArray(stream) {
     const arr = [];
@@ -187,7 +252,6 @@ async function getCommitteeList() {
 }
 
 async function downloadZipFile(year) {
-
     const localZipName = path.join(__dirname, `/tmp/${year}_${DATE}.zip`);
     try {
         fs.accessSync(localZipName)
@@ -201,7 +265,6 @@ async function downloadZipFile(year) {
     const result = await axios.get(`${DOS_PA_GOV}${FULL_EXPORT_URI}?p_SortBehavior=0&SortField=LinkFilenameNoMenu&SortDir=Desc`);
     const $ = cheerio.load(result.data);
     const links = {};
-    // console.log('parts:', result.data);
 
     $('a').toArray().forEach(x => {
         x = $(x);
@@ -232,6 +295,12 @@ async function downloadZipFile(year) {
     return localZipName;
 }
 
+async function getZipDataSet({ zip,match,headers }) {
+    const filerFileName = Object.keys(zip.files).find(x => x.indexOf(match) != -1);
+    const filersFile = zip.files[filerFileName];
+    return await zipToArray(filersFile, headers);
+}
+
 async function getZip(year) {
     if(!year.toString().match(/\d\d\d\d/)) throw new Error('year must be a 4 digit int');
     if(parseInt(year) < 2022) throw new Error('year prior to 2022 not supported');
@@ -244,28 +313,82 @@ async function getZip(year) {
             resolve(d);
         });
     });
-    const zip = new JSZip();
+    let zip = new JSZip();
     await zip.loadAsync(zipRaw);
 
-    const filersFile = zip.files[`filer_${year}.txt`];
-    // const filersText = await filersFile.async('string');
+    if(!zip.files[`filer_${year}.txt`]) {
+        console.log('no filer file - checking for zip');
+        const internalZipName = Object.keys(zip.files).find(x => x.slice(-4) == '.zip');
+        if(!internalZipName) throw new Error('Failed to find txt file or internal zip '+Object.keys(zip.files));
 
-    // const filersTextStream = new Readable.from(filersText);
-    // const filersArr = await streamToArray(filersTextStream.pipe(csv(FILER_HEADERS)));
-    const filersArr = await zipToArray(filersFile, FILER_HEADERS);
+        const internalZip = zip.files[internalZipName];
+        
+        const innerZip = await internalZip.async('binarystring');
+        zip = new JSZip();
+        await zip.loadAsync(innerZip);
 
-    return filersArr;
+        console.log(Object.keys(zip.files));
+    }
+
+    return {
+        filer: await getZipDataSet({zip, match: `filer_${year}.txt`, headers: FILER_HEADERS}),
+        contrib: await getZipDataSet({zip, match: `contrib_${year}.txt`, headers: CONTRIB_HEADERS}),
+        expense: await getZipDataSet({zip, match: `expense_${year}.txt`, headers: EXPENSE_HEADERS}),
+        debt: await getZipDataSet({zip, match: `debt_${year}.txt`, headers: DEBT_HEADERS}),
+    };
 }
 
-async function getCampaignFinance(params) {
-    const [zipArr, comms] = await Promise.all([
-        await getZip(params),
+async function getAggregatedFilerData(params) {
+    const agg = await getZip(params.year);
+
+    const byFilerId = {};
+
+    const getFn = (type) => x => {
+        const forId = (byFilerId[x.FILERID] = byFilerId[x.FILERID] || {
+            filer_id: x.FILERID,
+            filer: [],
+            contrib: [],
+            expense: [],
+            debt: []
+        });
+        forId[type].push(x);
+    }
+
+    agg.filer.map(getFn('filer'));
+    agg.contrib.map(getFn('contrib'));
+    agg.expense.map(getFn('expense'));
+    agg.debt.map(getFn('debt'));
+
+    Object.values(byFilerId).forEach(x => {
+        const {filer_id, filer, contrib, expense, debt} = x;
+
+        let calc_contributions = 0;
+        contrib.forEach(x => calc_contributions += parseFloat(x.CONTAMT1 || 0) + parseFloat(x.CONTAMT2) + parseFloat(x.CONTAMT3));
+        x.calc_contributions = calc_contributions;
+
+        let calc_expense = 0;
+        expense.forEach(x => calc_expense += parseFloat(x.EXPAMT || 0));
+        x.calc_expense = calc_expense;
+
+        let calc_debt = 0;
+        debt.forEach(x => calc_debt += parseFloat(x.DBTAMT || 0));
+        x.calc_debt = calc_debt;
+
+        return x;
+    });
+
+    return {...agg, byFilerId};
+}
+
+async function getFinanceData(params) {
+    const [{filer}, comms] = await Promise.all([
+        await getAggregatedFilerData(params),
         await getCommitteeList()
     ]);
 
-    console.log(zipArr[0], comms[0]);
+    console.log(filer[0], comms[0]);
     
-    const mergedWithCommittee = zipArr.map(row => {
+    const mergedWithCommittee = filer.map(row => {
         if(!row.FILERID) {
             console.log('No FILERID: ', row);
         }
@@ -277,6 +400,7 @@ async function getCampaignFinance(params) {
     });
 
     const byCandidateId = {};
+    const rawByCandidateId = {};
     mergedWithCommittee.forEach(row => {
         const {
             committee,
@@ -285,14 +409,29 @@ async function getCampaignFinance(params) {
             MONETARY,
             DISTRICT:district,
             PARTY,
-            FILERNAME
+            FILERNAME,
+            OFFICE,
+            EYEAR:date
         } = row;
         const candidate_id = committee?.candidate_id ?? REPORTID;
         const candidate_name = committee?.candidate_full_name ?? FILERNAME;
         if(!candidate_id) throw new Error('missing candidate_id?');
 
+        (rawByCandidateId[candidate_id] = rawByCandidateId[candidate_id] || []).push(row);
+
+        const {
+            first: first_name,
+            middle: middle_name,
+            last: last_name,
+        } = parseFullName(candidate_name);
+
         const starting_amount = parseFloat(BEGINNING);
         const raised = parseFloat(MONETARY);
+
+        const level = {
+            STH: 'house',
+            STS: 'senate'
+        }[OFFICE] ?? OFFICE;
 
         const party = {
             DEM: 'democratic',
@@ -304,19 +443,66 @@ async function getCampaignFinance(params) {
             candidate_id,
             starting_amount,
             raised,
-            district,
+            district: district == '' ? 0 : parseInt(district || 0),
             party,
-            candidate_name
+            candidate_name,
+            level,
+            date,
+            year: date.slice(0,4),
+            first_name,
+            middle_name,
+            last_name,
+            committee_name: committee?.committee_name,
+            entry_is_committee: !!committee
         });
     });
 
-    return byCandidateId;
+    return Object.values(byCandidateId).map(x => {
+        const [{candidate_id}]=x;
+        const thisYear = x
+            .filter(y => y.year == params.year && !y.entry_is_committee && y.district > 0);
+
+        if(!thisYear.length) {
+            // console.log('No records found for this year', x.length, params.year);
+            return null;
+        }
+
+        let {starting_amount, raised} = x[0];
+        x.forEach(y => {
+            starting_amount += y.starting_amount;
+            raised += y.raised;
+        });
+
+        const elements = {};
+        const setFirstNull = (field) => elements[field] = x.find(z => !!z[field])?.[field] ?? '';
+
+        setFirstNull('candidate_name');
+        setFirstNull('date');
+        setFirstNull('first_name');
+        setFirstNull('middle_name');
+        setFirstNull('last_name');
+        setFirstNull('committee_name');
+        setFirstNull('level');
+        setFirstNull('district');
+        setFirstNull('party');
+
+        return {
+            candidate_id,
+
+            starting_amount,
+            raised,
+            year: params.year,
+
+            ... elements
+        };
+    }).filter(x=>x);
 }
 
 module.exports = {
     getCommitteeList,
     getZip,
-    getCampaignFinance
+    getAggregatedFilerData,
+    getFinanceData
 };
 
 // getZip(2022);
