@@ -56,10 +56,10 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
                 district_id
             }
         });
-
         const {year, general_date} = election;
         if(!general_date) {
             console.log(JSON.stringify(election, null, 2));
+            return;
             throw new Error('General Date Missing');
         }
         const [generalElection] = await this.Election.findOrCreate({
@@ -149,7 +149,7 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
                     election_id,
                     candidate_id
                 }
-            });            
+            });
             if(votes > 0) {
                 candidacy.votes = votes;
                 await candidacy.save();

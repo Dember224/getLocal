@@ -14,7 +14,7 @@ const getCandidateCoverPage = async function(callData, callback){
       const separator = x.split(",");
       return separator;
     }).filter(x=>{
-      if(x[5] === String(callData.year) && x[6]===`PRE-${callData.election_type.toUpperCase()}`){
+      if(x[5] === String(callData.year) && x[6].includes(`PRE-${callData.election_type.toUpperCase()}`)){
         return x;
       }
     })
@@ -95,6 +95,7 @@ const getFinanceData = function(callData, callback){
           return x
         }
       })
+      console.log(the_cash)
       return callback(null, the_cash)
     })
   })

@@ -1,6 +1,7 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
 require('dotenv').config()
 const db_password = process.env.DB_PASSWORD
+const db_uri = process.env.DB_URL_PROD;
 
 const statesJson = require('./states.json');
 statesJson.forEach(x => {
@@ -9,7 +10,14 @@ statesJson.forEach(x => {
 
 async function getModels() {
   const db_url = process.env.DB_URL;
-    const sequelize = new Sequelize(`postgres://postgres:${db_password}@localhost:5432/postgres`);
+    const sequelize = new Sequelize(db_uri, {
+      dialect:'postgres',
+      dialectOptions: {
+        ssl: {
+          rejectUnauthorized: false
+        }
+      }
+    });
 
     const State = sequelize.define("State", {
         state_id: {

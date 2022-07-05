@@ -292,7 +292,7 @@ const getFinanceData = function(callData, callback){
     }, (e,r)=>{
       if(e) return callback(e);
       const money = r.filter(x=>{
-        if(x.name){
+        if(x.name && x.district !== ','){
           return x
         }
       })

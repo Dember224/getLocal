@@ -426,11 +426,16 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             const title = el.text().trim().toLowerCase();
             console.log('Processing scroll-container',title);
 
-            if(title.includes('general')) section = 'general';
+            if(title.includes('general') && title.includes('runoff')) section = 'general_runoff'
+            else if(title.includes('general')) section = 'general';
+            else if(title.includes('democratic') && title.includes('runoff')) section = 'democratic_primary_runoff';
             else if(title.includes('democratic')) section = 'democratic_primary';
+            else if(title.includes('republican') && title.includes('runoff')) section = 'republican_primary_runoff';
             else if(title.includes('republican')) section = 'republican_primary';
             else if(title.includes('green')) section = 'green_primary';
             else if(title.includes('libertarian')) section = 'libertarian_primary';
+            else if(title.includes('constitution')) section = 'constitution_primary';
+            else if(title.includes('nonpartisan')) section = 'nonpartisan_primary';
 
             else throw new Error(`Failed to match title '${title}'`);
         } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
@@ -447,56 +452,57 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             if(resultsText.indexOf('No candidate advanced from') == 0) return;
 
 
-            if(!dateRaw) throw new Error("Failed to extract date from "+resultsText);
-            const date = moment(dateRaw, "MMMM D, YYYY");
-            current[`${section}_date`] = date;
+            if(dateRaw){
+              const date = moment(dateRaw, "MMMM D, YYYY");
+              current[`${section}_date`] = date;
 
-            const headers = table.find('tr.non_result_row td').toArray().map(x => $(x).text().trim().toLowerCase());
+              const headers = table.find('tr.non_result_row td').toArray().map(x => $(x).text().trim().toLowerCase());
 
-            let expected;
-            // there are 2 headers when the election has not happened yet
-            if(headers.length == 2) expected = ['','candidate'];
-            else expected = [
-                '',
-                'candidate',
-                '%',
-                'votes'
-            ];
-            const invalid = expected.filter((x,i) => headers[i] != x);
-            if(invalid.length) throw new Error('Unexpected headers: '+headers.join(', '));
+              let expected;
+              // there are 2 headers when the election has not happened yet
+              if(headers.length == 2) expected = ['','candidate'];
+              else expected = [
+                  '',
+                  'candidate',
+                  '%',
+                  'votes'
+              ];
+              const invalid = expected.filter((x,i) => headers[i] != x);
+              if(invalid.length) throw new Error('Unexpected headers: '+headers.join(', '));
 
-            const rows = table.find('tr.results_row').toArray();
-            if(!rows.length) {
-                console.log(table.text());
-                console.log('No rows for',current.year,section);
-            }
+              const rows = table.find('tr.results_row').toArray();
+              if(!rows.length) {
+                  console.log(table.text());
+                  console.log('No rows for',current.year,section);
+              }
 
-            const results = rows.map(row => {
-                row = $(row);
-                const tds = row.find('td').toArray().map($);
-                if(tds.length != expected.length + 1) throw new Error('Unexpected elements length - stopping');
-                const [,,candidateRaw,pct,votesRaw] = tds;
+              const results = rows.map(row => {
+                  row = $(row);
+                  const tds = row.find('td').toArray().map($);
+                  if(tds.length != expected.length + 1) throw new Error('Unexpected elements length - stopping');
+                  const [,,candidateRaw,pct,votesRaw] = tds;
 
-                // the raw value has commas, so just pull out digits
-                const votes = parseInt($(votesRaw).text().replace(/[^\d]/g, ''));
-                const candidateLink = candidateRaw.find('a');
-                const candidateName = candidateLink.text().trim();
-                const candidateHref = candidateLink.attr('href');
+                  // the raw value has commas, so just pull out digits
+                  const votes = parseInt($(votesRaw).text().replace(/[^\d]/g, ''));
+                  const candidateLink = candidateRaw.find('a');
+                  const candidateName = candidateLink.text().trim();
+                  const candidateHref = candidateLink.attr('href');
 
-                let party;
-                if(candidateRaw.text().trim().slice(-3) == '(R)') party='republican';
-                else if(candidateRaw.text().trim().slice(-3) == '(D)') party='democratic';
+                  let party;
+                  if(candidateRaw.text().trim().slice(-3) == '(R)') party='republican';
+                  else if(candidateRaw.text().trim().slice(-3) == '(D)') party='democratic';
 
-                return {
-                    votes,
-                    party,
-                    candidate_name: candidateName,
-                    candidate_href: candidateHref,
-                }
-            });
+                  return {
+                      votes,
+                      party,
+                      candidate_name: candidateName,
+                      candidate_href: candidateHref,
+                  }
+              });
 
-            current[section] = results;
-            current.has_results = true;
+              current[section] = results;
+              current.has_results = true;
+          }
         } else if(section == 'general' && !current.general_date) {
             const resultsText = el.text().trim();
             console.log('trying for date:', resultsText);

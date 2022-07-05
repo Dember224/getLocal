@@ -141,8 +141,11 @@ const getMoney = function(callData, callback){
     var_obj = var_obj.split(/SetupGrid()|, "#gridSummary"/)[8].replace("(","")
     var_obj = JSON.parse(var_obj)
     if(var_obj){
-      const contributions = var_obj.find(x=>{return x.Section === 'Contributions from Individuals'}).Cycle + var_obj.find(x=>{return x.Section === 'Contributions from Not-For-Profit Organizations'}).Cycle;
-      const expenditures = var_obj.find(x=>{return x.Section ==='Total Expenditures'}).Cycle
+      const individuals = var_obj.find(x=>{return x.Section === 'Contributions from Individuals'})
+      const orgs = var_obj.find(x=>{return x.Section === 'Contributions from Not-For-Profit Organizations'})
+      const spent =  var_obj.find(x=>{return x.Section ==='Total Expenditures'})
+      const contributions = individuals && orgs ? individuals.Cycle + orgs.Cycle : null;
+      const expenditures = spent ? spent.Cycle : null;
       return callback(null, {contributions, expenditures})
     }else {
       return callback(null,{contribution:null, expenditures:null})

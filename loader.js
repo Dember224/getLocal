@@ -2,7 +2,7 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
-const state = argv.state;
+let state = argv.state;
 const loadType = argv.loadType;
 const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
 const office = argv.office;
@@ -35,7 +35,8 @@ const callData = {
   state,
   year,
   office,
-  election_type
+  election_type,
+  report
 }
 
 async function loadFinanceResults(storage){
@@ -65,6 +66,10 @@ async function loader() {
         await loadElectionResults(storage);
     } else if(isLoadTypeFinance){
       // await loadElectionResults(storage);
+      const state_split = state.split(" ")
+      if (state_split.length == 2){
+        state = `${state_split[0]}_${state_split[1]}`
+      }
       await loadFinanceResults(storage.models)
       } else {
           throw new Error("invalid loadType: "+loadType);

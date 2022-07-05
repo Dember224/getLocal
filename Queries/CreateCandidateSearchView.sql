@@ -1,10 +1,10 @@
-Create  View CandidateSearch as
+Create  View "CandidateSearch" as
 Select
 c.candidacy_id,
 c.candidate_id,
-cd.first_name,
-cd.middle_name,
-cd.last_name,
+Lower(cd.first_name) as first_name,
+Lower(cd.middle_name) as middle_name,
+Lower(cd.last_name_ as last_name,
 cd.party,
 s.name as state_name,
 d.number as district,
