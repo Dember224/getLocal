@@ -20,6 +20,42 @@ const DATE = new Date().toISOString().split('T')[0];
 const DOS_PA_GOV = 'https://www.dos.pa.gov';
 const FULL_EXPORT_URI = '/VotingElections/CandidatesCommittees/CampaignFinance/Resources/Pages/FullCampaignFinanceExport.aspx';
 
+function print(data, max_length) {
+    if(!data||!data.length) {
+        console.log('No Data');
+        return;
+    }
+
+    max_length = max_length ?? 15;
+    const lengths = {};
+    Object.keys(data[0]).forEach(x=>lengths[x]=0);
+
+    const header = {};
+    Object.keys(lengths).forEach(x => {
+        header[x] = x;
+    });
+    data = [header, ...data];
+
+    data.forEach(d => Object.keys(lengths)
+        .forEach(k => lengths[k] = Math.min(Math.max(
+            lengths[k],
+            d[k]?.toString().length ?? 0
+        ), max_length)
+    ));
+
+    data.forEach(d => {
+        const cols = Object.keys(lengths).map(l => {
+            const length = lengths[l];
+            let value = d[l];
+            if(typeof value == 'number') value = value.toFixed(2);
+            value = value?.toString() ?? '';
+            return value.padEnd(length).slice(0,length);
+        });
+
+        console.log(cols.join(' | '));
+    });
+}
+
 const FILER_HEADERS = [
     'FILERID',
     'REPORTID',
@@ -153,7 +189,7 @@ async function getCommitteeListFileName() {
 
     const rawFile = await transport.get(COMMITTEE_LIST_EXPORT_URI);
 
-    console.log(rawFile.headers);
+    // console.log(rawFile.headers);
     const cookie = rawFile.headers['set-cookie'].join(';').split(';')[0];
 
     let $ = cheerio.load(rawFile.data);
@@ -172,7 +208,7 @@ async function getCommitteeListFileName() {
     const params = new URLSearchParams();
     Object.entries(formData).forEach(([k,v]) => {
         if(!k || k == 'undefined') return;
-        console.log(k, v.slice(0,10));
+        // console.log(k, v.slice(0,10));
         params.append(k,v);
     });
 
@@ -189,9 +225,9 @@ async function getCommitteeListFileName() {
     } catch(e) {
         console.log('Error getting data: ',e);
     }
-    console.log(resp.request.method);
-    console.log(resp.status);
-    console.log(resp.headers);
+    // console.log(resp.request.method);
+    // console.log(resp.status);
+    // console.log(resp.headers);
 
     if(resp.headers['content-type'] != 'Application/x-msexcel') {
         throw new Error('Unexcepted Content-Type: '+resp.headers['content-type']);
@@ -216,9 +252,9 @@ async function getCommitteeList() {
     const header = sheet.data[1];
     const info = sheet.data[2];
     const rows = sheet.data.slice(3);
-    console.log(recordCount);
-    console.log(header);
-    console.log(info);
+    // console.log(recordCount);
+    // console.log(header);
+    // console.log(info);
 
     if(header.join(',') != EXPECTED_COMMITTEE_HEADERS.join(',')) {
         throw new Error('Received unexpected headers: '+header);
@@ -247,12 +283,12 @@ async function getCommitteeList() {
         };
     });
 
-    console.log(comms[0]);
+    // console.log(comms[0]);
     return comms;
 }
 
 async function downloadZipFile(year) {
-    const localZipName = path.join(__dirname, `/tmp/${year}_${DATE}.zip`);
+    const localZipName = path.join(__dirname, 'tmp', `${year}_${DATE}.zip`);
     try {
         fs.accessSync(localZipName)
         console.log('Using Cache File',localZipName);
@@ -373,136 +409,273 @@ async function getAggregatedFilerData(params) {
         let calc_debt = 0;
         debt.forEach(x => calc_debt += parseFloat(x.DBTAMT || 0));
         x.calc_debt = calc_debt;
-
-        return x;
     });
 
-    return {...agg, byFilerId};
+    const candidate_filers = agg.filer
+        .filter(x => x.FILERTYPE == 1)
+        .map(c => {
+            const {
+                first: first_name,
+                middle: middle_name,
+                last: last_name,
+            } = parseFullName(c.FILERNAME);
+            return {...c, first_name, middle_name, last_name}
+        });
+    const committee_filers = agg.filer
+        .filter(x => x.FILERTYPE == 2);
+
+    return {...agg, byFilerId, candidate_filers, committee_filers};
 }
 
-async function getFinanceData(params) {
-    const [{filer}, comms] = await Promise.all([
+async function getCombinedCandidateData(params) {
+    const [{candidate_filers, committee_filers, contrib, expense}, comms] = await Promise.all([
         await getAggregatedFilerData(params),
         await getCommitteeList()
     ]);
 
-    console.log(filer[0], comms[0]);
-    
-    const mergedWithCommittee = filer.map(row => {
-        if(!row.FILERID) {
-            console.log('No FILERID: ', row);
+    const candidatesByCandidateId = {};
+    const duplicateCandidateIds = {};
+    let totalDupes = 0;
+    candidate_filers.forEach(x => {
+        if(candidatesByCandidateId[x.REPORTID]) {
+            duplicateCandidateIds[x.REPORTID] = 1;
+            totalDupes ++;
         }
-        if(row.FILERTYPE == 2) {
-            const committee = comms.find(x=>x.report_id == row.REPORTID);
-            row.committee = committee;
+        (candidatesByCandidateId[x.REPORTID] = candidatesByCandidateId[x.REPORTID] ?? [])
+            .push(x);
+    });
+    console.log(candidate_filers.length,'candidate filers');
+    console.log(Object.keys(candidatesByCandidateId).length, 'unique candidates');
+    console.log(Object.keys(duplicateCandidateIds).length, 'ids with duplicates across', totalDupes, 'candidates');
+    console.log();
+
+    const commsByReportId = {};
+    comms.forEach(x => {
+        (commsByReportId[x.report_id] = commsByReportId[x.report_id] ?? [])
+            .push(x);
+    });
+    console.log(Object.keys(commsByReportId).length,'unique report ids for comms');
+
+    const committeeFilersByCandidateId = {};
+    const noCommDefinitions = {};
+    committee_filers.forEach(x => {
+        const {FILERID, REPORTID} = x;
+        const definitions = commsByReportId[REPORTID];
+        if(!definitions) {
+            noCommDefinitions[REPORTID] = 0;
+            return;
         }
-        return row;
+
+        let candidateIds = {};
+        definitions //.filter(x => (x.candidate_id || 0) > 0)
+            .filter(x => candidatesByCandidateId[x.candidate_id])
+            .forEach(x=>candidateIds[x.candidate_id]=1);
+        candidateIds = Object.keys(candidateIds);
+        if(candidateIds.length > 1) {
+            // console.log(FILERID,REPORTID, 'has multiple candidate ids', candidateIds);
+            // print(definitions);
+            // console.log();
+        } else if(candidateIds.length) {
+            const id = candidateIds[0];
+            (committeeFilersByCandidateId[id] = committeeFilersByCandidateId[id] ?? [])
+                .push(x);
+        } else {
+        }
+    });
+    console.log(Object.keys(noCommDefinitions).length, 'committee filers without definitions');
+    console.log(Object.keys(committeeFilersByCandidateId).length, 'candidates with committees');
+
+    const contributionsByReportId = {};
+    contrib.forEach(x => {
+        (contributionsByReportId[x.REPORTID] = contributionsByReportId[x.REPORTID] ?? []).push(x);
     });
 
-    const byCandidateId = {};
-    const rawByCandidateId = {};
-    mergedWithCommittee.forEach(row => {
-        const {
-            committee,
-            REPORTID,
-            BEGINNING,
-            MONETARY,
-            DISTRICT:district,
-            PARTY,
-            FILERNAME,
+    const expensesByReportId = {};
+    expense.forEach(x => {
+        (expensesByReportId[x.REPORTID] = expensesByReportId[x.REPORTID] ?? []).push(x);
+    });
+
+    const combined = Object.entries(candidatesByCandidateId).map(([id,filers]) => {
+        const committees = committeeFilersByCandidateId[id] ?? [];
+        const allFilers = filers.concat(committees).sort((a,b) => {
+            if(a.FILERTYPE < b.FILERTYPE) return -1;
+            else if(b.FILERTYPE < a.FILERTYPE) return 1;
+
+            else if(a.REPORTID < b.REPORTID) return -1;
+            else if(a.REPORTID > b.REPORTID) return 1;
+
+            else if(a.CYCLE < b.CYCLE) return -1;
+            else if(a.CYCLE > b.CYCLE) return 1;
+
+            else if(a.EYEAR < b.EYEAR) return -1;
+            else return 1;
+        });
+
+        const allReportIds = {};
+        allFilers.forEach(x => allReportIds[x.REPORTID]=1);
+        
+        // console.log('------------------- candidate', id);
+        // print(allFilers);
+
+        const mostRecentForReportId = {};
+        allFilers.forEach(x => mostRecentForReportId[x.REPORTID] = x);
+        const mostRecents = Object.values(mostRecentForReportId).sort((a,b) => {
+            if(a.FILERTYPE < b.FILERTYPE) return -1;
+            else return 1;
+        });
+
+        // print(mostRecents);
+
+        // let expenseTotal = 0;
+        // let contribTotal = 0;
+
+        let expenses = [];
+        let contribs = [];
+
+        Object.keys(allReportIds).forEach(id => {
+            // let expenseSum = 0;
+            const exp = expensesByReportId[id] ?? [];
+            expenses = expenses.concat(exp);
+            // exp.forEach(x => expenseSum += parseFloat(x.EXPAMT));
+            // console.log(`--- Expenses [${id} - # ${exp.length} - $${expenseSum.toFixed(2)}]:`);
+            // print(exp.slice(0,4), 15);
+
+            // let contribSum = 0;
+            const con = contributionsByReportId[id] ?? [];
+            contribs = contribs.concat(con);
+            // con.forEach(x =>contribSum += parseFloat(x.CONTAMT1));
+            // console.log(`--- Contribs [${id} - # ${con.length} - $${contribSum.toFixed(2)}]:`);
+            // print(con.slice(0,4), 15);
+
+            // expenseTotal += expenseSum;
+            // contribTotal += contribSum;
+        });
+        // console.log('Expense: ', expenseTotal.toFixed(2), 'Contrib: ', contribTotal.toFixed(2), 'Net:', (contribTotal - expenseTotal).toFixed());
+        // console.log();
+
+        let currentValue = 0;
+        let cycleStart = 0;
+        let cycleRaised = 0;
+        let cycleSpent = 0;
+        const mostRecentSums = {};
+        mostRecents.forEach(x => {
+            const beginning = parseFloat(x.BEGINNING);
+            let expenseSum = 0;
+            expenses.filter(z => z.REPORTID == x.REPORTID && z.CYCLE == x.CYCLE)
+                .forEach(z => expenseSum += parseFloat(z.EXPAMT));
+            let contribSum = 0;
+            contribs.filter(z => z.REPORTID == x.REPORTID && z.CYCLE == x.CYCLE)
+            .forEach(z => contribSum += parseFloat(z.CONTAMT1));
+            const result = beginning - expenseSum + contribSum
+            mostRecentSums[x.REPORTID] = {
+                beginning,
+                expenseSum,
+                contribSum,
+                result
+            };
+            currentValue += result;
+            cycleStart += beginning;
+            cycleRaised += contribSum;
+            cycleSpent += expenseSum;
+        });
+
+        return {
+            candidateId: id,
+            allFilers,
+            mostRecents,
+            contribs,
+            expenses,
+            mostRecentSums,
+            currentValue,
+            cycleStart,
+            cycleRaised,
+            cycleSpent
+        };
+    });
+
+    return combined;
+}
+
+async function getFinanceData(params) {
+    const combined = await getCombinedCandidateData(params);
+
+    return combined.map(c => {
+        const {candidateId, allFilers, mostRecents, currentValue, cycleRaised, cycleSpent, cycleStart} = c;
+
+        const mostRecentCandidate = mostRecents.find(x => x.REPORTID == candidateId);
+        if(!mostRecentCandidate) throw new Error('Missing mostRecentCandidate?');
+
+        let {
+            DISTRICT: district,
             OFFICE,
-            EYEAR:date
-        } = row;
-        const candidate_id = committee?.candidate_id ?? REPORTID;
-        const candidate_name = committee?.candidate_full_name ?? FILERNAME;
-        if(!candidate_id) throw new Error('missing candidate_id?');
+            PARTY,
+            FILERNAME: name
+        } = mostRecentCandidate;
 
-        (rawByCandidateId[candidate_id] = rawByCandidateId[candidate_id] || []).push(row);
-
-        const {
-            first: first_name,
-            middle: middle_name,
-            last: last_name,
-        } = parseFullName(candidate_name);
-
-        const starting_amount = parseFloat(BEGINNING);
-        const raised = parseFloat(MONETARY);
+        // statewide office
+        if(district == -1) return null;
 
         const level = {
             STH: 'house',
             STS: 'senate'
-        }[OFFICE] ?? OFFICE;
+        }[OFFICE] ?? null;
+
+        if(!level) return null;
 
         const party = {
             DEM: 'democratic',
             REP: 'republican'
         }[PARTY] ?? PARTY;
 
-        const entries = byCandidateId[candidate_id] = byCandidateId[candidate_id] ?? [];
-        entries.push({
-            candidate_id,
-            starting_amount,
-            raised,
-            district: district == '' ? 0 : parseInt(district || 0),
-            party,
-            candidate_name,
-            level,
-            date,
-            year: date.slice(0,4),
-            first_name,
-            middle_name,
-            last_name,
-            committee_name: committee?.committee_name,
-            entry_is_committee: !!committee
-        });
-    });
-
-    return Object.values(byCandidateId).map(x => {
-        const [{candidate_id}]=x;
-        const thisYear = x
-            .filter(y => y.year == params.year && !y.entry_is_committee && y.district > 0);
-
-        if(!thisYear.length) {
-            // console.log('No records found for this year', x.length, params.year);
-            return null;
-        }
-
-        let {starting_amount, raised} = x[0];
-        x.forEach(y => {
-            starting_amount += y.starting_amount;
-            raised += y.raised;
-        });
-
-        const elements = {};
-        const setFirstNull = (field) => elements[field] = x.find(z => !!z[field])?.[field] ?? '';
-
-        setFirstNull('candidate_name');
-        setFirstNull('date');
-        setFirstNull('first_name');
-        setFirstNull('middle_name');
-        setFirstNull('last_name');
-        setFirstNull('committee_name');
-        setFirstNull('level');
-        setFirstNull('district');
-        setFirstNull('party');
-
         return {
-            candidate_id,
+            candidateId,
+            current_amount: currentValue,
 
-            starting_amount,
-            raised,
+            starting_amount: cycleStart,
+            contributions: cycleRaised,
+            expenditures: cycleSpent,
             year: params.year,
+            election_year: params.year,
+            state: "pennsylvania",
+            office: level,
+            election_type: 'general',
+            name,
+            district,
+            party,
 
-            ... elements
+            other_filers: allFilers.filter(x => x.REPORTID != candidateId).map(x=>x.FILERNAME).join(', ')
         };
-    }).filter(x=>x);
+    }).filter(x => !!x);
+}
+
+async function getSampleData() {
+    const data = await getFinanceData({year:2022});
+    print(data, 30);
+    return;
+
+    // const data = await getAggregatedFilerData({year:2022});
+
+    // print(data.candidate_filers.slice(0,10));
+    // console.log(data.candidate_filers.length, 'total candidate_filers');
+
+    // print(data.committee_filers.slice(0,10));
+    // console.log(data.committee_filers.length, 'total committee_filers');
+
+    // let comms = await getCommitteeList();
+    // withCandidates = comms.filter(x => x.candidate_id != null);
+    // print(comms.slice(0,10), 25);
+    // console.log(comms.length, 'total committees');
+    // console.log(withCandidates.length, 'with candidates');
 }
 
 module.exports = {
     getCommitteeList,
     getZip,
     getAggregatedFilerData,
-    getFinanceData
+    getFinanceData,
+    getCombinedCandidateData
 };
 
-// getZip(2022);
+// getSampleData();
+
+// getFinanceData({year: 2022});
