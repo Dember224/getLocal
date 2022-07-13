@@ -380,7 +380,7 @@ async function getModels() {
         Candidate,
         Candidacy,
         CampaignFinance,
-        // CandidateSearch
+        CandidateSearch
     };
 }
 
