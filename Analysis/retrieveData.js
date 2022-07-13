@@ -97,11 +97,58 @@ async function races(state, year){
   await retrieval;
   return retrieval
 }
-// races('Ohio', 2020).then((r)=>{
-//   console.log(r)
+
+async function closest_races_by_state(state, year, closest_x_races) {
+  const get_close = races(state, year).then( (r)=>{
+    const races = r.filter(x=>{return x.length > 1});
+    const race_proportions = races.map(race=>{
+      let vote_total = 0
+      race.map(candidate=>{
+        vote_total += candidate.votes
+      })
+
+      const race_with_percentage = race.map(candidate=>{
+        candidate['vote_percentage'] = candidate.votes / vote_total;
+        return candidate;
+      })
+
+      return race_with_percentage.sort((a,b)=>{
+        return b.vote_percentage - a.vote_percentage;
+      });
+    })
+
+    let race_with_margin = race_proportions.map(race=>{
+      let top_spot_percentage_differential = null;
+      if(race[0].party == 'democratic' || race[1].party == 'democratic'){
+        top_spot_percentage_differential = race[0].vote_percentage - race[1].vote_percentage ;
+      }
+
+      const return_object = {
+        top_spot_percentage_differential,
+        race
+      }
+      return return_object;
+    })
+    race_with_margin = race_with_margin.filter(x=>{
+      return x.top_spot_percentage_differential != null;
+    });
+    race_with_margin = race_with_margin.sort((a,b)=>{
+      return a.top_spot_percentage_differential - b.top_spot_percentage_differential;
+    })
+    return race_with_margin.slice(0, closest_x_races)
+
+  })
+  await get_close
+  return get_close
+}
+// closest_races('North Carolina', 2020, 10).then((r)=>{
+//   r.map(x=>{
+//     console.log(x)
+//   })
 // })
 
 module.exports = {
   retriever,
-  races
+  races,
+  closest_races_by_state
 }
