@@ -141,14 +141,73 @@ async function closest_races_by_state(state, year, closest_x_races) {
   await get_close
   return get_close
 }
+
+async function get_races_by_outspend(state, year, raw_or_percentage) {
+  let race_array = await races(state, year)
+  race_array = race_array.filter(x=>{return x.length > 1});
+  const spend_order_array = race_array.map(race=>{
+    let total_spent = 0;
+    race.map(candidate=>{
+      total_spent += parseFloat(candidate.expenditures);
+    });
+
+    let with_spending = race.map(candidate=>{
+      const percentage_spent = parseFloat(candidate.expenditures) / total_spent;
+      candidate.percentage_spent = percentage_spent;
+      return candidate;
+    });
+
+    with_spending = with_spending.sort((a,b)=>{
+      return b.percentage_spent - a.percentage_spent;
+    })
+
+    with_spending = with_spending.map((candidate,index, array)=>{
+      const highest_spender = parseFloat(array[0].expenditures)
+      candidate.outspend = highest_spender - candidate.expenditures;
+      candidate.percentage_outspent = array[0].percentage_spent - candidate.percentage_spent
+      return candidate
+    });
+
+    const highest_earning_democrat = with_spending.find(candidate=>{
+      return candidate.party == 'democratic'
+    })
+
+    const raw_biggest_dem_outspent_by = highest_earning_democrat ? highest_earning_democrat.outspend : null;
+    const biggest_dem_outspend_by_percentage =  highest_earning_democrat ? highest_earning_democrat.percentage_outspent : null;
+
+    const return_array = {
+      race: with_spending,
+      raw_biggest_dem_outspent_by,
+      biggest_dem_outspend_by_percentage
+    }
+    return return_array;
+  })
+  if(raw_or_percentage == 'raw'){
+    return spend_order_array.sort((a, b)=>{
+      return b.raw_biggest_dem_outspent_by - a.raw_biggest_dem_outspent_by
+    });
+  } else if(raw_or_percentage = 'percentage'){
+    return spend_order_array.sort((a, b)=>{
+      return b.biggest_dem_outspend_by_percentage - a.biggest_dem_outspend_by_percentage
+    });
+  } else {
+    throw new Error("Please pass the third argument indicating whether you want the outspend sorted by percentage or raw dollars")
+  }
+
+}
 // closest_races('North Carolina', 2020, 10).then((r)=>{
 //   r.map(x=>{
 //     console.log(x)
 //   })
 // })
 
+get_races_by_outspend('Pennsylvania', 2022, 'percentage').then((r)=>{
+  console.log(r)
+})
+
 module.exports = {
   retriever,
   races,
-  closest_races_by_state
+  closest_races_by_state,
+  get_races_by_outspend
 }
