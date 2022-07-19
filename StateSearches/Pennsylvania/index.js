@@ -243,7 +243,7 @@ async function getCommitteeListFileName() {
 
 async function getCommitteeList() {
     const localListName = await getCommitteeListFileName();
-    
+
     const data = xlsx.parse(localListName);
     if(data.length != 1) throw new Error('Expected single sheet, got: '+data.length);
 
@@ -314,7 +314,7 @@ async function downloadZipFile(year) {
     if(!zipLink) throw new Error("Failed to find link for "+year);
 
     console.log('Pulling from:', zipLink);
-    
+
     const zipResp = await axios.get(`${DOS_PA_GOV}${zipLink}`, {
         responseType: 'stream'
     });
@@ -325,7 +325,7 @@ async function downloadZipFile(year) {
         zipResp.data.on('error', reject);
         zipResp.data.on('end', resolve);
     });
-    
+
     console.log('zip downloaded to', localZipName);
 
     return localZipName;
@@ -358,7 +358,7 @@ async function getZip(year) {
         if(!internalZipName) throw new Error('Failed to find txt file or internal zip '+Object.keys(zip.files));
 
         const internalZip = zip.files[internalZipName];
-        
+
         const innerZip = await internalZip.async('binarystring');
         zip = new JSZip();
         await zip.loadAsync(innerZip);
@@ -513,7 +513,7 @@ async function getCombinedCandidateData(params) {
 
         const allReportIds = {};
         allFilers.forEach(x => allReportIds[x.REPORTID]=1);
-        
+
         // console.log('------------------- candidate', id);
         // print(allFilers);
 
@@ -599,7 +599,7 @@ async function getCombinedCandidateData(params) {
 async function getFinanceData(params) {
     const combined = await getCombinedCandidateData(params);
 
-    return combined.map(c => {
+    const combined_filter = combined.map(c => {
         const {candidateId, allFilers, mostRecents, currentValue, cycleRaised, cycleSpent, cycleStart} = c;
 
         const mostRecentCandidate = mostRecents.find(x => x.REPORTID == candidateId);
@@ -646,6 +646,8 @@ async function getFinanceData(params) {
             other_filers: allFilers.filter(x => x.REPORTID != candidateId).map(x=>x.FILERNAME).join(', ')
         };
     }).filter(x => !!x);
+    console.log(combined_filter)
+    return combined_filter
 }
 
 async function getSampleData() {
