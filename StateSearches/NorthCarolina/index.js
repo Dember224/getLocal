@@ -3,7 +3,6 @@ const got = require('got');
 const csv = require('csv-parser');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers').partyParser
 
 function getOffice(contest_name){
@@ -200,14 +199,14 @@ const getFinanceData = function(callData, callback){
   })
 }
 
-const loadData = async function(callData){
-  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
-    if(e) return e;
-    await loader.loadFinanceArray(money_array);
-    console.log(`loading ${money_array.length}  records....`)
-    return money_array;
-  })
-}
+// const loadData = async function(callData){
+//   await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
+//     if(e) return e;
+//     await loader.loadFinanceArray(money_array);
+//     console.log(`loading ${money_array.length}  records....`)
+//     return money_array;
+//   })
+// }
 
 // loadData({year:2020, election_type:'General'});
 

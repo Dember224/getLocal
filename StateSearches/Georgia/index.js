@@ -1,7 +1,6 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../../Loaders/uploadFinances.js');
 
 const getCandidates = function(callData, callback){
   if(!callData.year){
@@ -301,13 +300,13 @@ const getFinanceData = function(callData, callback){
   })
 };
 
-const loadData = async function(callData){
-  await getFinanceData({report: callData.report, year: callData.year, office: callData.office}, (e, money_array)=>{
-    if(e) return e;
-    loader.loadFinanceArray(money_array);
-    return money_array;
-  })
-}
+// const loadData = async function(callData){
+//   await getFinanceData({report: callData.report, year: callData.year, office: callData.office}, (e, money_array)=>{
+//     if(e) return e;
+//     loader.loadFinanceArray(money_array);
+//     return money_array;
+//   })
+// }
 
 // get_all_money({report:'December 31st - Election Year', year:2020, office: "State Senate"}, (e, money_array)=>{
 //   if(e) return e;

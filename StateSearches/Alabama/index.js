@@ -1,7 +1,6 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../../Loaders/uploadFinances.js');
 
 
 const party_object = {
@@ -285,13 +284,13 @@ const getFinanceData = function(callData, callback){
 
 // getAllMoney({year:2018, election_type:'primary'})
 
-const loadData = function(callData){
-  getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
-    if(e) return e;
-    loader.loadFinanceArray(money_array);
-    return money_array;
-  })
-}
+// const loadData = function(callData){
+//   getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+//     if(e) return e;
+//     loader.loadFinanceArray(money_array);
+//     return money_array;
+//   })
+// }
 
 // loadData({year:2018, election_type:'primary'})
 
