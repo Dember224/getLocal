@@ -3,7 +3,7 @@ const tools = require('../../Tools/parsers.js');
 const cheerio =  require('cheerio');
 const async = require('async');
 const dates = require('../../Tools/date_tools.js');
-const loader = require('../../Loaders/uploadFinances.js');
+// const loader = require('../../Loaders/uploadFinances.js');
 
 const getCandidates = function(callData, callback){
   request({
@@ -128,13 +128,13 @@ const getFinanceData = function(callData, callback){
   })
 }
 
-const loadData = async function(callData){
-  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_object)=>{
-    if(e) return e;
-    await loader.loadFinanceArray(money_object);
-    return money_object;
-  })
-}
+// const loadData = async function(callData){
+//   await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_object)=>{
+//     if(e) return e;
+//     await loader.loadFinanceArray(money_object);
+//     return money_object;
+//   })
+// }
 // loadData({year:2020, election_type:'General'})
 module.exports = {
   getFinanceData

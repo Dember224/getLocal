@@ -4,7 +4,6 @@ const async = require('async');
 const csv = require('csv-parser');
 const fs = require('fs');
 const got = require('got');
-const loader = require('../../Loaders/uploadFinances.js');
 
 
 function getId(office_name){
@@ -228,14 +227,14 @@ const getFinanceData = async function(callData, callback){
 // getCommiteeRecords({year:2019})
 // checkAllMonths({year:2019, election_type:'General'})
 
-const loadData = function(callData){
-  getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_object)=>{
-    if(e) return e;
-    loader.loadFinanceArray(money_object);
-    console.log(money_object)
-    return money_object;
-  });
-}
+// const loadData = function(callData){
+//   getFinanceData({year:callData.year, election_type:callData.election_type}, (e,money_object)=>{
+//     if(e) return e;
+//     loader.loadFinanceArray(money_object);
+//     console.log(money_object)
+//     return money_object;
+//   });
+// }
 // loadData({year:2019, election_type:"General"})
 // getCandidateNames({election_type:'General', office:'House of Delegates', year: 2019}); //The offices are State Senate and House of Delegates case sensitive
 module.exports = {
