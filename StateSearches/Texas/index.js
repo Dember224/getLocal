@@ -4,7 +4,6 @@ const async = require('async');
 const fs = require('fs');
 const pdf = require('pdf-parse');
 const crawler = require('crawler-request');
-const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers.js').partyParser;
 const tmp = require('tmp');
 const parseExcelFileEndpoint = require('../../Tools/parsers.js').parseExcelFileEndpoint;
@@ -240,20 +239,20 @@ const getCandidateMoney = function(callData, callback){
 //   console.log(r);
 //   return r;
 // })
-const loadSenateData = function(callData){
-  getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
-    if(e) return e;
-    loader.loadFinanceArray(r)
-  });
-}
+// const loadSenateData = function(callData){
+//   getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"SENATOR"}, (e,r)=>{ //office name must be capitalized
+//     if(e) return e;
+//     loader.loadFinanceArray(r)
+//   });
+// }
 
-const loadRepData = function(callData){
-  getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{ //office name must be capitalized
-    if(e) return e;
-    loader.loadFinanceArray(r)
-    return r;
-  });
-}
+// const loadRepData = function(callData){
+//   getCandidateMoney({year:callData.year, election_type:callData.election_type, office:"REPRESENTATIVE"}, (e,r)=>{ //office name must be capitalized
+//     if(e) return e;
+//     loader.loadFinanceArray(r)
+//     return r;
+//   });
+// }
 
 const getFinanceData = function(callData, callback){
   async.auto({

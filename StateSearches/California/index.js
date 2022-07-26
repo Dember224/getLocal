@@ -5,7 +5,7 @@ const csv = require('csv-parser');
 const async = require('async');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
-const loader = require('../../Loaders/uploadFinances.js');
+// const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers.js').partyParser;
 
 function getOffice(office_name){
@@ -183,13 +183,13 @@ const getFinanceData = function(callData, callback){
 
 
 
-const loadData = async function(callData){
-  await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
-    if(e) return e;
-    await loader.loadFinanceArray(money_array);
-    return money_array;
-  })
-}
+// const loadData = async function(callData){
+//   await getFinanceData({year:callData.year, election_type:callData.election_type}, async (e,money_array)=>{
+//     if(e) return e;
+//     await loader.loadFinanceArray(money_array);
+//     return money_array;
+//   })
+// }
 // getAllMoney({year:2020, election_type:'primary'}, (e,r)=>{
 //   if(e) return e;
 //   console.log(r);

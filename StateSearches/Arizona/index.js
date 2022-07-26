@@ -1,7 +1,6 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../../Loaders/uploadFinances.js');
 const partyParser = require('../../Tools/parsers.js').partyParser
 
 const getFinanceData = function(callData,callback){
@@ -48,12 +47,12 @@ const getFinanceData = function(callData,callback){
   })
 };
 
-const loadData = function(callData){
-  getFinanceData({year: callData.year}, (e,money_array)=>{
-    if(e) return e;
-    loader.loadFinanceArray(money_array)
-  })
-}
+// const loadData = function(callData){
+//   getFinanceData({year: callData.year}, (e,money_array)=>{
+//     if(e) return e;
+//     loader.loadFinanceArray(money_array)
+//   })
+// }
 
 module.exports = {
   getFinanceData

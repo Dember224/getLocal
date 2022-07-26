@@ -2,7 +2,6 @@ const crawler = require('crawler-request');
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
-const loader = require('../../Loaders/uploadFinances.js');
 
 
 function getOffice(text){
@@ -328,20 +327,20 @@ getCandidateMoney({year:2019, election_type:"General"}, (e,money)=>{
 //
 //  }
 
-const loadMississippiFinances = function(callData){
-  getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
-    if(e) return e;
-    async.mapSeries(money_array,(money_object, cb)=>{
-      console.log(money_object);
-      loader.loadFinanceData(money_object);
-      return cb(null, money_object)
-    }, (e,r)=>{
-      if(e) return e;
-      return r;
-      loader.loadFinanceData({finished:true})
-    })
-  })
-}
+// const loadMississippiFinances = function(callData){
+//   getCandidateMoney({year:callData.year, election_type:callData.election_type}, (e,money_array)=>{
+//     if(e) return e;
+//     async.mapSeries(money_array,(money_object, cb)=>{
+//       console.log(money_object);
+//       loader.loadFinanceData(money_object);
+//       return cb(null, money_object)
+//     }, (e,r)=>{
+//       if(e) return e;
+//       return r;
+//       loader.loadFinanceData({finished:true})
+//     })
+//   })
+// }
 
 // loadMississippiFinances({year:2019, election_type:"General"})
 // getCampaignFinancePdf({name:'Lee Jackson'},(e,r)=>{

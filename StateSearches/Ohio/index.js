@@ -2,7 +2,6 @@ const cheerio = require('cheerio');
 const async = require('async');
 const csv = require('csv-parser');
 const fs = require('fs');
-const loader = require('../../Loaders/uploadFinances.js');
 const cloudflareScraper = require('cloudflare-scraper');
 
 const getCandidateCoverPage = async function(callData, callback){
@@ -101,13 +100,13 @@ const getFinanceData = function(callData, callback){
   })
 }
 
-const loadData = async function(callData){
-  await getFinanceData({year:callData.year, election_type: callData.election_type}, async (e, money)=>{
-    if(e) return e;
-    await loader.loadFinanceArray(money);
-    return money;
-  })
-}
+// const loadData = async function(callData){
+//   await getFinanceData({year:callData.year, election_type: callData.election_type}, async (e, money)=>{
+//     if(e) return e;
+//     await loader.loadFinanceArray(money);
+//     return money;
+//   })
+// }
 
 // loadData({year:2020, election_type:'General'})
 module.exports = {
