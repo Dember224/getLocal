@@ -15,7 +15,13 @@ app.get('/', (req,res,next)=>{
 
 app.get('/closestStateRaces/:state/:year', (req,res)=>{
   analytics.closest_races_by_state(req.params.state, req.params.year, 10).then((r)=>{
-    res.send(r)
+    res.send(r);
+  })
+})
+
+app.get('/outspend/:state/:year', (req,res)=>{
+  analytics.get_races_by_outspend(req.params.state, req.params.year, 'percentage').then((r)=>{
+    res.send(r);
   })
 })
 // app.get('/profile', (req, res,next)=>{

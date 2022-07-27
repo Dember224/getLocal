@@ -195,7 +195,9 @@ async function get_races_by_outspend(state, year, raw_or_percentage) {
   }
 
 }
-// closest_races('North Carolina', 2020, 10).then((r)=>{
+
+
+// closest_races_by_state('Pennsylvania', 2022, 'percentage').then((r)=>{
 //   r.map(x=>{
 //     console.log(x)
 //   })
