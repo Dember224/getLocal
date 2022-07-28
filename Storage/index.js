@@ -1,4 +1,4 @@
-const { Sequelize, Model, DataTypes } = require('sequelize');
+const { Sequelize, Model, DataTypes, Op } = require('sequelize');
 require('dotenv').config()
 const db_password = process.env.DB_PASSWORD
 const db_uri = process.env.DB_URL_PROD;
@@ -175,7 +175,7 @@ async function getModels() {
         party: {
             type: DataTypes.STRING,
         },
-        // used in general elections
+        // used in primary elections
         general_election_id: {
             type: DataTypes.INTEGER
         },
@@ -198,6 +198,53 @@ async function getModels() {
     Election.prototype.getState = async function() {
         const office = await this.getOffice();
         return office.getState();
+    };
+    Election.prototype.getPreviousElections = async function(include) {
+        const {type, year, office_id} = this;
+        const [...previous] = await Election.findAll({
+            where: {
+                type,
+                office_id,
+                year: {
+                    [Op.lt]: year
+                }
+            },
+            include
+        });
+
+        // sorted by most recent first
+        return previous.sort((a,b) => b.year - a.year);
+    };
+    Election.prototype.getGeneral = async function(include) {
+        if(this.type != 'primary') return null;
+        return Election.findByPk(this.general_election_id, {
+            include
+        });
+    };
+    Election.prototype.getPrimaries = async function(include) {
+        if(this.type != 'general') return null;
+        return Election.findAll({
+            where: {
+                type: 'primary',
+                general_election_id: this.election_id
+            }
+        }, include);
+    };
+    Election.prototype.getTurnout = async function() {
+        const candidacies = await this.getCandidacies();
+        let total = 0;
+        candidacies.forEach(x => total += x.votes ?? 0);
+        return total;
+    };
+    Election.prototype.getVotesByParty = async function() {
+        if(this.party) return null;
+        const candidacies = await this.getCandidacies();
+        const byParty = {};
+        for(let x of candidacies) {
+            const cand = await x.getCandidate();
+            byParty[cand.party] = x.votes;
+        };
+        return byParty;
     };
 
     Election.getElections = async function({state,year}, include) {

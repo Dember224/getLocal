@@ -653,16 +653,19 @@ async function getFinanceData(params) {
 }
 
 async function getSampleData() {
-    const data = await getAggregatedFilerData({year:2022});
-    const m = data.committee_filers.filter(x => x.FILERNAME == 'FRIENDS OF CINDY KIRK');
-    console.log(m);
+    // const data = await getAggregatedFilerData({year:2022});
+    // const m = data.committee_filers.filter(x => x.FILERNAME == 'FRIENDS OF CINDY KIRK');
+    // console.log(m);
 
-    const comms = await getCommitteeList();
-    const comm = comms.find(x => x.report_id == m[0].REPORTID);
-    console.log(comm);
+    const d = await getFinanceData({year: 2022});
+    print(d.filter(x => x.district == 160),30);
 
-    const cand = data.candidate_filers.find(x => x.REPORTID == comm.candidate_id);
-    console.log(cand);
+    // const comms = await getCommitteeList();
+    // const comm = comms.find(x => x.report_id == m[0].REPORTID);
+    // console.log(comm);
+
+    // const cand = data.candidate_filers.find(x => x.REPORTID == comm.candidate_id);
+    // console.log(cand);
 
     // const agg = await getCombinedCandidateData({year:2022});
 
@@ -694,6 +697,6 @@ module.exports = {
     getCombinedCandidateData
 };
 
-// getSampleData();
+getSampleData();
 
 // getFinanceData({year: 2022});

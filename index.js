@@ -39,9 +39,6 @@ function print(data, max_length) {
 (async () => {
   const {models} = await storage();
 
-  const s = await models.State.findOne({name: 'pennsylvania'});
-  
-
   let elections = await models.Election.getElections({
     year: 2022,
     state: 'pennsylvania'
@@ -75,42 +72,55 @@ function print(data, max_length) {
     const chamber = election.Office.District.Chamber.name;
     // const level = election.Office.District.Chamber.level.toString();
 
-    // elements.push({
-    //   state,
-    //   year,
-    //   chamber,
-    //   district,
-    //   type,
-    //   level,
+    const byParty = {};
+    election.Candidacies.forEach(c => {
+      // const {votes} = c;
+      const {party} = c.Candidate;
+      const {contributions = 0, expenditures = 0} = c.CampaignFinance ?? {};
 
-    //   first_name:'',
-    //   last_name:'',
-    //   party:'',
+      byParty[party] = {
+        contributions,
+        expenditures
+      };
+    });
 
-    //   contributions: '',
-    //   expenditures: ''
-    // })
+    const {
+      democratic, republican
+    } = byParty;
 
-    for(const candidacy of election.Candidacies) {
-      const {Candidate, CampaignFinance} = candidacy;
-      elements.push({
-        state,
-        year,
-        chamber,
-        district,
-        type,
-        // level,
-        first_name: Candidate.first_name,
-        last_name: Candidate.last_name,
-        party: Candidate.party,
-        contributions: CampaignFinance?.contributions ?? '',
-        expenditures: CampaignFinance?.expenditures ?? ''
-      });
+    const previous = await election.getPreviousElections();
+    const turnouts = [];
+    
+    const mostRecent = previous[0];
+    const votes = await mostRecent.getVotesByParty();
+
+    for(let a of previous) {
+      turnouts.push(await a.getTurnout());
     }
-    elements.push({});
-  }
-  
-  // elements.forEach(x=>{delete x.level;});
 
-  print(elements);
+    const voteSwing = (votes.democratic??0) - (votes.republican??0);
+
+    elements.push({
+      state,
+      year,
+      chamber,
+      district,
+      year,
+      type,
+      previous: previous.map(x => x.year).join(', '),
+      turnouts: turnouts.join(', '),
+
+      demCon: democratic?.contributions,
+      demExp: democratic?.expenditures,
+      repCon: republican?.contributions,
+      repExp: republican?.expenditures,
+
+      lastDemVotes: votes.democratic?.toString(),
+      lastRepVotes: votes.republican?.toString(),
+
+      voteSwing: voteSwing.toString(),
+      votePct: (voteSwing / turnouts[0] * 100).toFixed(2)
+    });
+  }
+  print(elements, 40);
 })();
