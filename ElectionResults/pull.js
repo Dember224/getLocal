@@ -54,7 +54,7 @@ async function makeGetInternal(uri) {
         uri = BALLOTPEDIA_URI + uri;
     }
 
-    await sleep((5+Math.random()) * 1000)
+    await sleep((Math.random()) * 1000)
 
     const response = await axios.get(uri);
 

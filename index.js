@@ -1,52 +1,126 @@
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
-
-const stateSearches = require('./StateSearches');
-const loadFinanceArray = require('./Loaders/uploadFinances').loadFinanceArray;
-const censusTools = require('./censusTools');
 const storage = require('./Storage');
-const electionResults = require('./ElectionResults/pull')
 
-const argv = yargs(hideBin(process.argv)).argv
-const state = argv.state;
-const command = argv.command;
-const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
-const office = argv.office;
-const report = argv.report;
-const election_type = argv.election_type;
-const district = argv.district;
+function print(data, max_length) {
+  if(!data||!data.length) {
+      console.log('No Data');
+      return;
+  }
 
-const callData = {
-  year,
-  election_type,
-  office,
-  report
+  max_length = max_length ?? 15;
+  const lengths = {};
+  Object.keys(data[0]).forEach(x=>lengths[x]=0);
+
+  const header = {};
+  Object.keys(lengths).forEach(x => {
+      header[x] = x;
+  });
+  data = [header, ...data];
+
+  data.forEach(d => Object.keys(lengths)
+      .forEach(k => lengths[k] = Math.min(Math.max(
+          lengths[k],
+          d[k]?.toString().length ?? 0
+      ), max_length)
+  ));
+
+  data.forEach(d => {
+      const cols = Object.keys(lengths).map(l => {
+          const length = lengths[l];
+          let value = d[l];
+          if(typeof value == 'number') value = value.toFixed(2);
+          value = value?.toString() ?? '';
+          return value.padEnd(length).slice(0,length);
+      });
+
+      console.log(cols.join(' | '));
+  });
 }
-//Need to add getStateElectionResults and the ELectionResults loader into this file to call from index.
-//if else becasue switch statements are for cowards.
-if(command == 'getFinanceData'){
-  stateSearches[state][command](callData, (e,r)=>{
-    if(e) console.log(e);
-    console.log(r);
-  })
-} else if(command == 'loadData'){
-  stateSearches[state]['getFinanceData'](callData, (e,r)=>{
-    if(e) return e;
-    loadFinanceArray(r);
-  })
-} else if (command =='getDistrictCensusData'){
-  censusTools[command]({office, district, state}, (e, r)=>{
-    if(e) console.log(e);
-    console.log(r)
-  })
-} else if (command == 'getStateElectionResults'){
-  electionResults[command]({state, year, level:office}).then((r)=>{
-    console.log(r)
-  }).catch((e)=>{
-    throw new Error(`Failed to retrieve election results due to: ${e}`)
-  })
-} else if (command =='GetStorage'){
-  storage()
-} else {
-  throw new Error('The index file does not recognize your command.')
-}
+
+(async () => {
+  const {models} = await storage();
+
+  let elections = await models.Election.getElections({
+    year: 2022,
+    state: 'pennsylvania'
+  }, [{
+    model: models.Candidacy,
+    include: [{
+      model: models.CampaignFinance
+    }, {
+      model: models.Candidate
+    }]
+  }]);
+
+  console.log(elections.length, 'total elections');
+  console.log(elections[0]);
+
+  const elements = [];
+
+  elections = elections.filter(x => {
+    return x.type == 'general' && (x.Candidacies?.length ?? 0 > 1);
+  }).sort((a,b) => {
+    if(a.Office.District.Chamber.level < b.Office.District.Chamber.level) return -1;
+    if(b.Office.District.Chamber.level < a.Office.District.Chamber.level) return 1;
+    return a.Office.District.number - b.Office.District.number;
+  });
+
+  for(const election of elections) {
+    const state = election.Office.District.Chamber.State.name;
+    const year = election.year.toString();
+    const type = election.type;
+    const district = election.Office.District.number.toString();
+    const chamber = election.Office.District.Chamber.name;
+    // const level = election.Office.District.Chamber.level.toString();
+
+    const byParty = {};
+    election.Candidacies.forEach(c => {
+      // const {votes} = c;
+      const {party} = c.Candidate;
+      const {contributions = 0, expenditures = 0} = c.CampaignFinance ?? {};
+
+      byParty[party] = {
+        contributions,
+        expenditures
+      };
+    });
+
+    const {
+      democratic, republican
+    } = byParty;
+
+    const previous = await election.getPreviousElections();
+    const turnouts = [];
+    
+    const mostRecent = previous[0];
+    const votes = await mostRecent.getVotesByParty();
+
+    for(let a of previous) {
+      turnouts.push(await a.getTurnout());
+    }
+
+    const voteSwing = (votes.democratic??0) - (votes.republican??0);
+
+    elements.push({
+      state,
+      year,
+      chamber,
+      district,
+      year,
+      type,
+      previous: previous.map(x => x.year).join(', '),
+      turnouts: turnouts.join(', '),
+
+      demCon: democratic?.contributions,
+      demExp: democratic?.expenditures,
+      repCon: republican?.contributions,
+      repExp: republican?.expenditures,
+
+      lastDemVotes: votes.democratic?.toString(),
+      lastRepVotes: votes.republican?.toString(),
+
+      voteSwing: voteSwing.toString(),
+      votePct: (voteSwing / turnouts[0] * 100).toFixed(2)
+    });
+  }
+  print(elements, 40);
+})();

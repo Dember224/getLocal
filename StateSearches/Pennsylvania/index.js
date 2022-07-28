@@ -458,11 +458,13 @@ async function getCombinedCandidateData(params) {
 
     const committeeFilersByCandidateId = {};
     const noCommDefinitions = {};
+    const committeeNoCandidate = [];
     committee_filers.forEach(x => {
-        const {FILERID, REPORTID} = x;
+        const {FILERID, REPORTID, FILERNAME} = x;
         const definitions = commsByReportId[REPORTID];
         if(!definitions) {
             noCommDefinitions[REPORTID] = 0;
+            console.log('No def:',FILERNAME);
             return;
         }
 
@@ -472,7 +474,7 @@ async function getCombinedCandidateData(params) {
             .forEach(x=>candidateIds[x.candidate_id]=1);
         candidateIds = Object.keys(candidateIds);
         if(candidateIds.length > 1) {
-            // console.log(FILERID,REPORTID, 'has multiple candidate ids', candidateIds);
+            console.log(FILERID,REPORTID, 'has multiple candidate ids', candidateIds);
             // print(definitions);
             // console.log();
         } else if(candidateIds.length) {
@@ -480,6 +482,8 @@ async function getCombinedCandidateData(params) {
             (committeeFilersByCandidateId[id] = committeeFilersByCandidateId[id] ?? [])
                 .push(x);
         } else {
+            // if no candidate ids found, doesn't mean no candidate - just might not be raising money separately
+            committeeNoCandidate.push(x);
         }
     });
     console.log(Object.keys(noCommDefinitions).length, 'committee filers without definitions');
@@ -651,9 +655,26 @@ async function getFinanceData(params) {
 }
 
 async function getSampleData() {
-    const data = await getFinanceData({year:2022});
-    print(data, 30);
-    return;
+    // const data = await getAggregatedFilerData({year:2022});
+    // const m = data.committee_filers.filter(x => x.FILERNAME == 'FRIENDS OF CINDY KIRK');
+    // console.log(m);
+
+    const d = await getFinanceData({year: 2022});
+    print(d.filter(x => x.district == 160),30);
+
+    // const comms = await getCommitteeList();
+    // const comm = comms.find(x => x.report_id == m[0].REPORTID);
+    // console.log(comm);
+
+    // const cand = data.candidate_filers.find(x => x.REPORTID == comm.candidate_id);
+    // console.log(cand);
+
+    // const agg = await getCombinedCandidateData({year:2022});
+
+
+    // const data = await getCombinedCandidateData({year:2022});
+    // print(data.committeeNoCandidate, 30);
+    // return;
 
     // const data = await getAggregatedFilerData({year:2022});
 
@@ -678,6 +699,6 @@ module.exports = {
     getCombinedCandidateData
 };
 
-// getSampleData();
+getSampleData();
 
 // getFinanceData({year: 2022});
