@@ -2,6 +2,7 @@ const { Sequelize, Model, DataTypes, Op } = require('sequelize');
 require('dotenv').config()
 const db_password = process.env.DB_PASSWORD
 const db_uri = process.env.DB_URL_PROD;
+const db_ssl = (process.env.DB_USE_SSL != 'false');
 
 const statesJson = require('./states.json');
 statesJson.forEach(x => {
@@ -9,15 +10,17 @@ statesJson.forEach(x => {
 })
 
 async function getModels() {
-  const db_url = process.env.DB_URL;
-    const sequelize = new Sequelize(db_uri, {
-      dialect:'postgres',
-    //   dialectOptions: {
-    //     ssl: {
-    //       rejectUnauthorized: false
-    //     }
-    //   }
-    });
+    const opts = {
+        dialect:'postgres',
+        dialectOptions: {
+          ssl: {
+            rejectUnauthorized: false
+          }
+        }
+    };
+    if(db_ssl === false) delete opts.dialectOptions;
+
+    const sequelize = new Sequelize(db_uri, opts);
 
     const State = sequelize.define("State", {
         state_id: {
@@ -353,31 +356,61 @@ async function getModels() {
         foreignKey: 'candidacy_id'
     });
 
-    // const CandidateSearch = sequelize.define('CandidateSearch', {
-    //   candidacy_id: {
-    //       type: DataTypes.INTEGER,
-    //       primaryKey: true
-    //     },
-    //     candidate_id: {
-    //         type: DataTypes.INTEGER,
-    //         references: {
-    //             model: Candidate,
-    //             key: 'candidate_id'
-    //         }
-    //     },
-    //     first_name: DataTypes.STRING,
-    //     middle_name: DataTypes.STRING,
-    //     last_name: DataTypes.STRING,
-    //     party: DataTypes.STRING,
-    //     state_name: DataTypes.STRING,
-    //     district: DataTypes.INTEGER,
-    //     chamber_level:DataTypes.INTEGER,
-    //     year:DataTypes.INTEGER,
-    //     election_type:DataTypes.STRING
-    //     }, {
-    //         tableName: 'CandidateSearch',
-    //         timestamps:false
-    // })
+    const candidate_search_query = `
+      Create or replace View "CandidateSearch" as
+      Select
+      c.candidacy_id,
+      c.candidate_id,
+      Lower(cd.first_name) as first_name,
+      Lower(cd.middle_name) as middle_name,
+      Lower(cd.last_name) as last_name,
+      cd.party,
+      s.name as state_name,
+      d.number as district,
+      ch.level as chamber_level,
+      e.year,
+      e.type as election_type
+      from "Candidacies" c
+      left join "Candidates" cd
+      on cd.candidate_id = c.candidate_id
+      left join "Elections" e
+      on e.election_id = c.election_id
+      left join "Offices" o
+      on e.office_id = o.office_id
+      left join "Districts" d
+      on d.district_id = o.district_id
+      left Join "Chambers" ch
+      on ch.chamber_id = d.chamber_id
+      left Join "States" s
+      on s.state_id = ch.state_id
+    `;
+    const cs = await sequelize.query(candidate_search_query);
+
+    const CandidateSearch = sequelize.define('CandidateSearch', {
+      candidacy_id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true
+        },
+        candidate_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Candidate,
+                key: 'candidate_id'
+            }
+        },
+        first_name: DataTypes.STRING,
+        middle_name: DataTypes.STRING,
+        last_name: DataTypes.STRING,
+        party: DataTypes.STRING,
+        state_name: DataTypes.STRING,
+        district: DataTypes.INTEGER,
+        chamber_level:DataTypes.INTEGER,
+        year:DataTypes.INTEGER,
+        election_type:DataTypes.STRING
+        }, {
+            tableName: 'CandidateSearch',
+            timestamps:false
+    })
 
     // for now, just build it
     for(let name in sequelize.models) {
@@ -397,7 +430,7 @@ async function getModels() {
         Candidate,
         Candidacy,
         CampaignFinance,
-        // CandidateSearch
+        CandidateSearch
     };
 }
 

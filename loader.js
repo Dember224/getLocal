@@ -65,7 +65,7 @@ async function loader() {
     if(isLoadTypeElections) {
         await loadElectionResults(storage);
     } else if(isLoadTypeFinance){
-      // await loadElectionResults(storage);
+      await loadElectionResults(storage);
       const state_split = state.split(" ")
       if (state_split.length == 2){
         state = `${state_split[0]}_${state_split[1]}`
