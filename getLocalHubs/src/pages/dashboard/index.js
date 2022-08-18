@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // material-ui
 import {
@@ -26,6 +26,10 @@ import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import DemVoteShare from './demVoteShare';
+import RepVoteShare from './repVoteShare';
+import getSuggestions from 'controllers/analyticsHandlers';
+import TotalVotes from './totalVotes'
 
 // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
@@ -72,33 +76,71 @@ const status = [
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
+    const [repVotes, setRepVotes] = useState(0);
+    const [votePercentage, setVotePercentage] = useState(0);
+    const [demVotes, setDemVotes] = useState(0);
+    const [demVotePercentage, setDemVotePercentage] = useState(0);
+    const [repVotePercentage, setRepVotePercentage] = useState(0);
+    const [lastTurnout, setLastTurnout] = useState(0);
+    const [stateName, setStateName] = useState('');
+    const [chamber, setChamber] = useState('');
+    const [district, setDistrict] = useState('');
+    const [previousYears, setPreviousYear] = useState([]);
+    const [turnouts, setTurnouts] = useState([]);
+
+    function convertCase(str) {
+      const lower = String(str).toLowerCase();
+      return lower.replace(/(^| )(\w)/g, function(x) {
+        return x.toUpperCase();
+      });
+    }
+
+    useEffect(()=>{
+      getSuggestions().then((res)=>{
+        const lastRepVotes = res.lastRepVotes;
+        const lastDemVotes = res.lastDemVotes;
+        const lastTurnout = res.turnouts.split(",")[0];
+        setLastTurnout(lastTurnout);
+        setRepVotes(lastRepVotes);
+        setDemVotes(lastDemVotes);
+        const dem_vote_percentage = (parseFloat(res.lastDemVotes) / parseFloat(lastTurnout))*100;
+        setDemVotePercentage(dem_vote_percentage);
+        const rep_vote_percentage = (parseFloat(res.lastRepVotes) / parseFloat(lastTurnout))*100;
+        setRepVotePercentage(rep_vote_percentage);
+        setStateName(convertCase(res.state));
+        setChamber(res.chamber);
+        setDistrict(res.district);
+        const prev_years = res.previous.split(',');
+        setPreviousYear(prev_years.reverse());
+        setTurnouts(res.turnouts.split(',').reverse())
+
+        console.log(res)
+      })
+    },[])
+
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
             <Grid item xs={12} sx={{ mb: -2.25 }}>
-                <Typography variant="h5">Dashboard</Typography>
+                <Typography variant="h5">{stateName} {chamber} District {district}</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
+                <DemVoteShare lastDemVotes={demVotes} vote_percentage={demVotePercentage} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Users" count="78,250" percentage={70.5} extra="8,900" />
+                <RepVoteShare lastRepVotes={repVotes} votePercentage={repVotePercentage}/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Order" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Sales" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+                <TotalVotes voteTotal={lastTurnout}/>
             </Grid>
 
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-
             {/* row 2 */}
             <Grid item xs={12} md={7} lg={8}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Unique Visitor</Typography>
+                        <Typography variant="h5">Previous Election Turnouts</Typography>
                     </Grid>
                     <Grid item>
                         <Stack direction="row" alignItems="center" spacing={0}>
@@ -123,7 +165,7 @@ const DashboardDefault = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <IncomeAreaChart slot={slot} />
+                        <IncomeAreaChart slot={slot} previousYears = {previousYears} turnouts = {turnouts} />
                     </Box>
                 </MainCard>
             </Grid>
@@ -148,43 +190,6 @@ const DashboardDefault = () => {
             </Grid>
 
             {/* row 3 */}
-            <Grid item xs={12} md={7} lg={8}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Recent Orders</Typography>
-                    </Grid>
-                    <Grid item />
-                </Grid>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <OrdersTable />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Analytics Report</Typography>
-                    </Grid>
-                    <Grid item />
-                </Grid>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
-                        <ListItemButton divider>
-                            <ListItemText primary="Company Finance Growth" />
-                            <Typography variant="h5">+45.14%</Typography>
-                        </ListItemButton>
-                        <ListItemButton divider>
-                            <ListItemText primary="Company Expenses Ratio" />
-                            <Typography variant="h5">0.58%</Typography>
-                        </ListItemButton>
-                        <ListItemButton>
-                            <ListItemText primary="Business Risk Cases" />
-                            <Typography variant="h5">Low</Typography>
-                        </ListItemButton>
-                    </List>
-                    <ReportAreaChart />
-                </MainCard>
-            </Grid>
-
             {/* row 4 */}
             <Grid item xs={12} md={7} lg={8}>
                 <Grid container alignItems="center" justifyContent="space-between">

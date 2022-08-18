@@ -7,6 +7,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 // project import
 import MainCard from 'components/MainCard';
 import ComponentSkeleton from './ComponentSkeleton';
+import RenderOutspendElections from './outspend.js'
 
 // ===============================|| SHADOW BOX ||=============================== //
 
@@ -54,9 +55,9 @@ const ComponentShadow = () => {
     return (
         <ComponentSkeleton>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <MainCard title="State Races" codeHighlight>
-                    <p>Hello</p>
+                <Grid item xs={12} lg={12}>
+                    <MainCard title="State Races " codeHighlight>
+                      <RenderOutspendElections />
                     </MainCard>
                 </Grid>
                 <Grid item xs={12}>

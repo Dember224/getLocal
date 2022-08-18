@@ -41,7 +41,7 @@ const utilities = {
         },
         {
             id: 'util-shadow',
-            title: 'Shadow',
+            title: 'State Races',
             type: 'item',
             url: '/shadow',
             icon: icons.BarcodeOutlined
