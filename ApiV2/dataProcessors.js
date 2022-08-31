@@ -17,8 +17,7 @@ const select_random_by_close_votes = async (race_spread)=>{
   const most_competitive = sorted_competitive.splice(0,race_spread);
 
   const random_race = most_competitive[Math.floor(Math.random() * most_competitive.length)];
-
-  return await random_race;
+  return random_race;
 }
 
 module.exports = {select_random_by_close_votes}

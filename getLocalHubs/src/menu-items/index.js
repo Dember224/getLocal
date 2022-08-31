@@ -5,9 +5,9 @@ import utilities from './utilities';
 import support from './support';
 
 // ==============================|| MENU ITEMS ||============================== //
-
+//pages,
 const menuItems = {
-    items: [dashboard, pages, utilities, support]
+    items: [dashboard,  utilities, support]
 };
 
 export default menuItems;

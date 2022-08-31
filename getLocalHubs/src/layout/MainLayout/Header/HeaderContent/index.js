@@ -1,6 +1,6 @@
 // material-ui
 import { Box, IconButton, Link, useMediaQuery } from '@mui/material';
-import { GithubOutlined } from '@ant-design/icons';
+import { GithubOutlined,TwitterOutlined } from '@ant-design/icons';
 
 // project import
 import Search from './Search';
@@ -20,19 +20,31 @@ const HeaderContent = () => {
 
             <IconButton
                 component={Link}
-                href="https://github.com/codedthemes/mantis-free-react-admin-template"
+                href="https://github.com/Dember224/getLocal"
                 target="_blank"
                 disableRipple
                 color="secondary"
-                title="Download Free Version"
+                title="Get Local github"
                 sx={{ color: 'text.primary', bgcolor: 'grey.100' }}
             >
                 <GithubOutlined />
             </IconButton>
 
-            <Notification />
-            {!matchesXs && <Profile />}
-            {matchesXs && <MobileSection />}
+            <IconButton
+                component={Link}
+                href="https://twitter.com/CampaignBucks"
+                target="_blank"
+                disableRipple
+                color="secondary"
+                title="Get Local Twitter"
+                sx={{ color: '#1DA1F2', bgcolor: 'grey.100' }}
+            >
+                <TwitterOutlined />
+            </IconButton>
+
+            {/* <Notification /> */}
+            {/* {!matchesXs && <Profile />} */}
+            {/* {matchesXs && <MobileSection />} */}
         </>
     );
 };

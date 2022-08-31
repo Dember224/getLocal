@@ -42,10 +42,10 @@ const IncomeAreaChart = ({ slot, previousYears, turnouts }) => {
         setSeries([
             {
                 name: 'Turnout',
-                data: slot === 'month' ? turnouts : [31, 40, 28, 51, 42, 109, 100]
+                data: turnouts
             }
         ]);
-    }, [slot]);
+    }, [turnouts]);
 
     useEffect(() => {
         setOptions((prevState) => ({
@@ -53,9 +53,7 @@ const IncomeAreaChart = ({ slot, previousYears, turnouts }) => {
             colors: [theme.palette.primary.main, theme.palette.primary[700]],
             xaxis: {
                 categories:
-                    slot === 'month'
-                        ? previousYears
-                        : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                     previousYears,
                 labels: {
                     style: {
                         colors: [
@@ -78,7 +76,7 @@ const IncomeAreaChart = ({ slot, previousYears, turnouts }) => {
                     show: true,
                     color: line
                 },
-                tickAmount: slot === 'month' ? 11 : 7
+                tickAmount: 1
             },
             yaxis: {
                 labels: {
@@ -94,14 +92,14 @@ const IncomeAreaChart = ({ slot, previousYears, turnouts }) => {
                 theme: 'light'
             }
         }));
-    }, [primary, secondary, line, theme, slot]);
+    }, [primary, secondary, line, theme, slot, previousYears]);
 
     const [series, setSeries] = useState([
         {
             name: 'Turnout',
-            data: [0, 86, 28, 115, 48, 210, 136]
+            data:[]
         }
-    ]);
+    ],[]);
 
 
 

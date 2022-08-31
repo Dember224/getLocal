@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
+import { setSyntheticTrailingComments } from '../../../node_modules/typescript/lib/typescript';
 
 // chart options
 const columnChartOptions = {
@@ -30,11 +31,11 @@ const columnChartOptions = {
         colors: ['transparent']
     },
     xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+        categories: ['Democrat', 'Republican']
     },
     yaxis: {
         title: {
-            text: '$ (thousands)'
+            text: '$'
         }
     },
     fill: {
@@ -81,7 +82,7 @@ const columnChartOptions = {
 
 // ==============================|| SALES COLUMN CHART ||============================== //
 
-const SalesColumnChart = () => {
+const SalesColumnChart = ({contributions, expenditures}) => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -91,14 +92,14 @@ const SalesColumnChart = () => {
     const primaryMain = theme.palette.primary.main;
     const successDark = theme.palette.success.dark;
 
-    const [series] = useState([
+    const [series, setSeries] = useState([
         {
-            name: 'Net Profit',
-            data: [180, 90, 135, 114, 120, 145]
+            name: 'Contributions',
+            data: contributions
         },
         {
-            name: 'Revenue',
-            data: [120, 45, 78, 150, 168, 99]
+            name: 'Expenditures',
+            data: expenditures
         }
     ]);
 
@@ -136,7 +137,15 @@ const SalesColumnChart = () => {
                 }
             }
         }));
-    }, [primary, secondary, line, warning, primaryMain, successDark]);
+        setSeries([{
+            name: 'Contributions',
+            data: contributions
+        },
+        {
+            name: 'Expenditures',
+            data: expenditures
+        }])
+    }, [primary, secondary, line, warning, primaryMain, successDark, series]);
 
     return (
         <div id="chart">

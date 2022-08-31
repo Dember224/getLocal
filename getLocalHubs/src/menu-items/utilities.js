@@ -5,7 +5,8 @@ import {
     BarcodeOutlined,
     BgColorsOutlined,
     FontSizeOutlined,
-    LoadingOutlined
+    LoadingOutlined,
+    DatabaseOutlined
 } from '@ant-design/icons';
 
 // icons
@@ -15,7 +16,8 @@ const icons = {
     BarcodeOutlined,
     AntDesignOutlined,
     LoadingOutlined,
-    AppstoreAddOutlined
+    AppstoreAddOutlined,
+    DatabaseOutlined
 };
 
 // ==============================|| MENU ITEMS - UTILITIES ||============================== //
@@ -25,35 +27,35 @@ const utilities = {
     title: 'Utilities',
     type: 'group',
     children: [
-        {
-            id: 'util-typography',
-            title: 'Typography',
-            type: 'item',
-            url: '/typography',
-            icon: icons.FontSizeOutlined
-        },
-        {
-            id: 'util-color',
-            title: 'Color',
-            type: 'item',
-            url: '/color',
-            icon: icons.BgColorsOutlined
-        },
+        // {
+        //     id: 'util-typography',
+        //     title: 'Typography',
+        //     type: 'item',
+        //     url: '/typography',
+        //     icon: icons.FontSizeOutlined
+        // },
+        // {
+        //     id: 'util-color',
+        //     title: 'Color',
+        //     type: 'item',
+        //     url: '/color',
+        //     icon: icons.BgColorsOutlined
+        // },
         {
             id: 'util-shadow',
             title: 'State Races',
             type: 'item',
             url: '/shadow',
-            icon: icons.BarcodeOutlined
+            icon: icons.DatabaseOutlined
         },
-        {
-            id: 'ant-icons',
-            title: 'Ant Icons',
-            type: 'item',
-            url: '/icons/ant',
-            icon: icons.AntDesignOutlined,
-            breadcrumbs: false
-        }
+        // {
+        //     id: 'ant-icons',
+        //     title: 'Ant Icons',
+        //     type: 'item',
+        //     url: '/icons/ant',
+        //     icon: icons.AntDesignOutlined,
+        //     breadcrumbs: false
+        // }
     ]
 };
 
