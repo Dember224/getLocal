@@ -95,11 +95,11 @@ const SalesColumnChart = ({contributions, expenditures}) => {
     const [series, setSeries] = useState([
         {
             name: 'Contributions',
-            data: contributions
+            data: [0,0]
         },
         {
             name: 'Expenditures',
-            data: expenditures
+            data: [0,0]
         }
     ]);
 
@@ -145,7 +145,7 @@ const SalesColumnChart = ({contributions, expenditures}) => {
             name: 'Expenditures',
             data: expenditures
         }])
-    }, [primary, secondary, line, warning, primaryMain, successDark, series]);
+    }, [primary, secondary, line, warning, primaryMain, successDark, contributions, expenditures]);
 
     return (
         <div id="chart">

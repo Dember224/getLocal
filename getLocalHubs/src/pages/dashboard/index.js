@@ -25,7 +25,6 @@ import MonthlyBarChart from './MonthlyBarChart';
 import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
-import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import DemVoteShare from './demVoteShare';
 import RepVoteShare from './repVoteShare';
 import getSuggestions from 'controllers/analyticsHandlers';
@@ -113,12 +112,10 @@ const DashboardDefault = () => {
         setChamber(res.chamber);
         setDistrict(res.district);
         const prev_years = res.previous.split(',');
-        console.log(prev_years)
         setPreviousYears(prev_years.reverse());
         setTurnouts(res.turnouts.split(',').reverse());
         setContributions([parseFloat(res.demCon), parseFloat(res.repCon)]);
         setExpenditures([parseFloat(res.demExp), parseFloat(res.repExp)]);
-        console.log([parseFloat(res.demCon), parseFloat(res.repCon)])
       })
     },[])
 

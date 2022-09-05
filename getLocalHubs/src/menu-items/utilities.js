@@ -24,7 +24,7 @@ const icons = {
 
 const utilities = {
     id: 'utilities',
-    title: 'Utilities',
+    title: 'Raw Data',
     type: 'group',
     children: [
         // {
@@ -43,7 +43,7 @@ const utilities = {
         // },
         {
             id: 'util-shadow',
-            title: 'State Races',
+            title: 'Race List',
             type: 'item',
             url: '/shadow',
             icon: icons.DatabaseOutlined
