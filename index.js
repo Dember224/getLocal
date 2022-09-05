@@ -77,22 +77,25 @@ module.exports = (async () => {
     const district = election.Office.District.number.toString();
     const chamber = election.Office.District.Chamber ? election.Office.District.Chamber.name : null;
     // const level = election.Office.District.Chamber.level.toString();
-
     const byParty = {};
     election.Candidacies.forEach(c => {
       // const {votes} = c;
       const {party} = c.Candidate;
       const {contributions = 0, expenditures = 0} = c.CampaignFinance ?? {};
-
+      const first_name = c.Candidate.first_name;
+      const last_name = c.Candidate.last_name;
       byParty[party] = {
         contributions,
-        expenditures
+        expenditures,
+        first_name,
+        last_name
       };
     });
 
     const {
-      democratic, republican
+      democratic, republican,
     } = byParty;
+
 
     const previous = await election.getPreviousElections();
     const turnouts = [];
@@ -128,10 +131,15 @@ module.exports = (async () => {
         lastRepVotes: votes.republican?.toString(),
 
         voteSwing: voteSwing.toString(),
-        votePct: (voteSwing / turnouts[0] * 100).toFixed(2)
+        votePct: (voteSwing / turnouts[0] * 100).toFixed(2),
+        demFirstName: democratic?.first_name,
+        demLastName: democratic?.last_name,
+        repFirstName: republican?.first_name,
+        repLastName: republican?.last_name
       });
         }
   }
+  console.log(elements)
   print(elements, 40)
     return await elements;
 })();
