@@ -45,6 +45,12 @@ const raceStyle = makeStyles((theme) => ({
   }
 }));
 
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt){
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
+
 
 export function TableMaker(props) {
 
@@ -71,11 +77,14 @@ export function TableMaker(props) {
         <TableRow>
           <TableCell className={classes.headercell}>Candidate Name</TableCell>
           <TableCell className={classes.headercell}>Party</TableCell>
-          <TableCell className={classes.headercell}>Votes</TableCell>
+          <TableCell className={classes.headercell}>State</TableCell>
           <TableCell className={classes.headercell}>Election Type</TableCell>
+          <TableCell className={classes.headercell}>Office</TableCell>
+          <TableCell className={classes.headercell}>District</TableCell>
+          <TableCell className={classes.headercell}>Votes</TableCell>
           <TableCell className={classes.headercell}>Expenditures</TableCell>
           <TableCell className={classes.headercell}>Contributions</TableCell>
-
+          <TableCell className={classes.headercell}>Year</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -83,12 +92,16 @@ export function TableMaker(props) {
           race.map((candidate, iterate)=>{
            return(
              <TableRow key={iterate}>
-              <TableCell className={classes.cell}>{`${candidate.first_name} ${candidate.last_name}`}</TableCell>
-              <TableCell className={classes.cell}>{candidate.party}</TableCell>
-              <TableCell className={classes.cell}>{candidate.votes}</TableCell>
+              <TableCell className={classes.cell}>{toTitleCase(`${candidate.first_name} ${candidate.last_name}`)}</TableCell>
+              <TableCell className={classes.cell}>{toTitleCase(candidate.party)}</TableCell>
+              <TableCell className={classes.cell}>{toTitleCase(candidate.state)}</TableCell>
               <TableCell className={classes.cell}>{candidate.election_type}</TableCell>
+              <TableCell className={classes.cell}>{candidate.chamber_level == 0 ? 'State House' : 'State Senate'}</TableCell>
+              <TableCell className={classes.cell}>{candidate.district}</TableCell>
+              <TableCell className={classes.cell}>{candidate.votes}</TableCell>
               <TableCell className={classes.cell}>{`$${candidate.expenditures}`}</TableCell>
               <TableCell className={classes.cell}>{`$${candidate.contributions}`}</TableCell>
+              <TableCell className={classes.cell}>{candidate.year}</TableCell>
              </TableRow>
           )
        })
