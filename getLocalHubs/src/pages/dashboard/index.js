@@ -88,6 +88,8 @@ const DashboardDefault = () => {
     const [turnouts, setTurnouts] = useState([]);
     const [contributions, setContributions] = useState([0,0]);
     const [expenditures, setExpenditures] = useState([0,0]);
+    const [demFirstName, setDemFirstName] = useState('');
+    const [demLastName, setDemLastName] = useState('');
 
     function convertCase(str) {
       const lower = String(str).toLowerCase();
@@ -111,11 +113,18 @@ const DashboardDefault = () => {
         setStateName(convertCase(res.state));
         setChamber(res.chamber);
         setDistrict(res.district);
-        const prev_years = res.previous.split(',');
+        const prev_years = res.previous.split(',').length > 1 ? res.previous.split(',') : [res.previous.split(',')[0], res.previous.split(',')[0]]
+
         setPreviousYears(prev_years.reverse());
-        setTurnouts(res.turnouts.split(',').reverse());
+        const last_votes = res.turnouts.split(',').length > 1 ? res.turnouts.split(',').reverse() : [res.turnouts, res.turnouts]
+        setTurnouts(last_votes);
         setContributions([parseFloat(res.demCon), parseFloat(res.repCon)]);
         setExpenditures([parseFloat(res.demExp), parseFloat(res.repExp)]);
+        setDemFirstName(res.demFirstName);
+        setDemLastName(res.demLastName);
+        console.log(res);
+        console.log(prev_years);
+        console.log(last_votes)
       })
     },[])
 
@@ -123,6 +132,9 @@ const DashboardDefault = () => {
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
+            <Grid item xs={12} sx={{ mb: -2.25 }}>
+                <Typography variant="h5">Consider Giving to {`${demFirstName} ${demLastName}`}</Typography>
+            </Grid>
             <Grid item xs={12} sx={{ mb: -2.25 }}>
                 <Typography variant="h5">{stateName} {chamber} District {district}</Typography>
             </Grid>
