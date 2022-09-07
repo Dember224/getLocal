@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {TableMaker} from './tableMaker.js';
-import axios from 'axios'
+import axios from 'axios';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 
 export default function RenderOutspendElections(){
 
-
+  const base_url = process.env.REACT_APP_API_URL;
   const [outspentDems, setOutspentDems] = useState([])
 
 
   useEffect(()=>{
-    axios.get('http://localhost:4000/outspend/Pennsylvania/2022')
+    axios.get(`${base_url}outspend/Pennsylvania/2022`)
     .then((res)=>{
       setOutspentDems(res["data"])
     })

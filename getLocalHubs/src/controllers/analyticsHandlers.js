@@ -1,9 +1,11 @@
 const axios = require('axios')
+require('dotenv').config
 
 
 const getSuggestions = async function(){
   try{
-    const res = await axios.get(`http://localhost:4000/suggestion`)
+    const base_url = process.env.REACT_APP_API_URL
+    const res = await axios.get(`${base_url}suggestion`)
     return res['data']
   } catch(e) {
     console.log(e);
