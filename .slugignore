@@ -1,2 +1,5 @@
 get-local-front-end
 getLocalApi
+/app/StateSearches
+/app/censusTools
+/app/Storage
