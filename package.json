@@ -40,7 +40,6 @@
     "node-xlsx": "^0.21.0",
     "parse-full-name": "^1.2.6",
     "pdf-parse": "^1.1.1",
-    "pg": "^8.7.3",
     "pg-format": "^1.0.4",
     "pg-hstore": "^2.3.4",
     "pg-promise": "^10.11.1",
