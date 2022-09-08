@@ -4,7 +4,8 @@
   "description": "An app designed to assess Democratic and left campaign finance at the state and local level in order to aid the direction of funds.",
   "main": "StateMap.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-scripts start"
   },
   "repository": {
     "type": "git",
