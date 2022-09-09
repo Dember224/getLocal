@@ -1,1 +1,1 @@
-web: react-scripts start getLocalHubs
+web: npm start getLocalHubs
