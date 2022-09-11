@@ -1,10 +1,11 @@
-const axios = require('axios')
-require('dotenv').config
+import axios from 'axios' 
+import * as dotenv from 'dotenv' 
+dotenv.config()
 
 
-const getSuggestions = async function(){
+export default async function getSuggestions(){
   try{
-    const base_url = process.env.REACT_APP_API_URL
+    const base_url = 'https://hubs-api.herokuapp.com/'
     const res = await axios.get(`${base_url}suggestion`)
     return res['data']
   } catch(e) {
@@ -13,4 +14,4 @@ const getSuggestions = async function(){
 
 }
 
-module.exports =  getSuggestions;
+

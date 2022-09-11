@@ -7,7 +7,7 @@ dotenv.config();
 
 export default function RenderOutspendElections(){
 
-  const base_url = process.env.REACT_APP_API_URL;
+  const base_url = 'https://hubs-api.herokuapp.com/'
   const [outspentDems, setOutspentDems] = useState([])
 
 

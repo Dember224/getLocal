@@ -1,0 +1,20 @@
+{
+  "name": "hubs_api",
+  "version": "1.0.0",
+  "description": "The API that getLocalHubs will call that accesses the getLocal database.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app",
+    "start": "node app.js"
+  },
+  "author": "Antoine Washington",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "pg": "^8.8.0",
+    "sequelize": "^6.21.6",
+    "usa-state-legislatures": "^1.0.4"
+  }
+}

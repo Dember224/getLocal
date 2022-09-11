@@ -1,4 +1,4 @@
-const elements = require('../index.js');
+const elements = require('./index.js');
 
 const select_random_by_close_votes = async (race_spread)=>{
   const races = await elements;

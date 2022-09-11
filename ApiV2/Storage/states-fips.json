@@ -1,0 +1,338 @@
+[
+    {
+      "abbreviation": "AL",
+      "name": "Alabama",
+      "state_id": "01",
+      "fips_code": "01"
+    },
+    {
+      "abbreviation": "AK",
+      "name": "Alaska",
+      "state_id": "02",
+      "fips_code": "02"
+    },
+    {
+      "abbreviation": "AS",
+      "name": "American Samoa",
+      "state_id": "03",
+      "fips_code": "03"
+    },
+    {
+      "abbreviation": "AZ",
+      "name": "Arizona",
+      "state_id": "04",
+      "fips_code": "04"
+    },
+    {
+      "abbreviation": "AR",
+      "name": "Arkansas",
+      "state_id": "05",
+      "fips_code": "05"
+    },
+    {
+      "abbreviation": "CA",
+      "name": "California",
+      "state_id": "06",
+      "fips_code": "06"
+    },
+    {
+      "abbreviation": "CZ",
+      "name": "Canal Zone",
+      "state_id": "07",
+      "fips_code": "07"
+    },
+    {
+      "abbreviation": "CO",
+      "name": "Colorado",
+      "state_id": "08",
+      "fips_code": "08"
+    },
+    {
+      "abbreviation": "CT",
+      "name": "Connecticut",
+      "state_id": "09",
+      "fips_code": "09"
+    },
+    {
+      "abbreviation": "DE",
+      "name": "Delaware",
+      "state_id": "10",
+      "fips_code": "10"
+    },
+    {
+      "abbreviation": "DC",
+      "name": "District Of Columbia",
+      "state_id": "11",
+      "fips_code": "11"
+    },
+    {
+      "abbreviation": "FL",
+      "name": "Florida",
+      "state_id": "12",
+      "fips_code": "12"
+    },
+    {
+      "abbreviation": "GA",
+      "name": "Georgia",
+      "state_id": "13",
+      "fips_code": "13"
+    },
+    {
+      "abbreviation": "GU",
+      "name": "Guam",
+      "state_id": "14",
+      "fips_code": "14"
+    },
+    {
+      "abbreviation": "HI",
+      "name": "Hawaii",
+      "state_id": "15",
+      "fips_code": "15"
+    },
+    {
+      "abbreviation": "16",
+      "name": "Idaho",
+      "state_id": "16",
+      "fips_code": "16"
+    },
+    {
+      "abbreviation": "IL",
+      "name": "Illinois",
+      "state_id": "17",
+      "fips_code": "17"
+    },
+    {
+      "abbreviation": "IN",
+      "name": "Indiana",
+      "state_id": "18",
+      "fips_code": "18"
+    },
+    {
+      "abbreviation": "IA",
+      "name": "Iowa",
+      "state_id": "19",
+      "fips_code": "19"
+    },
+    {
+      "abbreviation": "KS",
+      "name": "Kansas",
+      "state_id": "20",
+      "fips_code": "20"
+    },
+    {
+      "abbreviation": "KY",
+      "name": "Kentucky",
+      "state_id": "21",
+      "fips_code": "21"
+    },
+    {
+      "abbreviation": "LA",
+      "name": "Louisiana",
+      "state_id": "22",
+      "fips_code": "22"
+    },
+    {
+      "abbreviation": "ME",
+      "name": "Maine",
+      "state_id": "23",
+      "fips_code": "23"
+    },
+    {
+      "abbreviation": "MD",
+      "name": "Maryland",
+      "state_id": "24",
+      "fips_code": "24"
+    },
+    {
+      "abbreviation": "MA",
+      "name": "Massachusetts",
+      "state_id": "25",
+      "fips_code": "25"
+    },
+    {
+      "abbreviation": "MI",
+      "name": "Michigan",
+      "state_id": "26",
+      "fips_code": "26"
+    },
+    {
+      "abbreviation": "MN",
+      "name": "Minnesota",
+      "state_id": "27",
+      "fips_code": "27"
+    },
+    {
+      "abbreviation": "MS",
+      "name": "Mississippi",
+      "state_id": "28",
+      "fips_code": "28"
+    },
+    {
+      "abbreviation": "MO",
+      "name": "Missouri",
+      "state_id": "29",
+      "fips_code": "29"
+    },
+    {
+      "abbreviation": "MT",
+      "name": "Montana",
+      "state_id": "30",
+      "fips_code": "30"
+    },
+    {
+      "abbreviation": "NE",
+      "name": "Nebraska",
+      "state_id": "31",
+      "fips_code": "31"
+    },
+    {
+      "abbreviation": "NV",
+      "name": "Nevada",
+      "state_id": "32",
+      "fips_code": "32"
+    },
+    {
+      "abbreviation": "NH",
+      "name": "New Hampshire",
+      "state_id": "33",
+      "fips_code": "33"
+    },
+    {
+      "abbreviation": "NJ",
+      "name": "New Jersey",
+      "state_id": "34",
+      "fips_code": "34"
+    },
+    {
+      "abbreviation": "NM",
+      "name": "New Mexico",
+      "state_id": "35",
+      "fips_code": "35"
+    },
+    {
+      "abbreviation": "NY",
+      "name": "New York",
+      "state_id": "36",
+      "fips_code": "36"
+    },
+    {
+      "abbreviation": "NC",
+      "name": "North Carolina",
+      "state_id": "37",
+      "fips_code": "37"
+    },
+    {
+      "abbreviation": "ND",
+      "name": "North Dakota",
+      "state_id": "38",
+      "fips_code": "38"
+    },
+    {
+      "abbreviation": "OH",
+      "name": "Ohio",
+      "state_id": "39",
+      "fips_code": "39"
+    },
+    {
+      "abbreviation": "OK",
+      "name": "Oklahoma",
+      "state_id": "40",
+      "fips_code": "40"
+    },
+    {
+      "abbreviation": "OR",
+      "name": "Oregon",
+      "state_id": "41",
+      "fips_code": "41"
+    },
+    {
+      "abbreviation": "PA",
+      "name": "Pennsylvania",
+      "state_id": "42",
+      "fips_code": "42"
+    },
+    {
+      "abbreviation": "RI",
+      "name": "Rhode Island",
+      "state_id": "44",
+      "fips_code": "44"
+    },
+    {
+      "abbreviation": "SC",
+      "name": "South Carolina",
+      "state_id": "45",
+      "fips_code": "45"
+    },
+    {
+      "abbreviation": "SD",
+      "name": "South Dakota",
+      "state_id": "46",
+      "fips_code": "46"
+    },
+    {
+      "abbreviation": "TN",
+      "name": "Tennessee",
+      "state_id": "47",
+      "fips_code": "47"
+    },
+    {
+      "abbreviation": "TX",
+      "name": "Texas",
+      "state_id": "48",
+      "fips_code": "48"
+    },
+    {
+      "abbreviation": "UT",
+      "name": "Utah",
+      "state_id": "49",
+      "fips_code": "49"
+    },
+    {
+      "abbreviation": "VT",
+      "name": "Vermont",
+      "state_id": "50",
+      "fips_code": "50"
+    },
+    {
+      "abbreviation": "VA",
+      "name": "Virginia",
+      "state_id": "51",
+      "fips_code": "51"
+    },
+    {
+      "abbreviation": "VI",
+      "name": "Virgin Islands",
+      "state_id": "52",
+      "fips_code": "52"
+    },
+    {
+      "abbreviation": "WA",
+      "name": "Washington",
+      "state_id": "53",
+      "fips_code": "53"
+    },
+    {
+      "abbreviation": "WV",
+      "name": "West Virginia",
+      "state_id": "54",
+      "fips_code": "54"
+    },
+    {
+      "abbreviation": "WI",
+      "name": "Wisconsin",
+      "state_id": "55",
+      "fips_code": "55"
+    },
+    {
+      "abbreviation": "WY",
+      "name": "Wyoming",
+      "state_id": "56",
+      "fips_code": "56"
+    },
+    {
+      "abbreviation": "PR",
+      "name": "Puerto Rico",
+      "state_id": "72",
+      "fips_code": "72"
+    }
+  ]
