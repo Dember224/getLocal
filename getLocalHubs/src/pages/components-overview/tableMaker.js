@@ -11,29 +11,19 @@ import TableFooter from '@material-ui/core/TableFooter';
 
 
 const raceStyle = makeStyles((theme) => ({
-  table: {
-    width:"80%",
-    margin:'auto',
-    borderRadius:"45%",
-
-  },
   cell:{
     // height:"55px !important",
     background:'#EFEEED',
+    fontSize: '0.875rem',
     color:'black',
-    border:'solid'
+    border:'solid',
+    lineHeight: 1.57
 
-
-  },
-  head: {
-    "margin":"auto",
-    border:"solid",
-    backgroundColor:'#1D96B2',
-    color:"white"
 
   },
   headercell:{
     color:"black",
+    fontSize: '0.875rem',
     border:'solid',
     backgroundColor:'#1D96B2'
   },
