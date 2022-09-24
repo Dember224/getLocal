@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { Grid, Stack, Typography } from '@mui/material';
 
 // project import
@@ -50,25 +49,17 @@ CustomShadowBox.propTypes = {
 // ============================|| COMPONENT - SHADOW ||============================ //
 
 const ComponentShadow = () => {
-    const theme = useTheme();
+
 
     return (
         <ComponentSkeleton>
             <Grid container spacing={3}>
                 <Grid item xs={12} lg={12}>
-                    <MainCard title="State Races " codeHighlight>
+                    <MainCard title="State Races" codeHighlight>
                       <RenderOutspendElections />
                     </MainCard>
                 </Grid>
-                <Grid item xs={12}>
-                    <MainCard title="Custom Shadow" codeHighlight>
-                        <Grid container spacing={3}>
-                            <Grid item xs={6} sm={4} md={3} lg={2}>
-                                <CustomShadowBox shadow={theme.customShadows.z1} label="z1" color="inherit" />
-                            </Grid>
-                        </Grid>
-                    </MainCard>
-                </Grid>
+                
             </Grid>
         </ComponentSkeleton>
     );

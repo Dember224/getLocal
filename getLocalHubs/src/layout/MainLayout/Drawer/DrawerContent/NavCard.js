@@ -5,7 +5,7 @@ import { Button, CardMedia, Link, Stack, Typography } from '@mui/material';
 import MainCard from 'components/MainCard';
 
 // assets
-import logo from 'components/Logo/assets/\\/images/logo.jpg';
+import logo from 'components/Logo/assets/images/logo.jpg';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION CARD ||============================== //
