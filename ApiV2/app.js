@@ -5,6 +5,7 @@ const port = process.env.PORT || 4000;
 const cors = require('cors')
 const analytics = require('./Analysis/retrieveData.js');
 const dataProcessors = require('./dataProcessors');
+const findDonationsPage = require('./ForeignData/findDonationPage');
 
 app.use(cors());
 // app.use('/', dataRouter.dataRouter);
@@ -29,6 +30,13 @@ app.get('/outspend/:state/:year', (req,res)=>{
 app.get('/suggestion', async (req, res)=>{
   const race_suggestion = await dataProcessors.select_random_by_close_votes(5);
   res.send(race_suggestion);
+})
+
+app.get('/donations/:first_name/:last_name', async(req, res)=>{
+  const first_name = req.params.first_name;
+  const last_name = req.params.last_name;
+  const donation_link = await findDonationsPage(first_name, last_name);
+  res.send(donation_link);
 })
 // app.get('/profile', (req, res,next)=>{
 //   res.send()

@@ -29,13 +29,7 @@ import DemVoteShare from './demVoteShare';
 import RepVoteShare from './repVoteShare';
 import getSuggestions from 'controllers/analyticsHandlers';
 import TotalVotes from './totalVotes'
-
-// assets
-import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
+import DonationButton from './ForeignData/DonationButton';
 
 // avatar style
 const avatarSX = {
@@ -122,9 +116,6 @@ const DashboardDefault = () => {
         setExpenditures([parseFloat(res.demExp), parseFloat(res.repExp)]);
         setDemFirstName(res.demFirstName);
         setDemLastName(res.demLastName);
-        console.log(res);
-        console.log(prev_years);
-        console.log(last_votes)
       })
     },[])
 
@@ -134,6 +125,7 @@ const DashboardDefault = () => {
             {/* row 1 */}
             <Grid item xs={12} sx={{ mb: -2.25 }}>
                 <Typography variant="h5">Consider Giving to {`${demFirstName} ${demLastName}`}</Typography>
+                <DonationButton first_name={demFirstName} last_name={demLastName} />
             </Grid>
             <Grid item xs={12} sx={{ mb: -2.25 }}>
                 <Typography variant="h5">{stateName} {chamber} District {district}</Typography>
