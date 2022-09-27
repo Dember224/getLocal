@@ -16,12 +16,15 @@ async function getActBluePage(first_name, last_name){
         const $ = cheerio.load(body);
 
         const donation_link = $('.contribute').attr('href');
+        const candidate_profile = $(".hidden-phone a").attr('href');
+        console.log(candidate_profile)
 
-        return donation_link
+        return {donation_link, candidate_profile}
 
     } catch(e) {
         console.log(e);
     }
 }
+
 
 module.exports = getActBluePage

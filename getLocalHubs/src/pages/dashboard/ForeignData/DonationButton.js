@@ -4,16 +4,18 @@ import Button from '@mui/material/Button';
 
 const DonationButton = ({first_name, last_name})=>{
     const [donationLink, setDonationLink] = useState(null);
+    const [candidatePage, setCandidatePage] = useState(null);
     useEffect(()=>{
         if(first_name && last_name){
             async function scopedGetLink(){
-                const donation_link = await getActBluePage(first_name, last_name);
-                setDonationLink(donation_link);
+                const candidate_links_object = await getActBluePage(first_name, last_name);
+                setDonationLink(candidate_links_object["donation_link"]);
+                setCandidatePage(candidate_links_object["candidate_profile"])
             }
             scopedGetLink();
         }
         
-    }, [first_name, last_name, donationLink])
+    }, [first_name, last_name, donationLink, candidatePage])
 
     return(
         <>
@@ -28,6 +30,22 @@ const DonationButton = ({first_name, last_name})=>{
                 target="_blank"
             >
                 Donate
+            </Button>
+             : 
+             '' 
+             }
+
+{
+             candidatePage
+             ? 
+            <Button 
+                variant="contained"
+                href={candidatePage}
+                style={{'cursor':'pointer'}}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                Visit Profile
             </Button>
              : 
              '' 

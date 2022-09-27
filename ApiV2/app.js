@@ -35,8 +35,8 @@ app.get('/suggestion', async (req, res)=>{
 app.get('/donations/:first_name/:last_name', async(req, res)=>{
   const first_name = req.params.first_name;
   const last_name = req.params.last_name;
-  const donation_link = await findDonationsPage(first_name, last_name);
-  res.send(donation_link);
+  const candidate_links_object = await findDonationsPage(first_name, last_name);
+  res.send(candidate_links_object);
 })
 // app.get('/profile', (req, res,next)=>{
 //   res.send()
