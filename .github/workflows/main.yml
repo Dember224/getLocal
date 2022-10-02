@@ -14,7 +14,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  scrape:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
@@ -23,7 +23,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
+      # installs node packages so stuff doesn't break
+      - name: Install dependencies
+        run: npm install
+
+      # runs the scrapers just for PA for right now. 
+      
       - name: Download PA Campaign finance data
         run: node loader --loadType=finance --year --state=pennsylvania
 
