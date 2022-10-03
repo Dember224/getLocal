@@ -22,17 +22,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # installs node packages so stuff doesn't break
-      - name: Install dependencies
-        run: npm install
-
+      
       # runs the scrapers just for PA for right now. 
 
       - name: Download PA Campaign finance data
         env:
           DB_URL_PROD: ${{ secrets.DB_URL_PROD }}
-        run: node loader --loadType=finance --year --state=pennsylvania
+        run: |
+          npm install
+          node loader --loadType=finance --year --state=pennsylvania
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
