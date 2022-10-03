@@ -28,6 +28,7 @@ jobs:
         run: npm install
 
       # runs the scrapers just for PA for right now. 
+      -uses: actions/checkout@v3
 
       - name: Download PA Campaign finance data
         env:
