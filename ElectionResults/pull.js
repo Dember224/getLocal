@@ -131,7 +131,7 @@ function getStateAndLevel(label) {
     else if(label.indexOf(state + ' state assembly') == 0) level = 'house';
     // new jersey has a general assembly
     else if(label.indexOf(state + ' general assembly') == 0) level = 'house';
-    else if(label.indexOf(state + ' state executives') == 0) return null; //If the search pics up state execs eg. governors attorney generals etc. just skip the record for now. 
+    else if(label.indexOf(state + ' state executives') == 0 || label.indexOf(state + ' ballot measures') == 0) return null; //If the search pics up state execs eg. governors attorney generals etc. or ballot measures just skip the record for now. 
     else throw new Error(`Failed to determine level from '${label}'`);
 
     return {
