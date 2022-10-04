@@ -19,7 +19,8 @@ jobs:
     runs-on: windows-latest
 
     #Setting permissions to read and write files.
-    permissions: read-all | write-all
+    permissions: 
+      contents: read-all | write-all
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
