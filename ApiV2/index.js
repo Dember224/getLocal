@@ -36,12 +36,12 @@ function print(data, max_length) {
   });
 }
 
-module.exports = (async () => {
+async function analyzeState(state){
   const {models} = await storage();
 
   let elections = await models.Election.getElections({
-    year: 2022,
-    state: 'pennsylvania'
+    year: 2022, //will need to update to current year as new data comes in.
+    state
   }, [{
     model: models.Candidacy,
     include: [{
@@ -142,4 +142,6 @@ module.exports = (async () => {
   console.log(elements)
   print(elements, 40)
     return await elements;
-})();
+}
+
+module.exports = analyzeState
