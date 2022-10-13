@@ -53,12 +53,11 @@ const select_random_close_votes_by_random_state = async(race_spread)=>{
     const pseudo_random_state_number = Math.floor(Math.random()*query_results.length);
     const random_state = cs[0][pseudo_random_state_number].name
     const results = await select_random_by_close_votes(race_spread, random_state)
-    console.log(results)
+    return results
   } catch(e) {
     throw new Error(e)
   }
 
 }
 
-select_random_close_votes_by_random_state(5)
-module.exports = {select_random_by_close_votes}
+module.exports = {select_random_by_close_votes, select_random_close_votes_by_random_state}

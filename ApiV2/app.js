@@ -27,8 +27,14 @@ app.get('/outspend/:state/:year', (req,res)=>{
   })
 })
 
-app.get('/suggestion', async (req, res)=>{
-  const race_suggestion = await dataProcessors.select_random_by_close_votes(5);
+app.get('/suggestion/:state', async (req, res)=>{
+  const state = req.params.state
+  const race_suggestion = await dataProcessors.select_random_by_close_votes(5, state);
+  res.send(race_suggestion);
+})
+
+app.get('/random_state_suggestion', async(req, res)=>{
+  const race_suggestion = await dataProcessors.select_random_close_votes_by_random_state(5);
   res.send(race_suggestion);
 })
 
@@ -38,6 +44,7 @@ app.get('/donations/:first_name/:last_name', async(req, res)=>{
   const candidate_links_object = await findDonationsPage(first_name, last_name);
   res.send(candidate_links_object);
 })
+
 // app.get('/profile', (req, res,next)=>{
 //   res.send()
 // })
