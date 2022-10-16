@@ -90,6 +90,7 @@ const getStateDistrictData = async function(state, chamber, vintage, callback){
 }
 
 const getBothChambers = async function(state, vintage){
+  try{
     const upper = await getStateDistrictData(state, 'upper', vintage);
     const lower = await getStateDistrictData(state, 'lower', vintage);
     
@@ -97,16 +98,25 @@ const getBothChambers = async function(state, vintage){
     upper.map(x=>all_districts.push(x));
     lower.map(x=>all_districts.push(x));
     return all_districts
+  } catch(e){
+    throw new Error(`Issue getting both chambers for state ${state} with error: ${e}`);
+  }
+
 
 }
 
 const getAllStates = async function(vintage){
-  const all_data = [];
-  for(let i = 0; i < state_array.length -1; i++){
-    const states_data = await getBothChambers(state_array[i], vintage);
-    all_data.push(states_data)
+  try{
+    const all_data = [];
+    for(let i = 0; i < state_array.length -1; i++){
+      const states_data = await getBothChambers(state_array[i], vintage);
+      all_data.push(states_data)
+    }
+    return all_data
+  } catch(e){
+    throw `census load failed ${e}`
   }
-  console.log(all_data)
+
 }
 
 
