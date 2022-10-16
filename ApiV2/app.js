@@ -33,7 +33,7 @@ app.get('/suggestion/:state', async (req, res)=>{
   res.send(race_suggestion);
 })
 
-app.get('/random_state_suggestion', async(req, res)=>{
+app.get('/random_state_suggestion', async (req, res)=>{
   const race_suggestion = await dataProcessors.select_random_close_votes_by_random_state(5);
   res.send(race_suggestion);
 })

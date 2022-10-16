@@ -1,43 +1,42 @@
 require('dotenv').config();
 const census =require('citysdk');
 const stats_codes = require('./statisticsCodes');
-const chamberParser = require('../Tools/parsers').chamberParser;
-const axios = require('axios');
-const cheerio = require('cheerio');
-const async = require('async');
-const stateMap = require('../stateMap').state_array;
+const getStateFips = require('../Tools/state_fips').getStateFips;
+const state_array = require('../StateMap').state_array;
 
 const census_key = process.env.CENSUS_API_KEY;
 
+function statsTranslator(stats_array, stats_object,chamber, state){
+  function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+  const translated_stats_object = {chamber, state}
+  const entries = Object.entries(stats_array);
+  entries.map(entry_array=>{
+    
+    const stat_name = getKeyByValue(stats_object, entry_array[0])
+    const stat_value = entry_array[1]
+    if(stat_name == undefined) {
+      translated_stats_object['district'] = stat_value
+    } else {
+      translated_stats_object[stat_name] = stat_value;
+    }
+    
+})
+  return translated_stats_object;
 
-const getStateFIPSCode = function(state, callback){
-  state = state.toUpperCase();
-  axios.get('https://www.mcc.co.mercer.pa.us/dps/state_fips_code_listing.htm')
-  .then((response)=>{
+};
 
-    const $ = cheerio.load(response.data);
-    const tr = $(`tr:contains('${state}')`).text();
-    tr_array = tr.split('\n');
-    const tr_trimmed_array = tr_array.map(x=>{
-      return x.trim();
-    })
-    const state_index = tr_trimmed_array.indexOf(state);
-    const fips_index = state_index - 1;
-    const fips_code = tr_trimmed_array[fips_index];
-
-    return callback(null, fips_code);
-  })
+function MultipleStatsTransaltor(stat_set, stats_object, chamber,state){
+  const return_array = stat_set.map(current_stat=>{
+    return statsTranslator(current_stat, stats_object, chamber,state)
+  }); 
+  return return_array
 }
 
-const padZero = function(number){
-  const string_number = String(number);
-  return string_number.padStart(3,"0")
-}
+const getStateDistrictData = async function(state, chamber, vintage, callback){
 
-const getDistrictCensusData = function(callData, callback){
-  const chamber = chamberParser(callData.office);
-  const chamber_string = `state legislative district (${chamber} chamber)`;
-  const district = callData.district == '*' ? callData.district : padZero(callData.district);
+  chamber = chamber.toLowerCase();
   const stats_object = stats_codes.stats_object;
   stats_array = [];
 
@@ -45,76 +44,70 @@ const getDistrictCensusData = function(callData, callback){
     stats_array.push(stats_object[stats])
   }
 
-  getStateFIPSCode(callData.state, (e, state_fip_code)=>{
-    if(e) return callback(e);
-    const geoHierarchy = {
-      state: state_fip_code,
+  const state_fip_code = await getStateFips(state);
+  return new Promise((resolve,reject)=>{
+    if(chamber == 'upper'){
+      census({
+        vintage: vintage,
+        geoHierarchy: {
+          state: state_fip_code,
+          "state legislative district (upper chamber)": '*'
+        },
+        sourcePath: ['acs','acs5'],
+        values: stats_array,
+        statsKey:census_key
+      }, async (e,r)=>{
+        if(e) throw new Error('Unable to retrieve census data');
+        const data = MultipleStatsTransaltor(r, stats_object,chamber, state)
+        resolve(data)
+
+
+        
+      })
+    } else if(chamber == 'lower'){
+      census({
+        vintage: vintage,
+        geoHierarchy: {
+          state: state_fip_code,
+          "state legislative district (lower chamber)": '*'
+        },
+        sourcePath: ['acs','acs5'],
+        values: stats_array,
+        statsKey:census_key
+      }, (e,r)=>{
+        if(e) throw new Error('Unable to retrieve census data');
+        const data = MultipleStatsTransaltor(r, stats_object, chamber,state)
+        resolve(data)
+
+        
+      })
     }
-    geoHierarchy[chamber_string] = district;
-
-    census({
-      vintage:callData.vintage ? callData.vintage : 2019,
-      geoHierarchy: geoHierarchy,
-      sourcePath:['acs','acs5'],
-      values:stats_array,
-      statsKey: census_key
-
-    }, (e, census_data)=>{
-      if(e) return callback(e);
-
-      function getKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
-      };
-      const translate_stats_array = census_data.map(census_object =>{
-        const translated_stats_object ={};
-        const entries = Object.entries(census_object);
-        entries.map(entry_array=>{
-          const stat_name = getKeyByValue(stats_object, entry_array[0])
-          const stat_value = entry_array[1]
-
-          translated_stats_object[stat_name] = stat_value;
-        })
-        translated_stats_object.district = translated_stats_object.undefined;
-        translated_stats_object.state = callData.state;
-        return translated_stats_object
-
-      })
-
-      return callback(null, translate_stats_array)
-    })
-  })
-}
-
-const getAllStatesCensusData = function(callData, callback){
-  async.mapSeries(stateMap,(state, cb)=>{
-    getDistrictCensusData({office: callData.office, district: callData.district, state}, (e, census_array)=>{
-      if(e) return cb(e);
-      setTimeout(()=>{
-        return cb(null, census_array);
-      }, 30000)
-    })
-  }, (e, state_census_array)=>{
-    if(e) return callback(e);
-    const all_states_array = [];
-    state_census_array.map(single_state_array=>{
-      single_state_array.map(state_object=>{
-        all_states_array.push(state_object)
-      })
-    })
-    return callback(null, all_states_array)
   })
 
-}
-// getAllStatesCensusData({office:'representative', district:'*'}, (e,r)=>{
-//   if(e) return e;
-//   console.log(r)
-// })
-// getDistrictCensusData({office:'representative', district:'*', state:'Maine'}, (e,r)=>{
-//   if(e) console.log(e);
-//   console.log(r);
-// })
 
 
-module.exports = {
-  getDistrictCensusData
+
 }
+
+const getBothChambers = async function(state, vintage){
+    const upper = await getStateDistrictData(state, 'upper', vintage);
+    const lower = await getStateDistrictData(state, 'lower', vintage);
+    
+    const all_districts = []
+    upper.map(x=>all_districts.push(x));
+    lower.map(x=>all_districts.push(x));
+    return all_districts
+
+}
+
+const getAllStates = async function(vintage){
+  const all_data = [];
+  for(let i = 0; i < state_array.length -1; i++){
+    const states_data = await getBothChambers(state_array[i], vintage);
+    all_data.push(states_data)
+  }
+  console.log(all_data)
+}
+
+
+getAllStates( 2017)
