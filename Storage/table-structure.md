@@ -76,3 +76,29 @@ Potentially:
 - candidate_id - bigint
 - contributions - decimal (total $)
 - expenditures - decimal (total $)
+
+### Census Data
+
+- district_id
+- acs_source_path
+- acs_vintage
+- total_population
+- male_population
+- female_population
+- median_age
+- median_male_age
+- median_female_age
+- under_18_population
+- white_population
+- black_population
+- native_american_population
+- asian_population
+- pacific_islander_population
+- latino_population
+- citizen_population
+- non_citizen_population
+- married_population
+- never_married_population
+- separated_marriage_population
+- divorced_population
+- median_income
