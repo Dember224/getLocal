@@ -110,7 +110,9 @@ const getAllStates = async function(vintage){
     const all_data = [];
     for(let i = 0; i < state_array.length -1; i++){
       const states_data = await getBothChambers(state_array[i], vintage);
-      all_data.push(states_data)
+      states_data.map(x=>{
+        all_data.push(x);
+      });
     }
     return all_data
   } catch(e){
@@ -120,4 +122,6 @@ const getAllStates = async function(vintage){
 }
 
 
-getAllStates( 2017)
+getAllStates( 2017).then((r)=>{
+  console.log(r);
+})
