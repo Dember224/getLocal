@@ -1,4 +1,4 @@
-const { Sequelize, Model, DataTypes, Op } = require('sequelize');
+const { Sequelize, Model, DataTypes, Op, INTEGER } = require('sequelize');
 require('dotenv').config()
 const db_password = process.env.DB_PASSWORD
 const db_uri = process.env.DB_URL_PROD;
@@ -410,6 +410,65 @@ async function getModels() {
         }, {
             tableName: 'CandidateSearch',
             timestamps:false
+    });
+
+    const CensusData = sequelize.define('CensusData', {
+        census_id: {
+            type: DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement: true
+        },
+        acs_vintage: {
+            type:DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull:false
+        },
+        acs_source_path: {
+            type:DataTypes.JSONB,
+            primaryKey: true,
+            allowNull: false
+        },
+        district_id:{
+            type:DataTypes.INTEGER,
+            references: {
+                model: District,
+                key: 'district_id',
+            },
+            allowNull: false
+        },
+        chamber_id:{
+            type:DataTypes.INTEGER,
+            references: {
+                model: Chamber,
+                key:'chamber_id'
+            },
+            allowNull:false
+        },
+        total_population: DataTypes.INTEGER,
+        male_population: DataTypes.INTEGER,
+        female_population: DataTypes.INTEGER,
+        median_age: DataTypes.INTEGER,
+        median_male_age: DataTypes.INTEGER,
+        median_female_age: DataTypes.INTEGER,
+        under_18_population: DataTypes.INTEGER, 
+        white_population:  DataTypes.INTEGER,
+        black_population: DataTypes.INTEGER,
+        native_american_population:DataTypes.INTEGER,
+        asian_population: DataTypes.INTEGER,
+        pacific_islander_population: DataTypes.INTEGER,
+        latino_population: DataTypes.INTEGER,
+        citizen_population: DataTypes.INTEGER,
+        non_citizen_population: DataTypes.INTEGER,
+        married_population: DataTypes.INTEGER,
+        never_married_population: DataTypes.INTEGER,
+        separated_marriage_population: DataTypes.INTEGER,
+        divorced_population: DataTypes.INTEGER,
+        median_income: DataTypes.INTEGER,
+        other_race_population: DataTypes.INTEGER
+
+    })
+    CensusData.belongsTo(District, {
+        foreignKey:'district_id'
     })
 
     // for now, just build it
@@ -430,7 +489,8 @@ async function getModels() {
         Candidate,
         Candidacy,
         CampaignFinance,
-        CandidateSearch
+        CandidateSearch,
+        CensusData
     };
 }
 
