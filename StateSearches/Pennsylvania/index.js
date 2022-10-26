@@ -699,6 +699,6 @@ module.exports = {
     getCombinedCandidateData
 };
 
-getSampleData();
+// getSampleData();
 
 // getFinanceData({year: 2022});
