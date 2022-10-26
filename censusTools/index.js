@@ -59,7 +59,7 @@ const getStateDistrictData = async function(state, chamber, vintage, acs_source_
         values: stats_array,
         statsKey:census_key
       }, async (e,r)=>{
-        if(e) throw new Error('Unable to retrieve census data');
+        if(e) throw new Error(`Unable to retrieve census data for ${state} exited with error: ${e}`);
         const data = MultipleStatsTransaltor(r, stats_object,chamber, state, acs_source_path, vintage)
         resolve(data)
 
@@ -124,8 +124,8 @@ const getAllStates = async function(vintage){
 }
 
 
-// getAllStates( 2017).then((r)=>{
-//   console.log(r);
-// })
+getAllStates( 2017).then((r)=>{
+  console.log(r);
+})
 
 module.exports = getAllStates

@@ -14,7 +14,9 @@ const ElectionResultsLoader = require('./ElectionResults/load');
 const elections = require('./ElectionResults/pull');
 const getStorage = require('./Storage');
 const stateSearches = require('./StateSearches');
-const CampaignFinanceLoader = require('./Finances/load')
+const CampaignFinanceLoader = require('./Finances/load');
+const CensusDataLoader = require('./censusTools/load');
+const census_tools = require('./censusTools/index')
 
 
 async function loadElectionResults(storage) {
@@ -48,6 +50,7 @@ async function loadFinanceResults(storage){
       await loader.loadCampaignFinances(r)
     }
   })
+
   isPromise = result?.then;
   const loader = new CampaignFinanceLoader(storage);
 
@@ -57,22 +60,50 @@ async function loadFinanceResults(storage){
     })
   }
 }
+
+async function loadCensusData(storage){
+  try{
+    console.log('census loader called');
+    const loader = new CensusDataLoader(storage.models);
+  
+    const census_data = await census_tools(year);
+  
+    await loader.loadCensusData(census_data);
+  }catch(e){
+    console.log(e)
+  }
+
+}
+
+
 async function loader() {
+
     const isLoadTypeElections = await loadType == 'elections';
     const isLoadTypeFinance = await loadType == 'finance';
-    const storage = await getStorage()
+    const isLoadTypeCensus = await loadType == 'census';
+    console.log(await loadType)
+    const storage = await getStorage();
     console.log('Promise pending', storage);
+
     if(isLoadTypeElections) {
+
         await loadElectionResults(storage);
+
     } else if(isLoadTypeFinance){
+
       await loadElectionResults(storage);
-      const state_split = state.split(" ")
+      const state_split = state.split(" ");
+
       if (state_split.length == 2){
         state = `${state_split[0]}_${state_split[1]}`
       }
       await loadFinanceResults(storage.models)
+      } else if (isLoadTypeCensus){
+
+        await loadCensusData(storage);
+
       } else {
           throw new Error("invalid loadType: "+loadType);
       }
-}
+} //honestly this entire thing should be in a try catch block. The error handling in this file is kinda bad. 
 loader();

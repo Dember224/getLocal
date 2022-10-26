@@ -17,7 +17,6 @@ function chamberParser(value){
     return value;
 }
 CensusDataLoader.prototype.loadCensusData = async function(results){
-    console.log(results)
     for await (census_object of results){
         ({
             chamber,
@@ -49,7 +48,10 @@ CensusDataLoader.prototype.loadCensusData = async function(results){
             acs_vintage
           } = census_object)
         const state_name = state.toLowerCase()
-        const district_number = district
+        const district_number = district;
+
+        if(!district_number) continue; //lookup will break and exit without a district number
+
         console.log(state_name)
         const state_obj = await this.State.findOne({
             where: {
@@ -72,7 +74,7 @@ CensusDataLoader.prototype.loadCensusData = async function(results){
             ]
         })
         console.log(district_obj)
-        if(!district_obj) continue;
+        if(!district_obj || !district_obj.district_id) continue; // if you can't find the district move on.
 
         const district_id = district_obj.district_id;
 
@@ -111,13 +113,14 @@ CensusDataLoader.prototype.loadCensusData = async function(results){
     
 };
 
-const downloadData = async function(){
+//most recent census year for the acs5 is 2017
+const downloadData = async function(year){
     const storage = await getStorage();
 
     const loader = new CensusDataLoader(storage.models)
-    const census_data = await census_tools(2017);
+    const census_data = await census_tools(year);
 
     await loader.loadCensusData(census_data)
 }
 
-downloadData();
+module.exports = CensusDataLoader
