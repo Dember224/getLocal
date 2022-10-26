@@ -1,25 +1,33 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const getStateFips =  async function(state) {
-  const state_name = state.toLowerCase();
-  const response = await axios.get('https://www.nrcs.usda.gov/wps/portal/nrcs/detail/?cid=nrcs143_013696')
 
-try{    const $ = cheerio.load(response.data);
-    const tbody = $('.data').text()
-    const split_body = tbody.split('\t\t\n\t\t\n')
-    const body_array = split_body.map(x=>{
-      return x.split('\n').map(y=>{return y.trim()})
-    })
-    const matching_array = body_array.find(x=>{
-      return x[1].toLowerCase() == state_name;
-    })
-    return  matching_array[5]
-} catch(e){
-    return e
+const getStateFips = async function(state){
+
+  try{
+    const response = await axios.get('https://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code');
+    const $ = cheerio.load(response.data);
+
+    const html = $(`tbody  `).html().split('tr').find(x=>{
+      return x.includes(state)
+    });
+
+    const fips = html.split(/<td>|<\/td>/)[5]
+    if(state == 'Washington'){
+      return 53;
+    } else {
+      return fips
+    }
+    
+
+  } catch(e){
+    throw new Error(`Failed to get state fips with error ${e}`)
   }
 }
 
 module.exports = {
   getStateFips
 }
+
+
+
