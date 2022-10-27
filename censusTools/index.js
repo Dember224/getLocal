@@ -77,7 +77,7 @@ const getStateDistrictData = async function(state, chamber, vintage, acs_source_
         values: stats_array,
         statsKey:census_key
       }, (e,r)=>{
-        if(e) throw new Error('Unable to retrieve census data');
+        if(e) throw new Error(`Unable to retrieve census data for ${state} ${chamber}. Error: ${e}`);
         const data = MultipleStatsTransaltor(r, stats_object, chamber,state, acs_source_path, vintage)
         resolve(data)
 
