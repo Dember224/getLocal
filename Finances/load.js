@@ -157,7 +157,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         const contributions = finance_object.contributions ?? null;
         const expenditures = finance_object.expenditures ?? null;
 
-        await this.CampaignFinance.findOrCreate({
+        const finance = await this.CampaignFinance.findOrCreate({
           where: {
             candidacy_id: candidacy.candidacy_id,
           },
@@ -165,7 +165,21 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
             contributions: contributions,
             expenditures:expenditures
           }
-        });
+        }); //updating campaign finance data if it exists.
+        console.log('garsh darn',finance.candidacy_id) 
+        
+        if(finance.candidacy_id){
+          await this.CampaignFinance.update({
+            expenditures: expenditures,
+            contributions: contributions
+          }, 
+          {
+            where: {
+              candidacy_id: finance.candidacy_id
+            }
+          })
+        }
+        
       }
     }
 
