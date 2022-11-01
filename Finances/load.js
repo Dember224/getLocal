@@ -166,7 +166,6 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
             expenditures:expenditures
           }
         }); //updating campaign finance data if it exists.
-        console.log('garsh darn',finance.candidacy_id) 
         
         if(finance.candidacy_id){
           await this.CampaignFinance.update({
