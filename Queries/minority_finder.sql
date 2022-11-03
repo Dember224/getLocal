@@ -9,7 +9,8 @@ e.type,
 cc.votes,
 ca.first_name,
 ca.last_name,
-ca.party
+ca.party,
+(cc.votes::float/(cd.total_population::float - cd.under_18_population::float)) *100 as percentage_of_eligible_won
 from "CensusData" cd
 inner join "Districts" d
 on d.district_id = cd.district_id
@@ -26,6 +27,7 @@ and e.year=2022
 and e.type='general'
 inner join "Candidacies" cc
 on cc.election_id=e.election_id
+and cc.votes is not null
 inner join "Candidates" ca
 on ca.candidate_id = cc.candidate_id
 order by black_percentage desc
