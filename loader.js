@@ -2,7 +2,7 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
-let state = argv.state;
+let state = argv.state ? argv.state.toLowerCase() : undefined;
 const loadType = argv.loadType;
 const year = argv.year == undefined ? new Date().getFullYear() : argv.year ;
 const office = argv.office;

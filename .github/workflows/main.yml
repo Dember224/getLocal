@@ -31,6 +31,8 @@ jobs:
         run: |
           npm install
           node loader --loadType=finance --year=2022 --state=pennsylvania
+          node loader --loadType=finance --year=2020 --state=Arizona
+          node loader --loadType=finance --year=2022 --state=Arizona
           node loader --year=2017 --loadType=census
 
       # Runs a set of commands using the runners shell
