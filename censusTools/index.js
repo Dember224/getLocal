@@ -124,8 +124,8 @@ const getAllStates = async function(vintage){
 }
 
 
-getAllStates( 2017).then((r)=>{
-  console.log(r);
-})
+// getAllStates( 2017).then((r)=>{
+//   console.log(r);
+// })
 
 module.exports = getAllStates

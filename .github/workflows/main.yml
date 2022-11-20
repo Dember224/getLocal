@@ -33,6 +33,7 @@ jobs:
           node loader --loadType=finance --year=2022 --state=pennsylvania
           node loader --loadType=finance --year=2020 --state=Arizona
           node loader --loadType=finance --year=2022 --state=Arizona
+          node loader --state="North Carolina" --year=2022 --loadType=finance --election_type=general
           node loader --year=2017 --loadType=census
 
       # Runs a set of commands using the runners shell

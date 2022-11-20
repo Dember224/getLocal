@@ -98,6 +98,7 @@ async function loader() {
         state = `${state_split[0]}_${state_split[1]}`
       }
       await loadFinanceResults(storage.models)
+      return;
       } else if (isLoadTypeCensus){
 
         await loadCensusData(storage);

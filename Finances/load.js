@@ -52,7 +52,7 @@ function CampaignFinanceLoader(models){
 
 function ProcessLevel(office){
   let level = office.toLowerCase();
-  if(level.includes('house') || level.includes('lower') || level.includes('rep')) {
+  if(level.includes('house') || level.includes('lower') || level.includes('rep') || level.includes('assembly')) {
     return 0;
   } else if(level.includes('senat') || level.includes('upper')){
     return 1;
@@ -110,7 +110,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         number: where.district
       }
     });
-    if(!district) throw new Error('invalid district');
+     if(!district)  continue //throw new Error('invalid district'); Just skip it if we can't find the district for now. 
     const office = await this.Office.findOne({
       where: {
         district_id: district.district_id
