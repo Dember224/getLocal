@@ -137,11 +137,10 @@ const getCandidateMoney = function(callData, callback){
       })
     },
     pdf:(cb)=>{
-      crawler(`https://www.ethics.state.tx.us/data/search/cf/2020/CandE08102620.pdf`).then(function(response){//The pdf changes by proximity to the election.
-        const year_abbr = JSON.stringify(callData.year).slice(3,-1);
-        console.log(year_abbr)
-        const report_array = response.text.split(`Report Due:10/26/${year_abbr}Report Number:`);//remeber to split by the appropriate dates
-        const num_of_reports = response.text.split(`Report Due:10/26/${year_abbr}Report Number:`).length - 1;
+      crawler(`https://www.ethics.state.tx.us/data/search/cf/2022/CandE08103122.pdf`).then(function(response){//The pdf changes by proximity to the election.
+        const year_abbr = JSON.stringify(callData.year).slice(2,5);
+        const report_array = response.text.split(`Report Due:10/31/${year_abbr}Report Number:`);//remeber to split by the appropriate dates
+        const num_of_reports = response.text.split(`Report Due:10/31/${year_abbr}Report Number:`).length - 1;
         console.log(`There are ${num_of_reports} candidates and pacs in this file`);
         const re_mapped = [];
         report_array.map((x,i)=>{
