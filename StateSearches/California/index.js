@@ -17,6 +17,8 @@ function getOffice(office_name){
 }
 
 const elect_nav = {
+  general_2022:123,
+  primary_2022:122,
   general_2020:71,
   primary_2020:70,
   general_2018:63,
@@ -94,7 +96,8 @@ const getMoney = async function(callData, callback){
       return x;
     }
   }).filter(x=>{return x})[0] : null
-  const office_district = district_element ? district_element.split(/\n/).find(x=>{return x.includes('DISTRICT')}).split(/<|>/)[2] : null;
+  const split_district = district_element ? district_element.split(/\n/).find(x=>{return x.includes('DISTRICT')}) : null
+  const office_district = split_district ? split_district.split(/<|>/)[2] : null;
   let parse_money = '';
   const pure_office = office_district ? office_district : null;
   $(`tbody:contains("${searchOffice(pure_office)} ${callData.year};")`).each((i,x)=>{ //looking for the string ASSEMBLY 2020; or whatever office and year are sent in the callData
@@ -146,13 +149,11 @@ if(parse_money.split('\n').filter(x=>{
 // getCandidates({election_type:'primary', election_year:2020})
 
 const getFinanceData = function(callData, callback){
-  getCandidates({election_type:'primary', election_year:2020}, (e, candidate_array)=>{
+  getCandidates({election_type:callData.election_type, election_year:callData.year}, (e, candidate_array)=>{
     if(e) return e;
-    let count = 1;
     let random_wait = Math.floor(Math.random()*15000)
     async.mapSeries(candidate_array, (candidate_object, cb)=>{
-      setTimeout(() => { console.log("Retrieving record number", count); }, random_wait);
-      count +=1;
+      // setTimeout(() => { return; }, random_wait);
       getMoney({uri:candidate_object.href, year: callData.year, election_type:callData.election_type}, (e,money_object)=>{
         if(e) return cb(e);
         if(candidate_object && money_object){
@@ -163,7 +164,7 @@ const getFinanceData = function(callData, callback){
 
           money_object['name'] = name;
           money_object['name_year'] = `${name}${callData.year}${callData.election_type}`;
-          console.log('The money', money_object)
+          console.log(money_object)
           return cb(null, money_object)
         } else{
           return cb(null, null)
@@ -178,6 +179,7 @@ const getFinanceData = function(callData, callback){
       })
       return callback(null, results)
     })
+    return 
   })
 }
 
