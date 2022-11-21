@@ -106,9 +106,12 @@ const getCandidateList = function(callData, callback){
   }, (e,r,b)=>{
     if(e) return e;
     const name_array = b.aaData.map(x=>{
+      if(x[3]=='State'){
+        console.log(x)
+      }
       const return_object = {
-        id:x[4],
-        name:x[5],
+        id:x[5],
+        name:x[6],
         district:x[7]
       }
       return return_object
@@ -171,7 +174,7 @@ const combineCandidateAndMoney = function(callData){
 
 //have to get list of committees then assign a candidate name to that committee. Most NY candidates have their cash bound in committees rather than directly to the candidate.
 
-combineCandidateAndMoney({office:'Member of Assembly', start_date:'01/01/2020', end_date:'12/31/2020', election_type:'primary'})
+combineCandidateAndMoney({office:'Member of Assembly', start_date:'01/01/2022', end_date:'12/31/2022', election_type:'primary'})
 
 // getCandidateList({}, (e,r)=>{if(e) return e; console.log(r)})
 
