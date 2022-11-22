@@ -139,8 +139,8 @@ async function analyzeState(state){
       });
         }
   }
-  console.log(elements)
-  print(elements, 40)
+  // console.log(elements)
+  // print(elements, 40)
     return await elements;
 }
 

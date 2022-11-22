@@ -20,7 +20,6 @@ const select_random_by_close_votes = async (race_spread, state)=>{//modify to pa
   const most_competitive = sorted_competitive.splice(0,race_spread);
 
   const random_race = most_competitive[Math.floor(Math.random() * most_competitive.length)];
-  console.log(random_race)
   return random_race;
 }
 
@@ -38,8 +37,8 @@ const select_random_close_votes_by_random_state = async(race_spread)=>{
   const sequelize = new Sequelize(db_uri, opts);
   
     const states_with_elections_query = `Select Distinct s.name, s.state_id 
-    from "Candidates" c 
-    Inner Join "States" s 
+    from "States" s
+    Inner Join "Candidates" c 
     on s.state_id = c.state_id
     Inner Join "Candidacies" cd 
     on cd.candidate_id = c.candidate_id
