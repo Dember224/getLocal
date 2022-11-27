@@ -1,4 +1,5 @@
 const storage = require('./Storage');
+const { Op } = require('sequelize');
 
 function print(data, max_length) {
   if(!data||!data.length) {
@@ -48,11 +49,15 @@ async function analyzeState(state){
       model: models.CampaignFinance
     }, {
       model: models.Candidate
-    }]
+    }],where:{
+      votes:{
+        [Op.ne]:null
+      }
+    }
   }]);
 
-  console.log(elections.length, 'total elections');
-  console.log(elections[0]);
+  // console.log(elections.length, 'total elections');
+  // console.log(elections[0]);
 
   const elements = [];
 

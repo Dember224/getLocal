@@ -20,6 +20,7 @@ const select_random_by_close_votes = async (race_spread, state)=>{//modify to pa
   const most_competitive = sorted_competitive.splice(0,race_spread);
 
   const random_race = most_competitive[Math.floor(Math.random() * most_competitive.length)];
+  random_race.state = state;
   return random_race;
 }
 
