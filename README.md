@@ -16,11 +16,6 @@ Enabling traditionally under-represented people a means of overcoming the financ
 
 Currently, node scripts retrieve the totals then load it into a heroku postgres database. The next steps of the project are pending.
 
-Here is a years worth of data for the first 8 state's visualized:
-https://campaignbucs.grafana.net/dashboard/snapshot/YV6qJ4kmlJcbLa8Dtir08OurUSh3H9ik
-
-For a peak at what we've got so far, see here:
-https://data.heroku.com/dataclips/lvfocubcptvffcmhumzyfziuguci
 
 ## Standardization
 
