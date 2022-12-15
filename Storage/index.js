@@ -10,488 +10,501 @@ statesJson.forEach(x => {
 })
 
 async function getModels() {
-    const opts = {
-        dialect:'postgres',
-        dialectOptions: {
-          ssl: {
-            rejectUnauthorized: false
-          }
-        }
-    };
-    if(db_ssl === false) delete opts.dialectOptions;
-
-    const sequelize = new Sequelize(db_uri, opts);
-
-    const State = sequelize.define("State", {
-        state_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
-        },
-        name: DataTypes.STRING,
-        abbreviation: DataTypes.STRING
-    }, {
-        timestamps: false
-    });
-
-    await State.sync();
-    await State.bulkCreate(statesJson, {
-        ignoreDuplicates: true
-    });
-
-    const Chamber = sequelize.define("Chamber", {
-        chamber_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
-        },
-        state_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: State,
-                key: 'state_id'
-            }
-        },
-        name: DataTypes.STRING,
-        level: {
-            type: DataTypes.INTEGER,
-            validate: {
-                isIn: [[0,1]]
+    try{
+        const opts = {
+            dialect:'postgres',
+            dialectOptions: {
+              ssl: {
+                rejectUnauthorized: false
+              },
+              logging: true
             },
-            allowNull: false,
-            set(value) {
-                if(typeof value == 'string') value = value.toLowerCase();
-                if(value == 'upper' || value == 'senate') value = 1;
-                if(value == 'lower' || value == 'house') value = 0;
-                this.setDataValue('level', value);
-            }
-        }
-    }, {
-        timestamps: false
-    });
-    State.hasMany(Chamber, {
-        foreignKey: 'state_id'
-    });
-    Chamber.belongsTo(State, {
-        foreignKey: 'state_id'
-    });
-
-    const chambers = [];
-    statesJson.forEach(x => {
-        x?.chambers?.forEach(c => {
-            c = {...c};
-            c.state_id = x.state_id;
-            chambers.push(c);
-            if(c.level == 'upper') c.level = 1;
-            else c.level = 0;
+            pool: {
+                max: 10,
+                acquire: 30000,
+                min:0
+              }
+        };
+        if(db_ssl === false) delete opts.dialectOptions;
+    
+        const sequelize = new Sequelize(db_uri, opts);
+    
+        const State = sequelize.define("State", {
+            state_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true
+            },
+            name: DataTypes.STRING,
+            abbreviation: DataTypes.STRING
+        }, {
+            timestamps: false
         });
-    });
-    await Chamber.sync();
-    await Chamber.bulkCreate(chambers, {
-        ignoreDuplicates: true
-    });
-
-    const District = sequelize.define("District", {
-        district_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        chamber_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Chamber,
-                key: 'chamber_id'
+    
+        await State.sync();
+        await State.bulkCreate(statesJson, {
+            ignoreDuplicates: true
+        });
+    
+        const Chamber = sequelize.define("Chamber", {
+            chamber_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true
             },
-            allowNull: false
-        },
-        name: DataTypes.STRING,
-        number: DataTypes.INTEGER,
-
-        total_population: DataTypes.INTEGER,
-        eligible_voter_population: DataTypes.INTEGER
-    });
-    Chamber.hasMany(District, {
-        foreignKey: 'chamber_id'
-    });
-    District.belongsTo(Chamber, {
-        foreignKey: 'chamber_id'
-    });
-    District.prototype.getState = async function() {
-        const chamber = await this.getChamber();
-        return chamber.getState();
-    };
-
-    const Office = sequelize.define("Office", {
-        office_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        name: DataTypes.STRING,
-        district_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: District,
-                key: 'district_id'
-            },
-            allowNull: false
-        }
-    });
-    District.hasOne(Office, {
-        foreignKey: 'district_id'
-    });
-    Office.belongsTo(District, {
-        foreignKey: 'district_id'
-    });
-    Office.prototype.getChamber = async function() {
-        const district = await this.getDistrict();
-        return district.getChamber();
-    };
-    Office.prototype.getState = async function() {
-        const chamber = await this.getChamber();
-        return chamber.getState();
-    }
-
-    const Election = sequelize.define("Election", {
-        election_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        year: DataTypes.INTEGER,
-        date: DataTypes.DATE,
-        office_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Office,
-                key: 'office_id'
-            }
-        },
-        type: {
-            type: DataTypes.STRING,
-            validate: {
-                isIn: [["primary", "general", "runoff", "special"]]
-            }
-        },
-
-        // used in primary elections
-        party: {
-            type: DataTypes.STRING,
-        },
-        // used in primary elections
-        general_election_id: {
-            type: DataTypes.INTEGER
-        },
-        // used in runoffs
-        original_election_id: {
-            type: DataTypes.INTEGER,
-        }
-    });
-    Office.hasMany(Election, {
-        foreignKey: 'office_id'
-    });
-    Election.belongsTo(Office, {
-        foreignKey: 'office_id'
-    });
-
-    Election.prototype.getDistrict = async function() {
-        const office = await this.getOffice();
-        return office.getDistrict();
-    };
-    Election.prototype.getState = async function() {
-        const office = await this.getOffice();
-        return office.getState();
-    };
-    Election.prototype.getPreviousElections = async function(include) {
-        const {type, year, office_id} = this;
-        const [...previous] = await Election.findAll({
-            where: {
-                type,
-                office_id,
-                year: {
-                    [Op.lt]: year
+            state_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: State,
+                    key: 'state_id'
                 }
             },
-            include
-        });
-
-        // sorted by most recent first
-        return previous.sort((a,b) => b.year - a.year);
-    };
-    Election.prototype.getGeneral = async function(include) {
-        if(this.type != 'primary') return null;
-        return Election.findByPk(this.general_election_id, {
-            include
-        });
-    };
-    Election.prototype.getPrimaries = async function(include) {
-        if(this.type != 'general') return null;
-        return Election.findAll({
-            where: {
-                type: 'primary',
-                general_election_id: this.election_id
+            name: DataTypes.STRING,
+            level: {
+                type: DataTypes.INTEGER,
+                validate: {
+                    isIn: [[0,1]]
+                },
+                allowNull: false,
+                set(value) {
+                    if(typeof value == 'string') value = value.toLowerCase();
+                    if(value == 'upper' || value == 'senate') value = 1;
+                    if(value == 'lower' || value == 'house') value = 0;
+                    this.setDataValue('level', value);
+                }
             }
-        }, include);
-    };
-    Election.prototype.getTurnout = async function() {
-        const candidacies = await this.getCandidacies();
-        let total = 0;
-        candidacies.forEach(x => total += x.votes ?? 0);
-        return total;
-    };
-    Election.prototype.getVotesByParty = async function() {
-        if(this.party) return null;
-        const candidacies = await this.getCandidacies();
-        const byParty = {};
-        for(let x of candidacies) {
-            const cand = await x.getCandidate();
-            byParty[cand.party] = x.votes;
-        };
-        return byParty;
-    };
-
-    Election.getElections = async function({state,year}, include) {
-        return Election.findAll({
-            where: {
-                year,
+        }, {
+            timestamps: false
+        });
+        State.hasMany(Chamber, {
+            foreignKey: 'state_id'
+        });
+        Chamber.belongsTo(State, {
+            foreignKey: 'state_id'
+        });
+    
+        const chambers = [];
+        statesJson.forEach(x => {
+            x?.chambers?.forEach(c => {
+                c = {...c};
+                c.state_id = x.state_id;
+                chambers.push(c);
+                if(c.level == 'upper') c.level = 1;
+                else c.level = 0;
+            });
+        });
+        await Chamber.sync();
+        await Chamber.bulkCreate(chambers, {
+            ignoreDuplicates: true
+        });
+    
+        const District = sequelize.define("District", {
+            district_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
             },
-            include: [{
-                model: Office,
-                include: {
+            chamber_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Chamber,
+                    key: 'chamber_id'
+                },
+                allowNull: false
+            },
+            name: DataTypes.STRING,
+            number: DataTypes.INTEGER,
+    
+            total_population: DataTypes.INTEGER,
+            eligible_voter_population: DataTypes.INTEGER
+        });
+        Chamber.hasMany(District, {
+            foreignKey: 'chamber_id'
+        });
+        District.belongsTo(Chamber, {
+            foreignKey: 'chamber_id'
+        });
+        District.prototype.getState = async function() {
+            const chamber = await this.getChamber();
+            return chamber.getState();
+        };
+    
+        const Office = sequelize.define("Office", {
+            office_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            name: DataTypes.STRING,
+            district_id: {
+                type: DataTypes.INTEGER,
+                references: {
                     model: District,
+                    key: 'district_id'
+                },
+                allowNull: false
+            }
+        });
+        District.hasOne(Office, {
+            foreignKey: 'district_id'
+        });
+        Office.belongsTo(District, {
+            foreignKey: 'district_id'
+        });
+        Office.prototype.getChamber = async function() {
+            const district = await this.getDistrict();
+            return district.getChamber();
+        };
+        Office.prototype.getState = async function() {
+            const chamber = await this.getChamber();
+            return chamber.getState();
+        }
+    
+        const Election = sequelize.define("Election", {
+            election_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            year: DataTypes.INTEGER,
+            date: DataTypes.DATE,
+            office_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Office,
+                    key: 'office_id'
+                }
+            },
+            type: {
+                type: DataTypes.STRING,
+                validate: {
+                    isIn: [["primary", "general", "runoff", "special"]]
+                }
+            },
+    
+            // used in primary elections
+            party: {
+                type: DataTypes.STRING,
+            },
+            // used in primary elections
+            general_election_id: {
+                type: DataTypes.INTEGER
+            },
+            // used in runoffs
+            original_election_id: {
+                type: DataTypes.INTEGER,
+            }
+        });
+        Office.hasMany(Election, {
+            foreignKey: 'office_id'
+        });
+        Election.belongsTo(Office, {
+            foreignKey: 'office_id'
+        });
+    
+        Election.prototype.getDistrict = async function() {
+            const office = await this.getOffice();
+            return office.getDistrict();
+        };
+        Election.prototype.getState = async function() {
+            const office = await this.getOffice();
+            return office.getState();
+        };
+        Election.prototype.getPreviousElections = async function(include) {
+            const {type, year, office_id} = this;
+            const [...previous] = await Election.findAll({
+                where: {
+                    type,
+                    office_id,
+                    year: {
+                        [Op.lt]: year
+                    }
+                },
+                include
+            });
+    
+            // sorted by most recent first
+            return previous.sort((a,b) => b.year - a.year);
+        };
+        Election.prototype.getGeneral = async function(include) {
+            if(this.type != 'primary') return null;
+            return Election.findByPk(this.general_election_id, {
+                include
+            });
+        };
+        Election.prototype.getPrimaries = async function(include) {
+            if(this.type != 'general') return null;
+            return Election.findAll({
+                where: {
+                    type: 'primary',
+                    general_election_id: this.election_id
+                }
+            }, include);
+        };
+        Election.prototype.getTurnout = async function() {
+            const candidacies = await this.getCandidacies();
+            let total = 0;
+            candidacies.forEach(x => total += x.votes ?? 0);
+            return total;
+        };
+        Election.prototype.getVotesByParty = async function() {
+            if(this.party) return null;
+            const candidacies = await this.getCandidacies();
+            const byParty = {};
+            for(let x of candidacies) {
+                const cand = await x.getCandidate();
+                byParty[cand.party] = x.votes;
+            };
+            return byParty;
+        };
+    
+        Election.getElections = async function({state,year}, include) {
+            return Election.findAll({
+                where: {
+                    year,
+                },
+                include: [{
+                    model: Office,
                     include: {
-                        model: Chamber,
+                        model: District,
                         include: {
-                            model: State,
-                            where: {
-                                name: state
+                            model: Chamber,
+                            include: {
+                                model: State,
+                                where: {
+                                    name: state
+                                }
                             }
                         }
                     }
+                }, ...include]
+            });
+        };
+    
+        const Candidate = sequelize.define("Candidate", {
+            candidate_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            first_name: DataTypes.STRING,
+            middle_name: DataTypes.STRING,
+            last_name: DataTypes.STRING,
+            party: DataTypes.STRING,
+            state_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: State,
+                    key: 'state_id'
                 }
-            }, ...include]
+            },
+            as_of: DataTypes.DATE
         });
-    };
-
-    const Candidate = sequelize.define("Candidate", {
-        candidate_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        first_name: DataTypes.STRING,
-        middle_name: DataTypes.STRING,
-        last_name: DataTypes.STRING,
-        party: DataTypes.STRING,
-        state_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: State,
-                key: 'state_id'
+        Candidate.belongsTo(State, {
+            foreignKey: 'state_id'
+        });
+        State.hasMany(Candidate, {
+            foreignKey: 'state_id'
+        });
+    
+        const Candidacy = sequelize.define("Candidacy", {
+            candidacy_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            candidate_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Candidate,
+                    key: 'candidate_id'
+                }
+            },
+            election_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Election,
+                    key: 'election_id'
+                }
+            },
+            votes: {
+                type: DataTypes.INTEGER
             }
-        },
-        as_of: DataTypes.DATE
-    });
-    Candidate.belongsTo(State, {
-        foreignKey: 'state_id'
-    });
-    State.hasMany(Candidate, {
-        foreignKey: 'state_id'
-    });
-
-    const Candidacy = sequelize.define("Candidacy", {
-        candidacy_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        candidate_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Candidate,
-                key: 'candidate_id'
-            }
-        },
-        election_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Election,
-                key: 'election_id'
-            }
-        },
-        votes: {
-            type: DataTypes.INTEGER
+        });
+        Candidate.hasMany(Candidacy, {
+            foreignKey: 'candidate_id'
+        });
+        Candidacy.belongsTo(Candidate, {
+            foreignKey: 'candidate_id'
+        });
+    
+        Election.hasMany(Candidacy, {
+            foreignKey: 'election_id'
+        });
+        Candidacy.belongsTo(Election, {
+            foreignKey: 'election_id'
+        });
+    
+        const CampaignFinance = sequelize.define('CampaignFinance', {
+            candidacy_id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                references: {
+                  model:Candidacy,
+                  key: 'candidacy_id'
+                }
+            },
+            contributions: DataTypes.DECIMAL(10,2),
+            expenditures: DataTypes.DECIMAL(10,2)
+        });
+        Candidacy.hasOne(CampaignFinance, {
+            foreignKey: 'candidacy_id'
+        });
+        CampaignFinance.belongsTo(Candidacy, {
+            foreignKey: 'candidacy_id'
+        });
+    
+        const candidate_search_query = `
+          Create or replace View "CandidateSearch" as
+          Select
+          c.candidacy_id,
+          c.candidate_id,
+          Lower(cd.first_name) as first_name,
+          Lower(cd.middle_name) as middle_name,
+          Lower(cd.last_name) as last_name,
+          cd.party,
+          s.name as state_name,
+          d.number as district,
+          ch.level as chamber_level,
+          e.year,
+          e.type as election_type
+          from "Candidacies" c
+          left join "Candidates" cd
+          on cd.candidate_id = c.candidate_id
+          left join "Elections" e
+          on e.election_id = c.election_id
+          left join "Offices" o
+          on e.office_id = o.office_id
+          left join "Districts" d
+          on d.district_id = o.district_id
+          left Join "Chambers" ch
+          on ch.chamber_id = d.chamber_id
+          left Join "States" s
+          on s.state_id = ch.state_id
+        `;
+        const cs = await sequelize.query(candidate_search_query);
+    
+        const CandidateSearch = sequelize.define('CandidateSearch', {
+          candidacy_id: {
+              type: DataTypes.INTEGER,
+              primaryKey: true
+            },
+            candidate_id: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Candidate,
+                    key: 'candidate_id'
+                }
+            },
+            first_name: DataTypes.STRING,
+            middle_name: DataTypes.STRING,
+            last_name: DataTypes.STRING,
+            party: DataTypes.STRING,
+            state_name: DataTypes.STRING,
+            district: DataTypes.INTEGER,
+            chamber_level:DataTypes.INTEGER,
+            year:DataTypes.INTEGER,
+            election_type:DataTypes.STRING
+            }, {
+                tableName: 'CandidateSearch',
+                timestamps:false
+        });
+    
+        const CensusData = sequelize.define('CensusData', {
+            census_id: {
+                type: DataTypes.INTEGER,
+                primaryKey:true,
+                autoIncrement: true
+            },
+            acs_vintage: {
+                type:DataTypes.INTEGER,
+                primaryKey: true,
+                allowNull:false
+            },
+            acs_source_path: {
+                type:DataTypes.JSONB,
+                primaryKey: true,
+                allowNull: false
+            },
+            district_id:{
+                type:DataTypes.INTEGER,
+                references: {
+                    model: District,
+                    key: 'district_id',
+                },
+                allowNull: false
+            },
+            chamber_id:{
+                type:DataTypes.INTEGER,
+                references: {
+                    model: Chamber,
+                    key:'chamber_id'
+                },
+                allowNull:false
+            },
+            total_population: DataTypes.INTEGER,
+            male_population: DataTypes.INTEGER,
+            female_population: DataTypes.INTEGER,
+            median_age: DataTypes.INTEGER,
+            median_male_age: DataTypes.INTEGER,
+            median_female_age: DataTypes.INTEGER,
+            under_18_population: DataTypes.INTEGER, 
+            white_population:  DataTypes.INTEGER,
+            black_population: DataTypes.INTEGER,
+            native_american_population:DataTypes.INTEGER,
+            asian_population: DataTypes.INTEGER,
+            pacific_islander_population: DataTypes.INTEGER,
+            latino_population: DataTypes.INTEGER,
+            citizen_population: DataTypes.INTEGER,
+            non_citizen_population: DataTypes.INTEGER,
+            married_population: DataTypes.INTEGER,
+            never_married_population: DataTypes.INTEGER,
+            separated_marriage_population: DataTypes.INTEGER,
+            divorced_population: DataTypes.INTEGER,
+            median_income: DataTypes.INTEGER,
+            other_race_population: DataTypes.INTEGER
+    
+        })
+        CensusData.belongsTo(District, {
+            foreignKey:'district_id'
+        })
+    
+        // for now, just build it
+        for(let name in sequelize.models) {
+            console.log("Handling",name);
+            const m = sequelize.models[name];
+            await m.sync();
         }
-    });
-    Candidate.hasMany(Candidacy, {
-        foreignKey: 'candidate_id'
-    });
-    Candidacy.belongsTo(Candidate, {
-        foreignKey: 'candidate_id'
-    });
-
-    Election.hasMany(Candidacy, {
-        foreignKey: 'election_id'
-    });
-    Candidacy.belongsTo(Election, {
-        foreignKey: 'election_id'
-    });
-
-    const CampaignFinance = sequelize.define('CampaignFinance', {
-        candidacy_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            references: {
-              model:Candidacy,
-              key: 'candidacy_id'
-            }
-        },
-        contributions: DataTypes.DECIMAL(10,2),
-        expenditures: DataTypes.DECIMAL(10,2)
-    });
-    Candidacy.hasOne(CampaignFinance, {
-        foreignKey: 'candidacy_id'
-    });
-    CampaignFinance.belongsTo(Candidacy, {
-        foreignKey: 'candidacy_id'
-    });
-
-    const candidate_search_query = `
-      Create or replace View "CandidateSearch" as
-      Select
-      c.candidacy_id,
-      c.candidate_id,
-      Lower(cd.first_name) as first_name,
-      Lower(cd.middle_name) as middle_name,
-      Lower(cd.last_name) as last_name,
-      cd.party,
-      s.name as state_name,
-      d.number as district,
-      ch.level as chamber_level,
-      e.year,
-      e.type as election_type
-      from "Candidacies" c
-      left join "Candidates" cd
-      on cd.candidate_id = c.candidate_id
-      left join "Elections" e
-      on e.election_id = c.election_id
-      left join "Offices" o
-      on e.office_id = o.office_id
-      left join "Districts" d
-      on d.district_id = o.district_id
-      left Join "Chambers" ch
-      on ch.chamber_id = d.chamber_id
-      left Join "States" s
-      on s.state_id = ch.state_id
-    `;
-    const cs = await sequelize.query(candidate_search_query);
-
-    const CandidateSearch = sequelize.define('CandidateSearch', {
-      candidacy_id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true
-        },
-        candidate_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Candidate,
-                key: 'candidate_id'
-            }
-        },
-        first_name: DataTypes.STRING,
-        middle_name: DataTypes.STRING,
-        last_name: DataTypes.STRING,
-        party: DataTypes.STRING,
-        state_name: DataTypes.STRING,
-        district: DataTypes.INTEGER,
-        chamber_level:DataTypes.INTEGER,
-        year:DataTypes.INTEGER,
-        election_type:DataTypes.STRING
-        }, {
-            tableName: 'CandidateSearch',
-            timestamps:false
-    });
-
-    const CensusData = sequelize.define('CensusData', {
-        census_id: {
-            type: DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement: true
-        },
-        acs_vintage: {
-            type:DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull:false
-        },
-        acs_source_path: {
-            type:DataTypes.JSONB,
-            primaryKey: true,
-            allowNull: false
-        },
-        district_id:{
-            type:DataTypes.INTEGER,
-            references: {
-                model: District,
-                key: 'district_id',
-            },
-            allowNull: false
-        },
-        chamber_id:{
-            type:DataTypes.INTEGER,
-            references: {
-                model: Chamber,
-                key:'chamber_id'
-            },
-            allowNull:false
-        },
-        total_population: DataTypes.INTEGER,
-        male_population: DataTypes.INTEGER,
-        female_population: DataTypes.INTEGER,
-        median_age: DataTypes.INTEGER,
-        median_male_age: DataTypes.INTEGER,
-        median_female_age: DataTypes.INTEGER,
-        under_18_population: DataTypes.INTEGER, 
-        white_population:  DataTypes.INTEGER,
-        black_population: DataTypes.INTEGER,
-        native_american_population:DataTypes.INTEGER,
-        asian_population: DataTypes.INTEGER,
-        pacific_islander_population: DataTypes.INTEGER,
-        latino_population: DataTypes.INTEGER,
-        citizen_population: DataTypes.INTEGER,
-        non_citizen_population: DataTypes.INTEGER,
-        married_population: DataTypes.INTEGER,
-        never_married_population: DataTypes.INTEGER,
-        separated_marriage_population: DataTypes.INTEGER,
-        divorced_population: DataTypes.INTEGER,
-        median_income: DataTypes.INTEGER,
-        other_race_population: DataTypes.INTEGER
-
-    })
-    CensusData.belongsTo(District, {
-        foreignKey:'district_id'
-    })
-
-    // for now, just build it
-    for(let name in sequelize.models) {
-        console.log("Handling",name);
-        const m = sequelize.models[name];
-        await m.sync();
+    
+        console.log("Tables synchronized");
+    
+        
+    
+        return {
+            State,
+            Chamber,
+            District,
+            Office,
+            Election,
+            Candidate,
+            Candidacy,
+            CampaignFinance,
+            CandidateSearch,
+            CensusData
+        };
+    } catch(e){
+        console.log('Failed to synchronize due to:', e)
     }
-
-    console.log("Tables synchronized");
-
-    return {
-        State,
-        Chamber,
-        District,
-        Office,
-        Election,
-        Candidate,
-        Candidacy,
-        CampaignFinance,
-        CandidateSearch,
-        CensusData
-    };
+   
 }
 
 // function getState(state) {
