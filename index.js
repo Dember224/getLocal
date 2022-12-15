@@ -139,7 +139,5 @@ module.exports = (async () => {
       });
         }
   }
-  console.log(elements)
-  print(elements, 40)
-    return await elements;
+    return elements;
 })();

@@ -9,6 +9,7 @@ function CensusDataLoader(models){
     this.State = models.State;
     this.Chamber = models.Chamber;
     this.CensusData = models.CensusData;
+    this.sequelize = models.sequelize;
 }
 
 function chamberParser(value){
@@ -78,7 +79,7 @@ CensusDataLoader.prototype.loadCensusData = async function(results){
 
         const district_id = district_obj.district_id;
 
-        await this.CensusData.findOrCreate({
+        const census_obj = await this.CensusData.findOrCreate({
             where: {
                 chamber_id: district_obj.chamber_id,
                 female_population,
@@ -110,6 +111,7 @@ CensusDataLoader.prototype.loadCensusData = async function(results){
 
         
     }
+    return;
     
 };
 

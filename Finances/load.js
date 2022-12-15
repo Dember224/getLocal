@@ -34,7 +34,7 @@ function print(data, max_length) {
           return value.padEnd(length).slice(0,length);
       });
 
-      console.log(cols.join(' | '));
+      // console.log(cols.join(' | '));
   });
 }
 
@@ -61,130 +61,138 @@ function ProcessLevel(office){
   }
 }
 
-CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_array) {
-  const state_name = finance_array[0].state.toLowerCase();
+CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_array, final) {
+  try{
+    const state_name = finance_array[0].state.toLowerCase();
 
-  const noMatch = [];
-
-  for(const finance_object of finance_array) {
-    const candidate_full_name = finance_object.name;
-    let party = `${finance_object.party}`
-    party = party.toLowerCase()  == 'democrat' ? 'democratic' : party.toLowerCase() ;
-
-    const parsedName = parseFullName(candidate_full_name);
-
-    const election_date = new Date(finance_object.election_year);
-    const election_year = finance_object.year ?? election_date.getFullYear();
-
-    const first_name = parsedName.first.toLowerCase();
-    const last_name = parsedName.last.toLowerCase();
-
-    let level = ProcessLevel(finance_object.office)
-    const where = {
-      first_name:parsedName.first.toLowerCase(),
-      last_name:parsedName.last.toLowerCase(),
-      // party:party,
-      state_name,
-      district:finance_object.district ? finance_object.district : null,
-      chamber_level:level,
-      year: election_year,
-      election_type: finance_object.election_type.toLowerCase()
-    };
-
-    const state = await this.State.findOne({
-      where: {
-        name: state_name
-      }
-    });
-    if(!state) throw new Error('invalid state: '+state_name);
-    const chamber = await this.Chamber.findOne({
-      where: {
-        state_id: state.state_id,
-        level
-      }
-    });
-    if(!chamber) throw new Error('invalid chamber: '+level);
-    const district = await this.District.findOne({
-      where: {
-        chamber_id: chamber.chamber_id,
-        number: where.district
-      }
-    });
-     if(!district)  continue //throw new Error('invalid district'); Just skip it if we can't find the district for now. 
-    const office = await this.Office.findOne({
-      where: {
-        district_id: district.district_id
-      }
-    });
-    if(!office) throw new Error('invalid office');
-    const election = await this.Election.findOne({
-      where: {
-        office_id: office.office_id,
-        year: election_year
-      }
-    });
-
-    // sequelize.where(sequelize.fn('LOWER', sequelize.col('firstname')), 'LIKE', '%' + search.toLowerCase() + '%')
-
-    const candidates = await this.Candidate.findAll({
-      where: {
-        first_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('first_name')), Op.eq, first_name.toLowerCase()),
-        last_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('last_name')), Op.eq, last_name.toLowerCase())
-      }
-    });
-    if(!candidates.length) {
-      console.log('no candidates found for: ',parsedName, candidates);
-      noMatch.push({...finance_object, first_name, last_name});
-    } else {
-      const candidacies = await this.Candidacy.findAll({
+    const noMatch = [];
+  
+    for(const finance_object of finance_array) {
+      const candidate_full_name = finance_object.name;
+      let party = `${finance_object.party}`
+      party = party.toLowerCase()  == 'democrat' ? 'democratic' : party.toLowerCase() ;
+  
+      const parsedName = parseFullName(candidate_full_name);
+  
+      const election_date = new Date(finance_object.election_year);
+      const election_year = finance_object.year ?? election_date.getFullYear();
+  
+      const first_name = parsedName.first.toLowerCase();
+      const last_name = parsedName.last.toLowerCase();
+  
+      let level = ProcessLevel(finance_object.office)
+      const where = {
+        first_name:parsedName.first.toLowerCase(),
+        last_name:parsedName.last.toLowerCase(),
+        // party:party,
+        state_name,
+        district:finance_object.district ? finance_object.district : null,
+        chamber_level:level,
+        year: election_year,
+        election_type: finance_object.election_type.toLowerCase()
+      };
+  
+      const state = await this.State.findOne({
         where: {
-          election_id: election.election_id,
-          candidate_id: {
-            [Op.in]: candidates.map(x=>x.candidate_id)
-          }
+          name: state_name
         }
       });
-
-      let [candidacy] = [...candidacies].sort((a,b) => {
-        if(a.election_type == 'general') return -1;
-        if(b.election_type == 'general') return 1;
-        
-        return -1;
+      if(!state) throw new Error('invalid state: '+state_name);
+      const chamber = await this.Chamber.findOne({
+        where: {
+          state_id: state.state_id,
+          level
+        }
       });
-
-      if(candidacy) {
-        console.log('found it!', candidacy);
-        const contributions = finance_object.contributions ?? null;
-        const expenditures = finance_object.expenditures ?? null;
-
-        const finance = await this.CampaignFinance.findOrCreate({
+      if(!chamber) throw new Error('invalid chamber: '+level);
+      const district = await this.District.findOne({
+        where: {
+          chamber_id: chamber.chamber_id,
+          number: where.district
+        }
+      });
+       if(!district) throw new Error('invalid district'); //Just skip it if we can't find the district for now. 
+      const office = await this.Office.findOne({
+        where: {
+          district_id: district.district_id
+        }
+      });
+      if(!office) throw new Error('invalid office');
+      const election = await this.Election.findOne({
+        where: {
+          office_id: office.office_id,
+          year: election_year
+        }
+      });
+  
+      // sequelize.where(sequelize.fn('LOWER', sequelize.col('firstname')), 'LIKE', '%' + search.toLowerCase() + '%')
+  
+      const candidates = await this.Candidate.findAll({
+        where: {
+          first_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('first_name')), Op.eq, first_name.toLowerCase()),
+          last_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('last_name')), Op.eq, last_name.toLowerCase())
+        }
+      });
+      if(!candidates.length) {
+        console.log('no candidates found for: ',parsedName, candidates);
+        noMatch.push({...finance_object, first_name, last_name});
+      } else {
+        const candidacies = await this.Candidacy.findAll({
           where: {
-            candidacy_id: candidacy.candidacy_id,
-          },
-          defaults:{
-            contributions: contributions,
-            expenditures:expenditures
-          }
-        }); //updating campaign finance data if it exists.
-        
-        if(finance.candidacy_id){
-          await this.CampaignFinance.update({
-            expenditures: expenditures,
-            contributions: contributions
-          }, 
-          {
-            where: {
-              candidacy_id: finance.candidacy_id
+            election_id: election.election_id,
+            candidate_id: {
+              [Op.in]: candidates.map(x=>x.candidate_id)
             }
-          })
+          }
+        });
+  
+        let [candidacy] = [...candidacies].sort((a,b) => {
+          if(a.election_type == 'general') return -1;
+          if(b.election_type == 'general') return 1;
+          
+          return -1;
+        });
+  
+        if(candidacy) {
+          console.log('found it!', candidacy);
+          const contributions = finance_object.contributions ?? null;
+          const expenditures = finance_object.expenditures ?? null;
+  
+          const finance = await this.CampaignFinance.findOrCreate({
+            where: {
+              candidacy_id: candidacy.candidacy_id,
+            },
+            defaults:{
+              contributions: contributions,
+              expenditures:expenditures
+            }
+          }); //updating campaign finance data if it exists.
+          
+          if(finance.candidacy_id){
+            await this.CampaignFinance.update({
+              expenditures: expenditures,
+              contributions: contributions
+            }, 
+            {
+              where: {
+                candidacy_id: finance.candidacy_id
+              }
+            })
+          }
+          
         }
-        
       }
+  
+  
     }
-
+    console.log(final, 'is this finished?');
+    return;
+  
+  } catch(e){
+    console.log('Error in the finance load file', e)
   }
 
-  print(noMatch);
+
 }
 
 module.exports = CampaignFinanceLoader
