@@ -290,6 +290,7 @@ async function getModels() {
             middle_name: DataTypes.STRING,
             last_name: DataTypes.STRING,
             party: DataTypes.STRING,
+            gender_approximation: DataTypes.STRING,
             state_id: {
                 type: DataTypes.INTEGER,
                 references: {
