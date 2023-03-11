@@ -27,6 +27,7 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
     try{
         for(const election of results) {
             // console.log("Looking up",election.state,election.chamber);
+            console.log('lets see the election object,', election)
             const stateName = election.state
             const state = await this.State.findOne({
                 where: {
@@ -60,8 +61,8 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
             const {year, general_date} = election;
             if(!general_date) {
                 console.log(JSON.stringify(election, null, 2));
-                // return;
-                throw new Error('General Date Missing');
+                continue;
+                // throw new Error('General Date Missing');
             }
             const [generalElection] = await this.Election.findOrCreate({
                 where: {
@@ -160,7 +161,7 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
 
     
         }
-        return;
+       
          
 
     } catch(e){

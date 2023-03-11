@@ -29,6 +29,7 @@ async function loadElectionResults(storage, final) {
     const lower = await elections.getStateElectionHistoryForLevel({state,level:'lower'});
 
     const all = [];
+    
     upper.concat(lower).forEach(x => x.forEach(y => all.push(y)));
     // console.log(JSON.stringify(all,null,2));
 
@@ -92,7 +93,7 @@ async function loadCensusData(storage){
 }
 
 
-async function loader(final) {
+async function loader() {
   try {
     const isLoadTypeElections = await loadType == 'elections';
     const isLoadTypeFinance = await loadType == 'finance';
@@ -114,7 +115,7 @@ async function loader(final) {
       if (state_split.length == 2){
         state = `${state_split[0]}_${state_split[1]}`
       }
-      await loadFinanceResults(storage.models, final);
+      await loadFinanceResults(storage.models);
       
       return;
       } else if (isLoadTypeCensus){

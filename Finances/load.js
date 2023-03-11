@@ -61,7 +61,7 @@ function ProcessLevel(office){
   }
 }
 
-CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_array, final) {
+CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_array) {
   try{
     const state_name = finance_array[0].state.toLowerCase();
 
@@ -111,7 +111,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
           number: where.district
         }
       });
-       if(!district) throw new Error('invalid district'); //Just skip it if we can't find the district for now. 
+       if(!district)  continue//throw new Error('invalid district'); //Just skip it if we can't find the district for now. 
       const office = await this.Office.findOne({
         where: {
           district_id: district.district_id
@@ -137,6 +137,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         console.log('no candidates found for: ',parsedName, candidates);
         noMatch.push({...finance_object, first_name, last_name});
       } else {
+        if(!election) continue; //skip it if we've been feed a null object
         const candidacies = await this.Candidacy.findAll({
           where: {
             election_id: election.election_id,
@@ -185,8 +186,7 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
   
   
     }
-    console.log(final, 'is this finished?');
-    return;
+
   
   } catch(e){
     console.log('Error in the finance load file', e)

@@ -449,7 +449,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
                 // console.log('Processing scroll-container');
     
-                if(current[section]) throw new Error('Found second section with '+section); //just skip it if you get a secondr resul
+                if(current[section]) return //  throw new Error('Found second section with '+section); //just skip it if you get a secondr resul
     
                 const table = el.find('div.results_table_container table.results_table');
                 if(!table.length) throw new Error('Failed to find results table');
