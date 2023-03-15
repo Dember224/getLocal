@@ -43,12 +43,12 @@ const getFinanceData = async function(callData){
 
 }
 
-async function check_stuff(){
-   const data = await getFinanceData({year:2022})
-   console.log(data.filter(x=>x.contributions != 0))
-}
+// async function check_stuff(){
+//    const data = await getFinanceData({year:2022})
+//    console.log(data.filter(x=>x.contributions != 0))
+// }
 
-check_stuff()
+// check_stuff()
 module.exports = {
     getFinanceData
 }
