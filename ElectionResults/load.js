@@ -27,7 +27,6 @@ ElectionResultsLoader.prototype.loadElectionResults = async function(results) {
     try{
         for(const election of results) {
             // console.log("Looking up",election.state,election.chamber);
-            console.log('lets see the election object,', election)
             const stateName = election.state
             const state = await this.State.findOne({
                 where: {
