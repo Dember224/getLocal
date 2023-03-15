@@ -97,6 +97,7 @@ function getCandidatesInformation(td,$) {
         const won = (checkMark.length > 0) && checkMark.attr('alt').trim() == 'Green check mark transparent.png';
         const name = x.find('a').text().trim();
         const incumbent = x.text().trim().slice(-3) == '(i)';
+        console.log(won, name, incumbent)
 
         return {
             won,
@@ -356,7 +357,6 @@ async function getStateDistrictElectionHistory({state,level,district}) {
         district = checkDistrict(district);
         state = state.toLowerCase();
         level = checkLevel(level);
-    
         const districtList = await getStateDistrictList({state,level});
         const match = districtList.find(x => x.state == state && x.district == district);
         if(!match) throw new Error(`Invalid state/distrct: ${state}/${district}`);
@@ -376,14 +376,14 @@ async function getStateDistrictElectionHistory({state,level,district}) {
     
         let elements = $('#Elections, div.electionsectionheading, div.votebox-scroll-container, span.mw-headline, p')
             .toArray();
-    
-        const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
+
+            const electionsIndex = elements.findIndex(x => $(x).attr('id') == 'Elections');
         if(electionsIndex == -1) throw new Error('Failed to find Elections section');
         elements = elements.slice(electionsIndex+1);
     
         let elections = [];
         let current, section;
-        elements.forEach(el => {
+        for(let el of elements) {
             el = $(el);
             const id = el.attr('id');
             if(el.hasClass('mw-headline')) {
@@ -396,7 +396,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                     };
                     section = null;
                     elections.push(current);
-                    return;
+                    continue;
                 }
     
                 if(id == 'Special_election' || id=='Special') {
@@ -407,7 +407,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                     };
                     section = null;
                     elections.push(current);
-                    return;
+                    continue;
                 }
     
                 // if a special election happens the same year as a general,
@@ -420,14 +420,14 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                     };
                     section = null;
                     elections.push(current);
-                    return;
+                    continue;
                 }
             }
     
             // if no current, we haven't started yet
             if(!current) {
                 console.log('No Current, skipping');
-                return;
+                continue;
             }
     
             if(el[0].tagName == 'div' && el.hasClass('electionsectionheading')) {
@@ -444,12 +444,18 @@ async function getStateDistrictElectionHistory({state,level,district}) {
                 else if(title.includes('libertarian')) section = 'libertarian_primary';
                 else if(title.includes('constitution')) section = 'constitution_primary';
                 else if(title.includes('nonpartisan')) section = 'nonpartisan_primary';
+                else if(title.includes('conservative')) section = 'republican_primary'; //new york is a special flower with extra special names for democrat and republican
+                else if(title.includes('working families')) section = 'democratic_primary';
+                else if(title.includes('independence')) section = 'independence_primary';
+                else if(title.includes('serve')) section = 'serve_america_primary';
+                else if(title.includes('reform')) section = 'reform_primary';
+                else if(title.includes('women')) section = 'womens_equality_primary';
     
                 else throw new Error(`Failed to match title '${title}'`);
             } else if(el[0].tagName == 'div' && el.hasClass('votebox-scroll-container')) {
                 // console.log('Processing scroll-container');
     
-                if(current[section]) return //  throw new Error('Found second section with '+section); //just skip it if you get a secondr resul
+                if(current[section]) continue; //  throw new Error('Found second section with '+section); //just skip it if you get a secondr resul
     
                 const table = el.find('div.results_table_container table.results_table');
                 if(!table.length) throw new Error('Failed to find results table');
@@ -522,7 +528,7 @@ async function getStateDistrictElectionHistory({state,level,district}) {
             } else {
                 // console.log('ignoring element:',el.attr('class'),el.text().trim().slice(0,100));
             }
-        });
+        };
     
         // currently only handling the most recent type of results table
         // it looks like the data was previously in a different format (before 2018?)
@@ -538,11 +544,12 @@ async function getStateDistrictElectionHistory({state,level,district}) {
 
 async function getStateElectionHistoryForLevel({state,level}) {
     const list = await getStateDistrictList({state,level});
-    const all = [];
+    let all = [];
     for(let i in list) {
         const parts = await getStateDistrictElectionHistory(list[i]);
         all.push(parts);
     }
+
     return all;
 }
 
