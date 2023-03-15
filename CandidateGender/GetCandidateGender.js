@@ -67,7 +67,7 @@ async function checkCandidateGender(){
     try{
         const storage = await getStorage();
         const loader = new GenderApproximationLoader(storage.models);
-        await loader.loadGenerApproximations(3510, 4264)
+        await loader.loadGenerApproximations(4264, 5064)
 
 
     }catch(e){
