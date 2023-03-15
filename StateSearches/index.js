@@ -8,6 +8,7 @@ const arizona = require('./Arizona');
 const georgia = require('./Georgia');
 const pennsylvania = require('./Pennsylvania');
 const arkansas = require('./Arkansas')
+const new_york = require('./NewYork');
 
 module.exports ={
   virginia,
@@ -19,5 +20,6 @@ module.exports ={
   arizona,
   georgia,
   pennsylvania,
-  arkansas
+  arkansas,
+  new_york
 }

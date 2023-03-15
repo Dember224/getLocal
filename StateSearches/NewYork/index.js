@@ -1,5 +1,7 @@
 const request = require('request');
 const async = require('async');
+const axios = require('axios');
+
 
 function getOfficeNumber(office_name){
   if(office_name.includes('Senate')){
@@ -93,7 +95,7 @@ const getCandidateList = function(callData, callback){
       lstCounty: '',
       lstMunicipality:'',
       lstStatus: 'All',
-      lstFilerType: 'Committee',
+      lstFilerType: 'Candidate',
       lstOffice: '- Select -',
       lstDistrict: '- Select -',
       lstDateType: 'All',
@@ -106,21 +108,19 @@ const getCandidateList = function(callData, callback){
   }, (e,r,b)=>{
     if(e) return e;
     const name_array = b.aaData.map(x=>{
-      if(x[3]=='State'){
-        console.log(x)
-      }
       const return_object = {
         id:x[5],
         name:x[6],
-        district:x[7]
+        district:x[8],
       }
       return return_object
     })
+
     return callback(null, name_array)
   })
 }
 
-const combineCandidateAndMoney = function(callData){
+const combineCandidateAndMoney = function(callData, callback){
   async.autoInject({
     getMoney:(cb)=>{
       requestMoneyData({office:callData.office, start_date: callData.start_date, end_date: callData.end_date}, (e,r)=>{
@@ -138,7 +138,7 @@ const combineCandidateAndMoney = function(callData){
             }
           })
           const election_type = callData.election_type
-          if(this_candidate){
+          if(this_candidate){ 
             const return_object = {
               name: this_candidate.name,
               district: this_candidate.district,
@@ -150,7 +150,8 @@ const combineCandidateAndMoney = function(callData){
               asOf:x.asOf,
               year: x.year,
               name_year: this_candidate.name + x.year + election_type,
-              election_type: callData.election_type
+              election_type: callData.election_type,
+              id: this_candidate.id
             }
             return return_object
           } else{
@@ -164,19 +165,79 @@ const combineCandidateAndMoney = function(callData){
   }, (e,r)=>{
     if(e) return e;
     const filtered_list = r.getCandidates.filter(x=>{
-      if(x && x.contributions != 0){
+      if(x && x.contributions != 0 && x.name != ''){
         return x
       }
     })
-    console.log(filtered_list) //pass to callback when finished
+    return callback(null, filtered_list) //pass to callback when finished
   })
 }
 
 //have to get list of committees then assign a candidate name to that committee. Most NY candidates have their cash bound in committees rather than directly to the candidate.
 
-combineCandidateAndMoney({office:'Member of Assembly', start_date:'01/01/2022', end_date:'12/31/2022', election_type:'primary'})
+// combineCandidateAndMoney({office:'State Senate', start_date:'01/01/2022', end_date:'12/31/2022', election_type:'general'})
 
 // getCandidateList({}, (e,r)=>{if(e) return e; console.log(r)})
 
 // requestMoneyData({office:'Member of Assembly', start_date:'01/01/2020', end_date:'12/31/2020'}, (e,r)=>{if(e) return e; console.log(r)}) //Assembly must be 'Member of Assembly'
 //need to find a way to get candidate party. 
+
+const getFinancesAllLevels = function(callData, callback){
+  const start_date = `01/01/${callData.year}`;
+  const end_date = `12/31/${callData.year}`;
+  combineCandidateAndMoney({office:'State Senate', start_date, end_date, election_type:callData.election_type}, (e, senate_money)=>{
+    if(e) return e; 
+    combineCandidateAndMoney({office:'Member of Assembly', start_date, end_date, election_type:callData.election_type}, (e, assembly_money)=>{
+      if(e) return e;
+      const finance_object = [];
+      senate_money.map(x=>{
+        finance_object.push(x);
+      })
+      assembly_money.map(x=>{
+        finance_object.push(x)
+      })
+      // finance_object.map(x=>console.log(x))
+      return callback(null, finance_object)
+
+    })
+  })
+}
+
+async function searchNames(filer_id){
+  const results = await axios.post('https://publicreporting.elections.ny.gov/ActiveDeactiveFiler/GetSearchListOfFilersCandidateData', {
+    strFilerID: filer_id
+  });
+
+  candidate_name_array = results.data.aaData[0] ?  results.data.aaData[0]: null;
+
+  return candidate_name_array;
+  
+}
+
+const getFinanceData = function(callData, callback){
+  getFinancesAllLevels(callData, async (e, finance_array)=>{
+    if(e) return e; 
+    return_array = [];
+    for(let index in finance_array){
+      const finance_object = finance_array[index];
+      const candidate_name_array = await searchNames(finance_object.id)
+      if(candidate_name_array){
+        finance_object.name = candidate_name_array[3];
+        finance_object.district = candidate_name_array[6];
+      }
+      
+      return_array.push(finance_object)
+    }
+
+    return callback(null, return_array);
+  })
+}
+
+// getFinanceData({year:2022, election_type:'general'}, (e,r)=>{
+//   if(e) return e;
+//   console.log('return array called', r)
+// });
+
+module.exports = {
+  getFinanceData
+}
