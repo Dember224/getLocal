@@ -56,6 +56,7 @@ const callData = {
 async function loadFinanceResults(storage, final){
   try{
     console.log('Finance results called')
+    state = state.replace(' ', '_');
     result = stateSearches[state]['getFinanceData'](callData, async (e,r)=>{
       if(e){
         throw new Error("Error retrieving finance results message: "+ e)
