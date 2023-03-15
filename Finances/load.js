@@ -50,6 +50,10 @@ function CampaignFinanceLoader(models){
   this.CandidateSearch = models.CandidateSearch;
 }
 
+async function searchDistrictByName(){
+
+}
+
 function ProcessLevel(office){
   let level = office.toLowerCase();
   if(level.includes('house') || level.includes('lower') || level.includes('rep') || level.includes('assembly')) {
@@ -105,13 +109,36 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         }
       });
       if(!chamber) throw new Error('invalid chamber: '+level);
-      const district = await this.District.findOne({
+      let district = await this.District.findOne({
         where: {
           chamber_id: chamber.chamber_id,
           number: where.district
         }
       });
-       if(!district)  continue//throw new Error('invalid district'); //Just skip it if we can't find the district for now. 
+       if(!district){
+        const cs = await this.CandidateSearch.findOne({
+          where:{
+            first_name: parsedName.first.toLowerCase().trim(),
+            last_name: parsedName.last.toLowerCase().trim(),
+            year: finance_object.year,
+            state_name: finance_object.state
+          }
+        }) //if the finance lookup couldn't find a district number. Look up the district from the Candidate Search view using names, state, and year.
+        if(!cs)continue;
+        const district_number = cs.district;
+        const chamber_id = chamber.chamber_id;
+
+        district = await this.District.findOne({
+          where:{
+            number: district_number,
+            chamber_id: chamber_id
+          }
+        })
+
+
+         //throw new Error('invalid district');
+       }   //Just skip it if we can't find the district for now. 
+
       const office = await this.Office.findOne({
         where: {
           district_id: district.district_id
