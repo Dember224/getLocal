@@ -62,7 +62,6 @@ const getFinanceData = async function(callData){
     sen_money.map(money_obj=>{
         total_money.push(money_obj)
     })
-    total_money.map(x=>console.log(x))
     return total_money;
 
 
