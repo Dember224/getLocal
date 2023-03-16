@@ -48,6 +48,10 @@ app.get('/donations/:first_name/:last_name', async(req, res)=>{
 // app.get('/profile', (req, res,next)=>{
 //   res.send()
 // })
+
+app.use((err, req, res, next) =>{
+  return res.send(err.stack)
+})
 app.listen(port, () =>{
   console.log(`API is live, port: ${port}`);
 })
