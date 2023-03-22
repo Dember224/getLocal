@@ -60,7 +60,6 @@ inner join "Candidacies" cc
 on cc.candidacy_id = cs.candidacy_id
 and cc.votes is not null
 
-limit 150
 
 ),
 sample_average as (
@@ -106,12 +105,34 @@ stddev(g.median_income) as median_income_sd
 
 from general_sample g
 
+) 
+, winning_candidates as (
+	
+Select max(c.votes) as winning_vote_total,
+e.election_id
+	
+from general_sample g
+	
+inner join "Candidacies" c
+on g.candidacy_id = c.candidacy_id
+	
+inner join "Elections" e 
+on c.election_id = e.election_id
+	
+group by e.election_id
+	
+
 )
 
 Select 
 
 g.candidacy_id,
-(g.votes - a.vote_mean)/d.vote_sd as votes,
+case
+when c.votes = w.winning_vote_total
+then 0
+else 1
+end as labels,
+((g.votes - a.vote_mean)/d.vote_sd)/((g.total_population - a.population_mean)/d.population_sd) as vote_pop_proportion,
 (g.contributions - a.contribution_mean)/d.contribution_sd as contributions, 
 (g.expenditures - a.expenditure_mean)/d.expenditure_sd as expenditures,
 (g.gender - a.gender_mean)/d.gender_sd as gender,
@@ -133,3 +154,10 @@ on 1=1
 
 inner join sample_standard_d d
 on 1=1
+
+inner join "Candidacies" c
+on c.candidacy_id = g.candidacy_id
+
+inner join winning_candidates w
+on w.election_id = c.election_id
+
