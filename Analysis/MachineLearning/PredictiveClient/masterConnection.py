@@ -30,10 +30,30 @@ class DataAccessClient(object):
         results = cursor.fetchall()
         self.close_connection()
         return results
+        
+    def standardize_results(self,data_list):
+        sample_list = []
+        label_list = []
+        campaign_list = []
+        for tuple in data_list:
+            as_list = list(tuple)
+            sample = as_list[2:]
+            labels = as_list[1]
+            campaign = as_list[0]
+            sample_list.append(sample)
+            label_list.append(labels)
+            campaign_list.append(campaign)
 
+        return_dict = {
+            "SampleList": sample_list,
+            "labelList":label_list,
+            "CampaignList": campaign_list
+        }
+        return return_dict
     def execute_query(self, query_path):
         query = self.return_query_text(query_path=query_path)
-        return self.execute(query)
+        results = self.standardize_results(data_list=self.execute(query))
+        return results
 
 
 client = DataAccessClient()
