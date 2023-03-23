@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import math
 
 DATABASE = os.environ['DATABASE']
 USER = os.environ['PG_USER']
@@ -46,8 +47,10 @@ class DataAccessClient(object):
 
         return_dict = {
             "SampleList": sample_list,
-            "labelList":label_list,
-            "CampaignList": campaign_list
+            "LabelList":label_list,
+            "CampaignList": campaign_list,
+            "N": len(sample_list),
+            "K":math.sqrt(len(sample_list))
         }
         return return_dict
     def execute_query(self, query_path):
@@ -56,6 +59,6 @@ class DataAccessClient(object):
         return results
 
 
-client = DataAccessClient()
+# client = DataAccessClient()
 
-print(client.execute_query('../SQLQueries/KNearestNeighbors/ZScoreNormalizedSample.sql'))
+# print(client.execute_query('../SQLQueries/KNearestNeighbors/ZScoreNormalizedSample.sql'))
