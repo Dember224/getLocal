@@ -10,7 +10,7 @@ PORT = os.environ['PG_PORT']
 class DataAccessClient(object):
 
     def __init__(self):
-        self.connection = psycopg2.connect(database=DATABASE, user=USER, password=PASSWORD, host=PORT)
+        self.connection = psycopg2.connect(database=DATABASE, user=USER, password=PASSWORD, host=URL, port=PORT)
 
     def cursor(self):
         return self.connection.cursor()
@@ -36,3 +36,6 @@ class DataAccessClient(object):
         return self.execute(query)
 
 
+client = DataAccessClient()
+
+print(client.execute_query('../SQLQueries/KNearestNeighbors/ZScoreNormalizedSample.sql'))
