@@ -132,12 +132,9 @@ when c.votes = w.winning_vote_total
 then 0
 else 1
 end as labels,
-((g.votes - a.vote_mean)/d.vote_sd)/((g.total_population - a.population_mean)/d.population_sd) as vote_pop_proportion,
+((g.votes - a.vote_mean)/d.vote_sd)/((g.total_population - a.population_mean)/d.population_sd) as votes,
 (g.contributions - a.contribution_mean)/d.contribution_sd as contributions, 
 (g.expenditures - a.expenditure_mean)/d.expenditure_sd as expenditures,
-(g.gender - a.gender_mean)/d.gender_sd as gender,
-(g.male_population - a.m_population_mean)/ d.m_population_sd as male_population,
-(g.female_population - a.f_population_mean)/d.f_population_sd as female_population,
 (g.white_population - a.white_population_mean)/ d.white_population_sd as white_population,
 (g.black_population - a.black_population_mean)/d.black_population_sd as black_population,
 (g.latino_population - a.latino_population_mean)/ d.latino_population_sd as latino_population,

@@ -136,12 +136,10 @@ end as labels,
 (g.contributions - a.contribution_mean)/d.contribution_sd as contributions, 
 (g.expenditures - a.expenditure_mean)/d.expenditure_sd as expenditures,
 (g.gender - a.gender_mean)/d.gender_sd as gender,
+(g.total_population - a.population_mean)/d.population_sd as total_population,
 (g.male_population - a.m_population_mean)/ d.m_population_sd as male_population,
 (g.female_population - a.f_population_mean)/d.f_population_sd as female_population,
-(g.white_population - a.white_population_mean)/ d.white_population_sd as white_population,
-(g.black_population - a.black_population_mean)/d.black_population_sd as black_population,
-(g.latino_population - a.latino_population_mean)/ d.latino_population_sd as latino_population,
-(g.non_citizen_population - a.non_citizen_population_mean)/d.non_citizen_population_sd as non_citizen_population,
+(g.under_18_population - a.under_18_population_mean)/d.under_18_population_sd as child_population,
 (g.median_income - a.median_income_mean) / d.median_income_sd as median_income
 
 
@@ -158,4 +156,3 @@ on c.candidacy_id = g.candidacy_id
 
 inner join winning_candidates w
 on w.election_id = c.election_id
-
