@@ -129,8 +129,8 @@ Select
 g.candidacy_id,
 case
 when c.votes = w.winning_vote_total
-then 0
-else 1
+then 1
+else 0
 end as labels,
 ((g.votes - a.vote_mean)/d.vote_sd)/((g.total_population - a.population_mean)/d.population_sd) as votes,
 (g.contributions - a.contribution_mean)/d.contribution_sd as contributions, 

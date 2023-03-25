@@ -41,7 +41,7 @@ class KNeighborsClient(object):
         coupled_dict = {}
         for i in range(len(campaigns)):
             outcome = None
-            if predictions[i] == 0:
+            if predictions[i] == 1:
                 outcome = 'W'
             else:
                 outcome = 'L'
