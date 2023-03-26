@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import math
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 
 DATABASE = os.environ['DATABASE']
 USER = os.environ['PG_USER']
@@ -57,6 +58,15 @@ class DataAccessClient(object):
         query = self.return_query_text(query_path=query_path)
         results = self.standardize_results(data_list=self.execute(query))
         return results
+
+    def check_correctness(self,labels, guesses):
+        return_dict =  {
+            "Accuracy":accuracy_score(labels, guesses),
+            "Recall": recall_score(labels, guesses),
+            "Precision": precision_score(labels, guesses),
+            "F1":f1_score(labels, guesses)
+        }
+        return return_dict
 
 
 # client = DataAccessClient()

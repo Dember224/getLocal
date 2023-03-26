@@ -1,6 +1,6 @@
 from masterConnection import DataAccessClient
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+
 import math
 
 
@@ -28,14 +28,6 @@ class KNeighborsClient(object):
         zscore_data = self.data.execute_query(self.zscore_demographic_blind)
         return zscore_data
 
-    def check_correctness(self,labels, guesses):
-        return_dict =  {
-            "Accuracy":accuracy_score(labels, guesses),
-            "Recall": recall_score(labels, guesses),
-            "Precision": precision_score(labels, guesses),
-            "F1":f1_score(labels, guesses)
-        }
-        return return_dict
 
     def coupler(self, predictions, campaigns):
         coupled_dict = {}
@@ -79,7 +71,7 @@ class KNeighborsClient(object):
             "Predictions": predictions,
             "Campaigns": test_campaigns,
             "Coupled": self.coupler(predictions, test_campaigns),
-            "Quality": self.check_correctness(test_labels,predictions)
+            "Quality": self.data.check_correctness(test_labels,predictions)
         }
         return result_dict
 
