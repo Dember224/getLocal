@@ -132,7 +132,7 @@ when c.votes = w.winning_vote_total
 then 0
 else 1
 end as labels,
-g.votes::decimal/g.total_population::decimal as votes,
+g.votes::decimal/(g.total_population::decimal) as votes,
 g.contributions as contributions, 
 g.expenditures  as expenditures,
 g.total_population  as total_population,
