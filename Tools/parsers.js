@@ -23,13 +23,15 @@ const txtParser = function(text){
 
 const csvParser = function(text){
   const row_array = text.split('\r\n');
-  const headers = row_array[0].split(',');
+  const headers = row_array[0].split(',').map(x=>{
+    return x.replace(/['"]+/g, '')
+  });
   const text_array = row_array.map(x=>{
     const text_object = {};
     const rows = x.split(',')
     rows.map((y,i)=>{
       if(i !== 0){
-        text_object[headers[i]] = y
+        text_object[headers[i]] = y.replace(/['"]+/g, '')
       }
     })
     return text_object
