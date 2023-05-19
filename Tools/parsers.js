@@ -21,6 +21,23 @@ const txtParser = function(text){
 } //parses a tab delimited txt file
 
 
+const csvParser = function(text){
+  const row_array = text.split('\r\n');
+  const headers = row_array[0].split(',');
+  const text_array = row_array.map(x=>{
+    const text_object = {};
+    const rows = x.split(',')
+    rows.map((y,i)=>{
+      if(i !== 0){
+        text_object[headers[i]] = y
+      }
+    })
+    return text_object
+  })
+  return text_array;
+}
+
+
 //office parsers
 
 const getOffice = function(office){
@@ -89,5 +106,6 @@ module.exports = {
   txtParser,
   chamberParser,
   partyParser,
-  parseExcelFileEndpoint
+  parseExcelFileEndpoint,
+  csvParser
 }
