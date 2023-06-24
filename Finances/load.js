@@ -56,7 +56,7 @@ async function searchDistrictByName(){
 
 function ProcessLevel(office){
   let level = office.toLowerCase();
-  if(level.includes('house') || level.includes('lower') || level.includes('rep') || level.includes('assembly')) {
+  if(level.includes('house') || level.includes('lower') || level.includes('rep') || level.includes('assembly') || level.includes('delegate')) {
     return 0;
   } else if(level.includes('senat') || level.includes('upper')){
     return 1;
@@ -164,7 +164,10 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
         console.log('no candidates found for: ',parsedName, candidates);
         noMatch.push({...finance_object, first_name, last_name});
       } else {
-        if(!election) continue; //skip it if we've been feed a null object
+        if(!election) {
+          console.log('Fed null on election.') 
+          continue;
+        } //skip it if we've been feed a null object
         const candidacies = await this.Candidacy.findAll({
           where: {
             election_id: election.election_id,
