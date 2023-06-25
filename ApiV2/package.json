@@ -10,11 +10,13 @@
   "author": "Antoine Washington",
   "license": "ISC",
   "dependencies": {
+    "@json2csv/node": "^7.0.1",
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "moment": "^2.29.4",
     "pg": "^8.8.0",
     "sequelize": "^6.21.6",
     "usa-state-legislatures": "^1.0.4"

@@ -6,13 +6,16 @@ const cors = require('cors')
 const analytics = require('./Analysis/retrieveData.js');
 const dataProcessors = require('./dataProcessors');
 const findDonationsPage = require('./ForeignData/findDonationPage');
+const moment = require('moment');
+
+const DataAccess = require('./dataAccessLayer.js');
 
 app.use(cors());
 // app.use('/', dataRouter.dataRouter);
 
 
 app.get('/', (req,res,next)=>{
-  res.send()
+  res.send('ping')
 })
 
 app.get('/closestStateRaces/:state/:year', (req,res)=>{
@@ -43,6 +46,23 @@ app.get('/donations/:first_name/:last_name', async(req, res)=>{
   const last_name = req.params.last_name;
   const candidate_links_object = await findDonationsPage(first_name, last_name);
   return res.send(candidate_links_object);
+})
+
+app.get('/stateCsvDownload/:state/:year',  async(req, res)=>{
+  const data = new DataAccess();
+  const year = req.params.year;
+  const state = req.params.state;
+  const csv = await data.fullStateDataCsv(state, year);
+  return res.attachment(`stateData${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(csv);
+
+})
+
+app.get('/stateJsonDownload/:state/:year', async(req, res)=>{
+  const data = new DataAccess();
+  const year = req.params.year;
+  const state = req.params.state;
+  const json = await data.fullStateData(state, year);
+  return res.json(json)
 })
 
 // app.get('/profile', (req, res,next)=>{
