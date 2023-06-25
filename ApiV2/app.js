@@ -30,39 +30,64 @@ app.get('/outspend/:state/:year', (req,res)=>{
   })
 })
 
-app.get('/suggestion/:state', async (req, res)=>{
-  const state = req.params.state
-  const race_suggestion = await dataProcessors.select_random_by_close_votes(5, state);
-  return res.send(race_suggestion);
+app.get('/suggestion/:state', async (req, res, next)=>{
+  try{
+    const state = req.params.state
+    const race_suggestion = await dataProcessors.select_random_by_close_votes(5, state);
+    return res.send(race_suggestion);
+  } catch(e) {
+    return next(e);
+  }
+  
 })
 
-app.get('/random_state_suggestion', async (req, res)=>{
-  const race_suggestion = await dataProcessors.select_random_close_votes_by_random_state(5);
-  return res.send(race_suggestion);
+app.get('/random_state_suggestion', async (req, res, next)=>{
+  try{
+    const race_suggestion = await dataProcessors.select_random_close_votes_by_random_state(5);
+    return res.send(race_suggestion);
+  } catch(e){
+    return next(e);
+  }
+  
 })
 
-app.get('/donations/:first_name/:last_name', async(req, res)=>{
-  const first_name = req.params.first_name;
-  const last_name = req.params.last_name;
-  const candidate_links_object = await findDonationsPage(first_name, last_name);
-  return res.send(candidate_links_object);
+app.get('/donations/:first_name/:last_name', async(req, res, next)=>{
+  try {
+    const first_name = req.params.first_name;
+    const last_name = req.params.last_name;
+    const candidate_links_object = await findDonationsPage(first_name, last_name);
+    return res.send(candidate_links_object);
+  } catch(e){
+    return next(e);
+  }
+  
 })
 
-app.get('/stateCsvDownload/:state/:year',  async(req, res)=>{
-  const data = new DataAccess();
-  const year = req.params.year;
-  const state = req.params.state;
-  const csv = await data.fullStateDataCsv(state, year);
-  return res.attachment(`stateData${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(csv);
+app.get('/stateCsvDownload/:state/:year',  async(req, res, next)=>{
+  try{
+    const data = new DataAccess();
+    const year = req.params.year;
+    const state = req.params.state;
+    const csv = await data.fullStateDataCsv(state, year);
+    return res.attachment(`stateData${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(csv);
 
+  } catch(e){
+    return next(e);
+  }
+  
 })
 
-app.get('/stateJsonDownload/:state/:year', async(req, res)=>{
-  const data = new DataAccess();
-  const year = req.params.year;
-  const state = req.params.state;
-  const json = await data.fullStateData(state, year);
-  return res.json(json)
+app.get('/stateJsonDownload/:state/:year', async(req, res, next)=>{
+  try{
+    const data = new DataAccess();
+    const year = req.params.year;
+    const state = req.params.state;
+    const json = await data.fullStateData(state, year);
+    return res.json(json)
+  } catch (e){
+    return next(e);
+  }
+
 })
 
 // app.get('/profile', (req, res,next)=>{
