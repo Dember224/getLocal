@@ -9,6 +9,7 @@ const findDonationsPage = require('./ForeignData/findDonationPage');
 const moment = require('moment');
 
 const DataAccess = require('./dataAccessLayer.js');
+const e = require('express');
 
 app.use(cors());
 // app.use('/', dataRouter.dataRouter);
@@ -65,11 +66,19 @@ app.get('/donations/:first_name/:last_name', async(req, res, next)=>{
 
 app.get('/stateCsvDownload/:state/:year',  async(req, res, next)=>{
   try{
-    const data = new DataAccess();
+    const data = new DataAccess(); //instantiating this a lot in this module. Not sure if better to call only once?
     const year = req.params.year;
     const state = req.params.state;
-    const csv = await data.fullStateDataCsv(state, year);
-    return res.attachment(`stateData${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(csv);
+    const data_available = await data.checkForStateData(state, year);
+
+    if(data_available){
+      const csv = await data.fullStateDataCsv(state, year);
+      return res.attachment(`stateData${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(csv);
+    } else {
+      res.status(400);
+      return res.send("The given state or year are not available. Please check the /getAvailableStates endpoint for a list of available states and years.");
+    }
+    
 
   } catch(e){
     return next(e);
@@ -82,12 +91,32 @@ app.get('/stateJsonDownload/:state/:year', async(req, res, next)=>{
     const data = new DataAccess();
     const year = req.params.year;
     const state = req.params.state;
-    const json = await data.fullStateData(state, year);
-    return res.json(json)
+
+    const data_available = await data.checkForStateData(state, year);
+
+    if(data_available){
+      const json = await data.fullStateData(state, year);
+      return res.json(json);
+    } else {
+      res.status(400);
+      return res.send("The given state or year are not available. Please check the /getAvailableStates endpoint for a list of available states and years.")
+    }
+    
   } catch (e){
     return next(e);
   }
 
+})
+
+app.get('/getAvailableStates', async(req, res, next)=>{
+  try{
+    const data = new DataAccess();
+    const states = await data.checkAvailableStates();
+    return res.json(states)
+
+  } catch(e){
+    next(e);
+  }
 })
 
 // app.get('/profile', (req, res,next)=>{

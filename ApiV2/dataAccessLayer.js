@@ -1,7 +1,10 @@
 const {Sequelize, QueryTypes} = require('sequelize');
-const fullStateQuery = require('./queries/dataByState');
 const {AsyncParser} = require('@json2csv/node');
 require('dotenv').config()
+
+//List of query imports here so the directory isn't littered with SQL
+const fullStateQuery = require('./queries/dataByState');
+const availableStateQuery = require('./queries/availableStates');
 
 
 class DataAccess {
@@ -21,13 +24,23 @@ class DataAccess {
     }
 
     async runQuery(query, arg_object) {
-        const results = await this.sequelize.query(query,
-            {
-                replacements: arg_object,
-                type: QueryTypes.SELECT
-            }
-        )
-        return results;
+        if(arg_object){
+            const results = await this.sequelize.query(query,
+                {
+                    replacements: arg_object,
+                    type: QueryTypes.SELECT
+                }
+            )
+            return results;
+        } else {
+            const results = await this.sequelize.query(query,
+                {
+                    type: QueryTypes.SELECT
+                }
+            )
+            return results;
+        }
+        
     }
 
     async dataToCSV(data){
@@ -55,8 +68,56 @@ class DataAccess {
         return csv_data
     }
 
+    async checkAvailableStates(){
+        const available_state_array = await this.runQuery(availableStateQuery);
+        const cleaned_available_state_array = []
+        available_state_array.map(state_object=>{
+            const just_this_state = available_state_array.filter(x=>{
+                return x.state_name === state_object.state_name
+            });
+            const return_object = {
+                state_name: just_this_state[0].state_name,
+                years:[]
+            };
+
+            just_this_state.map(x=>{
+                return_object.years.push(x.year)
+
+            });
+
+            if(!cleaned_available_state_array.length){
+                cleaned_available_state_array.push(return_object);
+            } else {
+                if(!cleaned_available_state_array.find(x=>{
+                    return x.state_name === state_object.state_name
+                })){
+                    cleaned_available_state_array.push(return_object)
+                }
+            }
+
+
+        })
+        return cleaned_available_state_array;
+    }
+
+    async checkForStateData(state, year){
+        const available_state_array = await this.checkAvailableStates();
+        const state_object = available_state_array.find(state_object=>{
+            return state_object.state_name === state;
+        });
+
+        if(!state_object){
+            return false;
+        } else {
+            return state_object.years.includes(year);
+        }
+    }
+
 
 };
+
+const data = new DataAccess()
+data.checkAvailableStates();
 
 
 module.exports = DataAccess
