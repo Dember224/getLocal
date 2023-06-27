@@ -109,7 +109,7 @@ class DataAccess {
         if(!state_object){
             return false;
         } else {
-            return state_object.years.includes(year);
+            return state_object.years.includes(parseInt(year));
         }
     }
 
