@@ -1,6 +1,7 @@
 const stateSearches = require('./StateSearches');
 const DataAccess = require('./ApiV2/dataAccessLayer');
 const {parseFullName} = require('parse-full-name');
+const theSuperDeDuper = require('./Tools/dedupe');
 
 
 class EfficacyChecker {
@@ -58,6 +59,7 @@ class EfficacyChecker {
         const our_data_length = our_data.length;
         let finance_data_missing = 0;
         let their_total_data = 0
+        const de_duped = theSuperDeDuper(finance_data);
 
 
 
@@ -65,7 +67,7 @@ class EfficacyChecker {
             const first_name = candidates_we_have.first_name.toLowerCase().trim();
             const last_name = candidates_we_have.last_name.toLowerCase().trim();
 
-            const match = finance_data.find(name_object=>{
+            const match = de_duped.find(name_object=>{
                 if(first_name == name_object.first.toLowerCase().trim() && last_name == name_object.last.toLowerCase().trim() && !name_object.error.length){
                     return name_object;
                 }
@@ -88,7 +90,7 @@ class EfficacyChecker {
 
         console.log(`Finance data retrieval missing ${finance_data_missing} records`)
 
-        const their_data =  finance_data.map(finance_names=>{
+        const their_data =  de_duped.map(finance_names=>{
             const first_name = finance_names.first.toLowerCase().trim();
             const last_name = finance_names.last.toLowerCase().trim();
 
