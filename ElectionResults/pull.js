@@ -368,8 +368,9 @@ async function getStateDistrictElectionHistory({state,level,district}) {
         // console.log(`make get retrieved for: ${district_href}`)
         let $ = cheerio.load(resp);
     
-        const sections = $('div.electionsectionheading');
-        if(!sections.length) throw new Error('No div.electionsectionheading');
+        // const sections = $('div.electionsectionheading');
+        // if(!sections.length) throw new Error('No div.electionsectionheading');
+        //The electionsectionheading class has been removed from a newer version of Ballotpedia.
     
         const containers = $('div.votebox-scroll-container');
         if(!containers.length) throw new Error('No div.votebox-scroll-container');
