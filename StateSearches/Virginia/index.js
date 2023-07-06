@@ -1,5 +1,6 @@
 const axios = require('axios');
 const parsers = require('../../Tools/parsers');
+const theSuperDeDuper = require('../../Tools/dedupe');
 const month_array = ['01', '02', '03', '04','05','06','07','08','09', '10','11','12'];
 
 function getCurrentMonth(){
@@ -42,7 +43,7 @@ const getFinanceCSVPage = async function(callData){
       party:x.Party === "Democratic" ? "Democrat" : x.Party,
       office:sortOffice(office),
       asOf: new Date(),
-      year: callData.year,
+      year: parseInt(callData.year),
       state: "Virginia",
       election_type:callData.election_type
     }
@@ -90,16 +91,16 @@ const getFinanceData = async function(callData){
   }
 
   const raw_array = final_array.flat(1)
-  console.log(raw_array)
   const return_array = raw_array.filter(x=>{
     if(x.district && x.office && x.office != 'N/A'){
       return x;
     }
   })
-  return_array.map(x=>{
-    console.log(x)
-  })
-  return return_array;
+
+  const de_duped = theSuperDeDuper(return_array);
+  console.table(de_duped)
+
+  return de_duped;
 }
 
 // getFinanceData({year:2023, }).then((r)=>{
