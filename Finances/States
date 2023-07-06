@@ -1,0 +1,1257 @@
+<!-- here -->
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<title>States - Ballotpedia</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"ZAv2KFjYWwrpK_4x0GfPcQAAAAk","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"States","wgTitle":"States","wgCurRevisionId":9082002,"wgRevisionId":9082002,"wgArticleId":4824,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["One-off pages, active","Lists on Ballotpedia"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"States","wgRelevantArticleId":4824,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMediaViewerOnClick":!1,
+"wgMediaViewerEnabledByDefault":!1};RLSTATE={"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","jquery.tablesorter.styles":"ready","mediawiki.toc.styles":"ready","skins.ballotpediabootstrap.bootstrap.styles":"ready","skins.ballotpediabootstrap.styles":"ready","skins.ballotpediabootstrap.corrections.styles":"ready","skins.ballotpediabootstrap.externallinks.styles":"ready","skins.ballotpediabootstrap.awesome.styles":"ready","skins.ballotpediabootstrap.bootstraptheme.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","jquery.tablesorter","mediawiki.toc","ext.SimpleTooltip","ext.PredictIt","ext.DoubleDropdown","ext.SingleDropdown","ext.APIWidget","ext.FrontPageRSS","skins.ballotpediabootstrap.scripts","skins.ballotpediabootstrap.tooltips"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});});</script>
+<link rel="stylesheet" href="/wiki/load.php?lang=en&amp;modules=jquery.tablesorter.styles%7Cmediawiki.toc.styles%7Cskins.ballotpediabootstrap.awesome.styles%7Cskins.ballotpediabootstrap.bootstrap.styles%7Cskins.ballotpediabootstrap.bootstraptheme.styles%7Cskins.ballotpediabootstrap.corrections.styles%7Cskins.ballotpediabootstrap.externallinks.styles%7Cskins.ballotpediabootstrap.styles&amp;only=styles&amp;skin=ballotpediabootstrap"/>
+<script async="" src="/wiki/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=ballotpediabootstrap"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="/wiki/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=ballotpediabootstrap"/>
+<meta name="generator" content="MediaWiki 1.35.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+<meta name="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta property="og:locale" content="en_US"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:site" content="@ballotpedia"/>
+<meta name="twitter:title" content="States - Ballotpedia"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="/wiki/opensearch_desc.php" title="Ballotpedia (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://ballotpedia.org/wiki/api.php?action=rsd"/>
+<link rel="license" href="http://www.gnu.org/copyleft/fdl.html"/>
+<link rel="alternate" type="application/atom+xml" title="Ballotpedia Atom feed" href="/wiki/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<link rel="canonical" href="https://ballotpedia.org/States"/>
+	<meta property="og:type" content="article"/>
+
+	<meta property="og:site_name" content="Ballotpedia"/>
+
+	<meta property="og:title" content="States"/>
+
+	<meta property="og:url" content="https://ballotpedia.org/States"/>
+
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/wiki/skins/ballotpediabootstrap/csshover.min.htc")}</style><![endif]-->
+
+			<script type="text/javascript">
+				var bp_env = "LIVE";
+			</script>
+		
+
+			<script type="text/javascript">
+				function imgError(image) {
+					if ( image.src.includes("https://s3.amazonaws.com/ballotpedia-api/storage/uploads/thumbs/") ) {
+						image.onerror = "";
+						//var new_src = image.src.replace("https://s3.amazonaws.com/ballotpedia-api/storage/uploads/thumbs/", "https://api.ballotpedia.org/v3/thumbnail/");
+						//image.src = new_src;
+					}
+					return true;
+				}
+			</script>
+		
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,200;0,400;0,600;0,800;1,200;1,400;1,600;1,800&display=swap" rel="stylesheet">
+<script type="text/javascript">!function(t,o,e){e=t.createElement(o),t=t.getElementsByTagName(o)[0],e.async=1,e.src="https://resonantbrush.com/v2/0/fesblzozuRJjzHOf_VUD5C1xGS4NlcUiO5VCnQgEPI1ISxgUs3JntMnY9dAPUFAYqZJXR0cCujx",t.parentNode.insertBefore(e,t)}(document,"script"),function(t,o){t[o]=t[o]||function(){(t[o].q=t[o].q||[]).push(arguments)}}(document,window,"script","admiral");!function(t,e,n,a){function o(t){try{return t=localStorage.getItem("v4ac1eiZr0"),t&&t.split(",")[4]>0}catch(e){}return!1}function r(){var a=o();if(a){var r=t[e].pubads();typeof r.setTargeting===n&&r.setTargeting("admiral-engaged","true")}}a=t[e]=t[e]||{},a.cmd=a.cmd||[],typeof a.pubads===n?r():typeof a.cmd.unshift===n?a.cmd.unshift(r):a.cmd.push(r)}(window,"googletag","function");</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PRFQ44Z');</script>
+<!-- End Google Tag Manager -->
+<script id="headerbidder" type="text/javascript" src="//a.publir.com/platform/384.js" async="async"></script>
+			<script>
+			var googletag = googletag || {};
+			googletag.cmd = googletag.cmd || [];
+			</script>
+<link rel="stylesheet" href="/SB-promo-header.css">
+<!--[if lt IE 9]><script src="/wiki/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-States rootpage-States skin-ballotpediabootstrap action-view ballotpediabootstrap-animateLayout">
+<!-- Track Page Categories in GA as events -->
+<script>
+document.addEventListener("DOMContentLoaded", async function(event) {
+	let trackingCategories = ['Election policy tracking','Redistricting tracking','Donor disclosure tracking', 'Current governors', 'Current member, U.S. House', 'Current member, U.S. Senate', 'ESG page views', 'Federalism tracking', 'UI tracking', 'State ballots, 2021', 'State ballots, 2022', 'TASP GA', 'Education policy tracking', 'Criminal justice policy tracking', 'UL profile', 'UL overview', 'Work requirement page views', 'REINS page views', 'DOE page views', 'TSP2023', 'TSP2023school'];
+	let lis = document.querySelectorAll("#catlinks li");
+	let allCategories = '';
+
+	for (let i = 0; i < lis.length; i++) {
+		if (trackingCategories.includes(lis[i].textContent)) {
+			allCategories = allCategories +  lis[i].textContent + '|';
+		}
+	}
+	allCategories = allCategories.slice(0, -1);
+	if (allCategories) {
+		ga('send', 'event', 'Page Category View', 'Page Category', allCategories, { nonInteraction: true });
+	}
+
+	if ( (allCategories && allCategories.includes("Republican Party")) || (allCategories && allCategories.includes("Democratic Party")) ) {
+		ga('send', 'event', 'Non-tracking category', 'Page URL', `${allCategories} - ${window.location.pathname}`, { nonInteraction: true });
+	}
+});
+</script>
+		<div id="modal-email" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Press escape to close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Get Email Updates from Ballotpedia</h4>
+			</div>
+			<div id="right-container" style="margin: 4%;">
+				<form class="form" id="whatcounts-form" name="whatcounts-form-skin" action="javascript:void(0)" onsubmit="submitForm(event)">
+					<input type="hidden" name="list_ids" id="list_ids" value="35,31,26" />
+					<input type="hidden" name="cmd" value="subscribe" />
+					<input type="hidden" name="goto" value="" />
+					<input type="hidden" name="errors_to" value="" />
+					<input type="hidden" id="format_mime" name="format" value="mime" />
+					<input type="hidden" id="custom_source" name="custom_source" value="site_skin" />
+						<p class="form-field  email pd-text required required-custom">
+							<label class="field-label" for="email">Email *</label>
+							<input type="text" name="email" id="email" value="" class="text" size="30" maxlength="255">
+						</p>
+						<p class="form-field  first_name pd-text required required-custom">
+							<label class="field-label" for="first_name">First Name *</label>
+							<input type="text" name="first_name" id="first_name" value="" class="text" size="30" maxlength="40">
+						</p>
+						<p class="form-field last_name pd-text">
+							<label class="field-label" for="last_name">Last Name</label>
+							<input type="text" name="last_name" id="last_name" value="" class="text" size="30" maxlength="80">
+						</p>
+						<div class="text-center">
+							<div id="recaptcha-service" class="g-recaptcha" style="display: inline-block"
+							data-callback="recaptchaCallback"
+							data-sitekey="6LdtdxgUAAAAAPd0NqIuHMYS_GQReTlIbayVJ_qn"></div>
+							<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+							<p id="showSkinCaptchaMessage">Please complete the Captcha above</p>
+						</div>
+						<p class="submit">
+							<input type="submit" value="Subscribe" style="text-shadow:none !important;background:#334aab !important;color:white !important;">
+						</p>
+				</form>
+			</div>
+		</div></div></div>
+		<!--
+			Hide 'action' URL from Sign up form until Captcha is solved to prevent bots from scraping and spamming the form parameters.
+		-->
+		<script>
+			window.recaptchaCallback = undefined;
+			var captcha = false;
+
+			document.addEventListener("DOMContentLoaded", function(event) {
+				window.recaptchaCallback = function recaptchaCallback(response) {
+
+					let formData = new FormData();
+					formData.append('g-recaptcha-response', response);
+
+					fetch("https://ballotpedia.org/recaptcha.php", {
+					body: formData,
+					method: "POST"
+					}).then(function(res) {
+					return res.text();
+					}).then(function(data) {
+					if (data) {
+						captcha = true;
+					}
+					});
+
+				}
+			});
+
+			function submitForm(e) {
+				if (!captcha) {
+					e.preventDefault();
+					document.getElementById('showSkinCaptchaMessage').style.display = 'block';
+				}
+				else {
+					$.post("https://ballotpedia.org/whatcounts_subscribe.php", {
+						email: $('#email').val(),
+						first: $('#first_name').val(),
+						last: $('#last_name').val(),
+						list_ids: $('#list_ids').val()
+					}, function(result){
+                     setTimeout(function(){
+						window.location='https://ballotpedia.org/Thank_you';
+					 }, 1000);
+					});
+				}
+			}
+		</script>
+
+				
+<!-- Modal for Candidate Survey -->
+		
+		
+				<div id="modal-facebook" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Press escape to close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Ballotpedia on Facebook</h4>
+			</div>
+			<div class="modal-body">
+				<p><a class="btn-block btn-lg btn-primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fballotpedia.org%2FStates"><span class="fa fa-facebook"></span> &nbsp; Share this page</a><br /></p>
+				<p><a class="btn-block btn-lg btn-primary" target="_blank" href="https://www.facebook.com/Ballotpedia/"><span class="fa fa-facebook"></span> &nbsp; Follow Ballotpedia</a><br /></p>
+			</div>
+		</div></div></div>
+		<div id="modal-twitter" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Press escape to close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Ballotpedia on Twitter</h4>
+			</div>
+			<div class="modal-body">
+				<p><a class="btn-block btn-lg btn-info" target="_blank" href="https://twitter.com/home?status=https%3A%2F%2Fballotpedia.org%2FStates"><span class="fa fa-twitter"></span> &nbsp; Share this page</a><br /></p>
+				<p><a class="btn-block btn-lg btn-info" target="_blank" href="https://twitter.com/Ballotpedia/"><span class="fa fa-twitter"></span> &nbsp; Follow Ballotpedia</a><br /></p>
+			</div>
+		</div></div></div>
+		<div id="bp-header" class="affix">
+			<div id="bp-header-mid">
+				<div class="container">
+
+					<div class="row header-blue-row">
+						<a href="#" class="bp-header-email-toggle" data-toggle="modal" data-target="#modal-email"><button class="header-btn-mobile hidden-sm hidden-md hidden-lg">Subscribe</button></a>
+						<a href="#" data-toggle="modal" data-target="#modal-twitter"><i class="fa fa-twitter header-icon-mobile hidden-sm hidden-md hidden-lg" aria-hidden="true"></i></a>
+						<a href="#" data-toggle="modal" data-target="#modal-facebook"><i class="fa fa-facebook header-icon-mobile hidden-sm hidden-md hidden-lg" aria-hidden="true"></i></a>
+						<!-- <div class="addthis_inline_share_toolbox hidden-sm hidden-md hidden-lg"></div><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ad0e65e3952f8b1"></script> -->
+						<a href="https://donate.ballotpedia.org"><button class="header-btn-mobile hidden-sm hidden-md hidden-lg">Donate</button></a>
+					</div>
+
+
+					<!--Row-->
+					<div class="row vcenter main-header-row">
+
+					<!-- Hamburger Icon needs to show at 1200px, hide lg -->
+					<div class="col-xs-1 hidden-lg">
+
+					<a href="#" id="bp-header-nav-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+					</div>
+
+
+					<div class="col-xs-10 col-lg-12">
+
+						<div class="row vcenter">
+
+							<div class="col-xs-12 col-sm-3 col-md-2 col-lg-3 text-center hidden-xs">
+								<a href="#" data-toggle="modal" data-target="#modal-twitter"><i class="fa fa-twitter header-icon" aria-hidden="true"></i></a>
+								<a href="#" data-toggle="modal" data-target="#modal-facebook"><i class="fa fa-facebook header-icon" aria-hidden="true"></i></a>
+								<!-- <div class="addthis_inline_share_toolbox"></div><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ad0e65e3952f8b1"></script> -->
+								<a href="#" class="bp-header-email-toggle hidden-lg" data-toggle="modal" data-target="#modal-email"><button class="header-subscribe-btn">Subscribe</button></a>
+								<a href="#" class="bp-header-email-toggle hidden-xs hidden-sm hidden-md" style="margin-left: 30px" data-toggle="modal" data-target="#modal-email"><button class="header-subscribe-btn">Subscribe</button></a>
+							</div>
+
+
+							<!-- Mobile Header -->
+							<div class="col-xs-2 center-block hidden-sm hidden-md hidden-lg">
+								<a href="/"><img style="width: 50px; vertical-align: unset" src="https://ballotpedia.s3.us-east-1.amazonaws.com/images/bp-logo-sm.svg" alt="Ballotpedia Logo" title="The Encyclopedia of American Politics"></a>
+							</div>
+							<!-- <div class="col-xs-2 center-block hidden-sm hidden-md hidden-lg">
+								<a class="hidden-sm hidden-md hidden-lg" id="bp-header-logo-mobile" href="/">
+									<img src="https://ballotpedia.s3.us-east-1.amazonaws.com/images/bp-logo-sm.svg" alt="Ballotpedia Logo" title="The Encyclopedia of American Politics">
+								</a>
+							</div> -->
+
+
+							<div class="col-xs-10 col-sm-6 col-md-8 col-lg-6">
+								<!-- Large Header -->
+								<a class="center-block hidden-xs" id="bp-header-logo-desktop" href="/">
+									<img src="/wiki/skins/BallotpediaBootstrap/images/bp-logo.svg" alt="Ballotpedia Logo" title="The Encyclopedia of American Politics">
+								</a>
+
+
+								<!-- Search Bar -->
+								<div id="bp-header-search">
+			<form action="/wiki/index.php" id="searchform">
+				<div class="form-group">
+					<button type="submit" class="bp-header-search-go btn-link"><span class="fa fa-search"></span></button>
+					<input id="searchInput" class="search-query" type="search" accesskey="f" title="Special:Search" placeholder="Search the Encyclopedia of American Politics" name="search" value="">
+					<input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="mw-searchButton" class="searchButton btn hidden"/>
+				</div>
+			</form></div>
+							</div>
+
+
+							<div class="col-xs-12 col-sm-3 col-md-2 col-lg-3 text-center hidden-xs">
+								<a href="https://donate.ballotpedia.org"><button class="header-donate-btn">Donate</button></a>
+							</div>
+
+						</div>
+
+					</div>
+
+
+					<!-- TOC Icon needs to show at 1200px, hide lg -->
+					<div class="col-xs-1 hidden-lg toc-mobile">
+						<a href="#" id="bp-header-toc-toggle"><span class="glyphicon glyphicon-list"></span></a>
+					</div>
+
+
+					<!-- End Row -->
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+		<div id="mw-page-base"></div>
+		<div id="mw-head-base"></div>
+		<a id="top"></a>
+
+		<!-- content -->
+		<div id="contentwrapper" class="user-loggedout not-editable container with-navbar with-navbar-fixed">
+
+			<!-- Temporary sitewide banner -->
+			
+			<!-- * The following styles and HTML are for a temporary Sample Ballot header * -->
+			<!-- Arbitrary Comment -->
+									<a href='https://ballotpedia.org/Sample_Ballot_Lookup?utm_source=ballotpedia&utm_campaign=sample_ballot_banner' class="sb-promo-link-container">
+						<div class='container sb-promo-front-container'>
+							<div id='sb-promo-lookup-heading-title'>What&#39;s on your ballot?</div>
+							Find out with Ballotpedia&#39;s Sample Ballot Lookup tool
+						</div>
+					</a>
+							<!-- * End temporary Sample Ballot Header * -->
+
+			
+			<!--<div class="proper-ad-unit" style="padding-bottom:0!important;"><div id="proper-ad-ballotpedia_leaderboard"> <script>if(window.proper_display) { proper_display('ballotpedia_leaderboard'); }</script> </div></div>-->
+			<!--<div id='div-gpt-ad-1527250331237-0' style="text-align:center;" class="ad header-ad"><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1527250331237-0'); });</script></div>-->
+			<div id='div-gpt-ad-1548351491831-0' style="text-align:center;" class="ad header-ad"><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1548351491831-0'); });</script></div>
+
+			<div class="row">
+				<div class="col-md-offset-0 col-md-12" role="main">
+							<div class="mw-body" id="content">
+			<div id="mw-js-message" style="display:none;"></div>
+						<!-- sitenotice -->
+			<div id="siteNotice"><div id="localNotice" lang="en" dir="ltr"><center><big><a href="/Ballotpedia%E2%80%99s_Top_15_%E2%80%93_The_Most_Interesting_and_Consequential_Political_Stories_to_Follow_in_2023" title="Ballotpedia’s Top 15 – The Most Interesting and Consequential Political Stories to Follow in 2023">Ballotpedia’s Top 15 – The Most Interesting and Consequential Political Stories to Follow in 2023</a></big></center></div></div>
+			<!-- /sitenotice -->
+									<h1 id="firstHeading" class="firstHeading page-header" lang="en"><span dir="auto">States</span></h1>
+									<!-- bodyContent -->
+			<div id="bodyContent">
+								<div id="siteSub">From Ballotpedia</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-navigation">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><table class="infobox" style="text-align: center; width:20%;">
+
+<tbody><tr>
+<td><center><big><b>States</b></big></center><hr />
+</td></tr>
+<tr>
+<td><center><a href="/Alabama" title="Alabama">Alabama</a> • <a href="/Alaska" title="Alaska">Alaska</a> • <a href="/Arizona" title="Arizona">Arizona</a> • <a href="/Arkansas" title="Arkansas">Arkansas</a> • <a href="/California" title="California">California</a> • <a href="/Colorado" title="Colorado">Colorado</a> • <a href="/Connecticut" title="Connecticut">Connecticut</a> • <a href="/Delaware" title="Delaware">Delaware</a> • <a href="/Florida" title="Florida">Florida</a> • <a href="/Georgia" title="Georgia">Georgia</a> • <a href="/Hawaii" title="Hawaii">Hawaii</a> • <a href="/Idaho" title="Idaho">Idaho</a> • <a href="/Illinois" title="Illinois">Illinois</a> • <a href="/Indiana" title="Indiana">Indiana</a> • <a href="/Iowa" title="Iowa">Iowa</a> • <a href="/Kansas" title="Kansas">Kansas</a> • <a href="/Kentucky" title="Kentucky">Kentucky</a> • <a href="/Louisiana" title="Louisiana">Louisiana</a> • <a href="/Maine" title="Maine">Maine</a> • <a href="/Maryland" title="Maryland">Maryland</a> • <a href="/Massachusetts" title="Massachusetts">Massachusetts</a> • <a href="/Michigan" title="Michigan">Michigan</a> • <a href="/Minnesota" title="Minnesota">Minnesota</a> • <a href="/Mississippi" title="Mississippi">Mississippi</a> • <a href="/Missouri" title="Missouri">Missouri</a> • <a href="/Montana" title="Montana">Montana</a> • <a href="/Nebraska" title="Nebraska">Nebraska</a> • <a href="/Nevada" title="Nevada">Nevada</a> • <a href="/New_Hampshire" title="New Hampshire">New Hampshire</a> • <a href="/New_Jersey" title="New Jersey">New Jersey</a> • <a href="/New_Mexico" title="New Mexico">New Mexico</a> • <a href="/New_York" title="New York">New York</a> • <a href="/North_Carolina" title="North Carolina">North Carolina</a> • <a href="/North_Dakota" title="North Dakota">North Dakota</a> • <a href="/Ohio" title="Ohio">Ohio</a> • <a href="/Oklahoma" title="Oklahoma">Oklahoma</a> • <a href="/Oregon" title="Oregon">Oregon</a> • <a href="/Pennsylvania" title="Pennsylvania">Pennsylvania</a> • <a href="/Rhode_Island" title="Rhode Island">Rhode Island</a> • <a href="/South_Carolina" title="South Carolina">South Carolina</a> • <a href="/South_Dakota" title="South Dakota">South Dakota</a> • <a href="/Tennessee" title="Tennessee">Tennessee</a> • <a href="/Texas" title="Texas">Texas</a> • <a href="/Utah" title="Utah">Utah</a> • <a href="/Vermont" title="Vermont">Vermont</a> • <a href="/Virginia" title="Virginia">Virginia</a> • <a href="/Washington" title="Washington">Washington</a> • <a href="/West_Virginia" title="West Virginia">West Virginia</a> • <a href="/Wisconsin" title="Wisconsin">Wisconsin</a> • <a href="/Wyoming" title="Wyoming">Wyoming</a></center>
+</td></tr></tbody></table>
+<p>A <b>U.S. state</b> is any one of the 50 sub-national entities of the United States. 
+</p><p>Additionally, there are five <a href="/U.S._Territories" title="U.S. Territories">U.S. territories</a>—American Samoa, Guam, the Northern Mariana Islands, Puerto Rico, and the U.S. Virgin Islands—and Washington, D.C.
+</p>
+<div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#State_governments"><span class="tocnumber">1</span> <span class="toctext">State governments</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Initiative_.26_referendum_in_the_U.S."><span class="tocnumber">2</span> <span class="toctext">Initiative &amp; referendum in the U.S.</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Initiate_constitutional_amendments"><span class="tocnumber">2.1</span> <span class="toctext">Initiate constitutional amendments</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Legislatively-referred_constitutional_amendments"><span class="tocnumber">2.2</span> <span class="toctext">Legislatively-referred constitutional amendments</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Initiated_state_statutes"><span class="tocnumber">2.3</span> <span class="toctext">Initiated state statutes</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Legislatively-referred_state_statutes"><span class="tocnumber">2.4</span> <span class="toctext">Legislatively-referred state statutes</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Veto_referendum"><span class="tocnumber">2.5</span> <span class="toctext">Veto referendum</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Statewide_recall"><span class="tocnumber">2.6</span> <span class="toctext">Statewide recall</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Right_of_statute_affirmation"><span class="tocnumber">2.7</span> <span class="toctext">Right of statute affirmation</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Right_of_citizen-initiated_grand_jury_empanelment"><span class="tocnumber">2.8</span> <span class="toctext">Right of citizen-initiated grand jury empanelment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Footnotes"><span class="tocnumber">4</span> <span class="toctext">Footnotes</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="State_governments">State governments</span></h2>
+<dl><dd><dl><dd><i>See also: <a href="/U.S._Constitution" class="mw-redirect" title="U.S. Constitution">U.S. Constitution</a> and <a href="/Congress" class="mw-redirect" title="Congress">Congress</a></i></dd></dl></dd></dl>
+<p>States can organize their state governments any way they like, as long as they conform to the sole requirement of the <a href="/U.S._Constitution" class="mw-redirect" title="U.S. Constitution">U.S. Constitution</a> that they have "a Republican Form of Government." In practice, each state has adopted a three-branch system of government generally along the sames lines as that of the federal government. Nebraska, for example, has a <a href="/Unicameral" class="mw-redirect" title="Unicameral">unicameral</a> legislature.
+</p>
+<table class="bptable sortable" style="background:none; text-align: center;">
+
+<tbody><tr>
+<th colspan="8" style="background-color:#334aab; color:#f0a236;"><i><big>State links</big></i>
+</th></tr>
+<tr>
+<th style="background-color:#00AF8C; color: white;">State
+</th>
+<th style="background-color:#00AF8C; color: white;">State area
+</th>
+<th style="background-color:#00AF8C; color: white;">State population
+</th>
+<th style="background-color:#00AF8C; color: white;">U.S. Congress
+</th>
+<th style="background-color:#00AF8C; color: white;">State executives
+</th>
+<th style="background-color:#00AF8C; color: white;">State legislature
+</th>
+<th style="background-color:#00AF8C; color: white;">State courts
+</th>
+<th style="background-color:#00AF8C; color: white;">State ballot measures
+</th></tr>
+<tr>
+<td><a href="/Alabama" title="Alabama">Alabama</a></td>
+<td>50,646 square miles</td>
+<td>5,024,279</td>
+<td><a href="/United_States_congressional_delegations_from_Alabama" title="United States congressional delegations from Alabama">U.S. Congress from Alabama</a></td>
+<td><a href="/Alabama_state_executive_offices" title="Alabama state executive offices">Alabama state executives</a></td>
+<td><a href="/Alabama_State_Legislature" title="Alabama State Legislature">Alabama State Legislature</a></td>
+<td><a href="/Courts_in_Alabama" title="Courts in Alabama">Courts in Alabama</a></td>
+<td><a href="/List_of_Alabama_ballot_measures" title="List of Alabama ballot measures">Alabama ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Alaska" title="Alaska">Alaska</a></td>
+<td>571,019 square miles</td>
+<td>733,391</td>
+<td><a href="/United_States_congressional_delegations_from_Alaska" title="United States congressional delegations from Alaska">U.S. Congress from Alaska</a></td>
+<td><a href="/Alaska_state_executive_offices" title="Alaska state executive offices">Alaska state executives</a></td>
+<td><a href="/Alaska_State_Legislature" title="Alaska State Legislature">Alaska State Legislature</a></td>
+<td><a href="/Courts_in_Alaska" title="Courts in Alaska">Courts in Alaska</a></td>
+<td><a href="/List_of_Alaska_ballot_measures" title="List of Alaska ballot measures">Alaska ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Arizona" title="Arizona">Arizona</a></td>
+<td>113,653 square miles</td>
+<td>7,151,502</td>
+<td><a href="/United_States_congressional_delegations_from_Arizona" title="United States congressional delegations from Arizona">U.S. Congress from Arizona</a></td>
+<td><a href="/Arizona_state_executive_offices" title="Arizona state executive offices">Arizona state executives</a></td>
+<td><a href="/Arizona_State_Legislature" title="Arizona State Legislature">Arizona State Legislature</a></td>
+<td><a href="/Courts_in_Arizona" title="Courts in Arizona">Courts in Arizona</a></td>
+<td><a href="/List_of_Arizona_ballot_measures" title="List of Arizona ballot measures">Arizona ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Arkansas" title="Arkansas">Arkansas</a></td>
+<td>51,992 square miles</td>
+<td>3,011,524</td>
+<td><a href="/United_States_congressional_delegations_from_Arkansas" title="United States congressional delegations from Arkansas">U.S. Congress from Arkansas</a></td>
+<td><a href="/Arkansas_state_executive_offices" title="Arkansas state executive offices">Arkansas state executives</a></td>
+<td><a href="/Arkansas_State_Legislature" class="mw-redirect" title="Arkansas State Legislature">Arkansas State Legislature</a></td>
+<td><a href="/Courts_in_Arkansas" title="Courts in Arkansas">Courts in Arkansas</a></td>
+<td><a href="/List_of_Arkansas_ballot_measures" title="List of Arkansas ballot measures">Arkansas ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/California" title="California">California</a></td>
+<td>155,857 square miles</td>
+<td>39,538,223</td>
+<td><a href="/United_States_congressional_delegations_from_California" title="United States congressional delegations from California">U.S. Congress from California</a></td>
+<td><a href="/California_state_executive_offices" title="California state executive offices">California state executives</a></td>
+<td><a href="/California_State_Legislature" title="California State Legislature">California State Legislature</a></td>
+<td><a href="/Courts_in_California" title="Courts in California">Courts in California</a></td>
+<td><a href="/List_of_California_ballot_measures" class="mw-redirect" title="List of California ballot measures">California ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Colorado" title="Colorado">Colorado</a></td>
+<td>103,636 square miles</td>
+<td>5,773,714</td>
+<td><a href="/United_States_congressional_delegations_from_Colorado" title="United States congressional delegations from Colorado">U.S. Congress from Colorado</a></td>
+<td><a href="/Colorado_state_executive_offices" title="Colorado state executive offices">Colorado state executives</a></td>
+<td><a href="/Colorado_State_Legislature" class="mw-redirect" title="Colorado State Legislature">Colorado State Legislature</a></td>
+<td><a href="/Courts_in_Colorado" title="Courts in Colorado">Courts in Colorado</a></td>
+<td><a href="/List_of_Colorado_ballot_measures" title="List of Colorado ballot measures">Colorado ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Connecticut" title="Connecticut">Connecticut</a></td>
+<td>4,842 square miles</td>
+<td>3,605,944</td>
+<td><a href="/United_States_congressional_delegations_from_Connecticut" title="United States congressional delegations from Connecticut">U.S. Congress from Connecticut</a></td>
+<td><a href="/Connecticut_state_executive_offices" title="Connecticut state executive offices">Connecticut state executives</a></td>
+<td><a href="/Connecticut_State_Legislature" class="mw-redirect" title="Connecticut State Legislature">Connecticut State Legislature</a></td>
+<td><a href="/Courts_in_Connecticut" title="Courts in Connecticut">Courts in Connecticut</a></td>
+<td><a href="/List_of_Connecticut_ballot_measures" title="List of Connecticut ballot measures">Connecticut ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Delaware" title="Delaware">Delaware</a></td>
+<td>1,948 square miles</td>
+<td>989,948</td>
+<td><a href="/United_States_congressional_delegations_from_Delaware" title="United States congressional delegations from Delaware">U.S. Congress from Delaware</a></td>
+<td><a href="/Delaware_state_executive_offices" title="Delaware state executive offices">Delaware state executives</a></td>
+<td><a href="/Delaware_State_Legislature" class="mw-redirect" title="Delaware State Legislature">Delaware State Legislature</a></td>
+<td><a href="/Courts_in_Delaware" title="Courts in Delaware">Courts in Delaware</a></td>
+<td><a href="/List_of_Delaware_ballot_measures" title="List of Delaware ballot measures">Delaware ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Florida" title="Florida">Florida</a></td>
+<td>53,653 square miles</td>
+<td>21,538,187</td>
+<td><a href="/United_States_congressional_delegations_from_Florida" title="United States congressional delegations from Florida">U.S. Congress from Florida</a></td>
+<td><a href="/Florida_state_executive_offices" title="Florida state executive offices">Florida state executives</a></td>
+<td><a href="/Florida_State_Legislature" title="Florida State Legislature">Florida State Legislature</a></td>
+<td><a href="/Courts_in_Florida" title="Courts in Florida">Courts in Florida</a></td>
+<td><a href="/List_of_Florida_ballot_measures" title="List of Florida ballot measures">Florida ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Georgia" title="Georgia">Georgia</a></td>
+<td>57,716 square miles</td>
+<td>10,711,908</td>
+<td><a href="/United_States_congressional_delegations_from_Georgia" title="United States congressional delegations from Georgia">U.S. Congress from Georgia</a></td>
+<td><a href="/Georgia_state_executive_offices" title="Georgia state executive offices">Georgia state executives</a></td>
+<td><a href="/Georgia_State_Legislature" class="mw-redirect" title="Georgia State Legislature">Georgia State Legislature</a></td>
+<td><a href="/Courts_in_Georgia" title="Courts in Georgia">Courts in Georgia</a></td>
+<td><a href="/List_of_Georgia_ballot_measures" title="List of Georgia ballot measures">Georgia ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Hawaii" title="Hawaii">Hawaii</a></td>
+<td>6,422 square miles</td>
+<td>1,455,271</td>
+<td><a href="/United_States_congressional_delegations_from_Hawaii" title="United States congressional delegations from Hawaii">U.S. Congress from Hawaii</a></td>
+<td><a href="/Hawaii_state_executive_offices" title="Hawaii state executive offices">Hawaii state executives</a></td>
+<td><a href="/Hawaii_State_Legislature" title="Hawaii State Legislature">Hawaii State Legislature</a></td>
+<td><a href="/Courts_in_Hawaii" title="Courts in Hawaii">Courts in Hawaii</a></td>
+<td><a href="/List_of_Hawaii_ballot_measures" title="List of Hawaii ballot measures">Hawaii ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Idaho" title="Idaho">Idaho</a></td>
+<td>82,644 square miles</td>
+<td>1,839,106</td>
+<td><a href="/United_States_congressional_delegations_from_Idaho" title="United States congressional delegations from Idaho">U.S. Congress from Idaho</a></td>
+<td><a href="/Idaho_state_executive_offices" title="Idaho state executive offices">Idaho state executives</a></td>
+<td><a href="/Idaho_State_Legislature" title="Idaho State Legislature">Idaho State Legislature</a></td>
+<td><a href="/Courts_in_Idaho" title="Courts in Idaho">Courts in Idaho</a></td>
+<td><a href="/List_of_Idaho_ballot_measures" title="List of Idaho ballot measures">Idaho ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Illinois" title="Illinois">Illinois</a></td>
+<td>55,512 square miles</td>
+<td>12,812,508</td>
+<td><a href="/United_States_congressional_delegations_from_Illinois" title="United States congressional delegations from Illinois">U.S. Congress from Illinois</a></td>
+<td><a href="/Illinois_state_executive_offices" title="Illinois state executive offices">Illinois state executives</a></td>
+<td><a href="/Illinois_State_Legislature" class="mw-redirect" title="Illinois State Legislature">Illinois State Legislature</a></td>
+<td><a href="/Courts_in_Illinois" title="Courts in Illinois">Courts in Illinois</a></td>
+<td><a href="/List_of_Illinois_ballot_measures" title="List of Illinois ballot measures">Illinois ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Indiana" title="Indiana">Indiana</a></td>
+<td>35,825 square miles</td>
+<td>6,785,528</td>
+<td><a href="/United_States_congressional_delegations_from_Indiana" title="United States congressional delegations from Indiana">U.S. Congress from Indiana</a></td>
+<td><a href="/Indiana_state_executive_offices" title="Indiana state executive offices">Indiana state executives</a></td>
+<td><a href="/Indiana_State_Legislature" class="mw-redirect" title="Indiana State Legislature">Indiana State Legislature</a></td>
+<td><a href="/Courts_in_Indiana" title="Courts in Indiana">Courts in Indiana</a></td>
+<td><a href="/List_of_Indiana_ballot_measures" title="List of Indiana ballot measures">Indiana ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Iowa" title="Iowa">Iowa</a></td>
+<td>55,853 square miles</td>
+<td>3,190,369</td>
+<td><a href="/United_States_congressional_delegations_from_Iowa" title="United States congressional delegations from Iowa">U.S. Congress from Iowa</a></td>
+<td><a href="/Iowa_state_executive_offices" title="Iowa state executive offices">Iowa state executives</a></td>
+<td><a href="/Iowa_State_Legislature" class="mw-redirect" title="Iowa State Legislature">Iowa State Legislature</a></td>
+<td><a href="/Courts_in_Iowa" title="Courts in Iowa">Courts in Iowa</a></td>
+<td><a href="/List_of_Iowa_ballot_measures" title="List of Iowa ballot measures">Iowa ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Kansas" title="Kansas">Kansas</a></td>
+<td>81,758 square miles</td>
+<td>2,937,880</td>
+<td><a href="/United_States_congressional_delegations_from_Kansas" title="United States congressional delegations from Kansas">U.S. Congress from Kansas</a></td>
+<td><a href="/Kansas_state_executive_offices" title="Kansas state executive offices">Kansas state executives</a></td>
+<td><a href="/Kansas_State_Legislature" title="Kansas State Legislature">Kansas State Legislature</a></td>
+<td><a href="/Courts_in_Kansas" title="Courts in Kansas">Courts in Kansas</a></td>
+<td><a href="/List_of_Kansas_ballot_measures" title="List of Kansas ballot measures">Kansas ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Kentucky" title="Kentucky">Kentucky</a></td>
+<td>39,491 square miles</td>
+<td>4,505,836</td>
+<td><a href="/United_States_congressional_delegations_from_Kentucky" title="United States congressional delegations from Kentucky">U.S. Congress from Kentucky</a></td>
+<td><a href="/Kentucky_state_executive_offices" title="Kentucky state executive offices">Kentucky state executives</a></td>
+<td><a href="/Kentucky_State_Legislature" class="mw-redirect" title="Kentucky State Legislature">Kentucky State Legislature</a></td>
+<td><a href="/Courts_in_Kentucky" title="Courts in Kentucky">Courts in Kentucky</a></td>
+<td><a href="/List_of_Kentucky_ballot_measures" title="List of Kentucky ballot measures">Kentucky ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Louisiana" title="Louisiana">Louisiana</a></td>
+<td>43,210 square miles</td>
+<td>4,657,757</td>
+<td><a href="/United_States_congressional_delegations_from_Louisiana" title="United States congressional delegations from Louisiana">U.S. Congress from Louisiana</a></td>
+<td><a href="/Louisiana_state_executive_offices" title="Louisiana state executive offices">Louisiana state executives</a></td>
+<td><a href="/Louisiana_State_Legislature" title="Louisiana State Legislature">Louisiana State Legislature</a></td>
+<td><a href="/Courts_in_Louisiana" title="Courts in Louisiana">Courts in Louisiana</a></td>
+<td><a href="/List_of_Louisiana_ballot_measures" title="List of Louisiana ballot measures">Louisiana ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Maine" title="Maine">Maine</a></td>
+<td>30,844 square miles</td>
+<td>1,362,359</td>
+<td><a href="/United_States_congressional_delegations_from_Maine" title="United States congressional delegations from Maine">U.S. Congress from Maine</a></td>
+<td><a href="/Maine_state_executive_offices" title="Maine state executive offices">Maine state executives</a></td>
+<td><a href="/Maine_State_Legislature" title="Maine State Legislature">Maine State Legislature</a></td>
+<td><a href="/Courts_in_Maine" title="Courts in Maine">Courts in Maine</a></td>
+<td><a href="/List_of_Maine_ballot_measures" title="List of Maine ballot measures">Maine ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Maryland" title="Maryland">Maryland</a></td>
+<td>9,711 square miles</td>
+<td>6,177,224</td>
+<td><a href="/United_States_congressional_delegations_from_Maryland" title="United States congressional delegations from Maryland">U.S. Congress from Maryland</a></td>
+<td><a href="/Maryland_state_executive_offices" title="Maryland state executive offices">Maryland state executives</a></td>
+<td><a href="/Maryland_State_Legislature" class="mw-redirect" title="Maryland State Legislature">Maryland State Legislature</a></td>
+<td><a href="/Courts_in_Maryland" title="Courts in Maryland">Courts in Maryland</a></td>
+<td><a href="/List_of_Maryland_ballot_measures" title="List of Maryland ballot measures">Maryland ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Massachusetts" title="Massachusetts">Massachusetts</a></td>
+<td>7,800 square miles</td>
+<td>7,029,917</td>
+<td><a href="/United_States_congressional_delegations_from_Massachusetts" title="United States congressional delegations from Massachusetts">U.S. Congress from Massachusetts</a></td>
+<td><a href="/Massachusetts_state_executive_offices" title="Massachusetts state executive offices">Massachusetts state executives</a></td>
+<td><a href="/Massachusetts_State_Legislature" class="mw-redirect" title="Massachusetts State Legislature">Massachusetts State Legislature</a></td>
+<td><a href="/Courts_in_Massachusetts" title="Courts in Massachusetts">Courts in Massachusetts</a></td>
+<td><a href="/List_of_Massachusetts_ballot_measures" title="List of Massachusetts ballot measures">Massachusetts ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Michigan" title="Michigan">Michigan</a></td>
+<td>56,608 square miles</td>
+<td>10,077,331</td>
+<td><a href="/United_States_congressional_delegations_from_Michigan" title="United States congressional delegations from Michigan">U.S. Congress from Michigan</a></td>
+<td><a href="/Michigan_state_executive_offices" title="Michigan state executive offices">Michigan state executives</a></td>
+<td><a href="/Michigan_State_Legislature" title="Michigan State Legislature">Michigan State Legislature</a></td>
+<td><a href="/Courts_in_Michigan" title="Courts in Michigan">Courts in Michigan</a></td>
+<td><a href="/List_of_Michigan_ballot_measures" title="List of Michigan ballot measures">Michigan ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Minnesota" title="Minnesota">Minnesota</a></td>
+<td>79,626 square miles</td>
+<td>5,706,494</td>
+<td><a href="/United_States_congressional_delegations_from_Minnesota" title="United States congressional delegations from Minnesota">U.S. Congress from Minnesota</a></td>
+<td><a href="/Minnesota_state_executive_offices" title="Minnesota state executive offices">Minnesota state executives</a></td>
+<td><a href="/Minnesota_State_Legislature" title="Minnesota State Legislature">Minnesota State Legislature</a></td>
+<td><a href="/Courts_in_Minnesota" title="Courts in Minnesota">Courts in Minnesota</a></td>
+<td><a href="/List_of_Minnesota_ballot_measures" title="List of Minnesota ballot measures">Minnesota ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Mississippi" title="Mississippi">Mississippi</a></td>
+<td>46,924 square miles</td>
+<td>2,961,279</td>
+<td><a href="/United_States_congressional_delegations_from_Mississippi" title="United States congressional delegations from Mississippi">U.S. Congress from Mississippi</a></td>
+<td><a href="/Mississippi_state_executive_offices" title="Mississippi state executive offices">Mississippi state executives</a></td>
+<td><a href="/Mississippi_State_Legislature" title="Mississippi State Legislature">Mississippi State Legislature</a></td>
+<td><a href="/Courts_in_Mississippi" title="Courts in Mississippi">Courts in Mississippi</a></td>
+<td><a href="/List_of_Mississippi_ballot_measures" title="List of Mississippi ballot measures">Mississippi ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Missouri" title="Missouri">Missouri</a></td>
+<td>68,746 square miles</td>
+<td>6,154,913</td>
+<td><a href="/United_States_congressional_delegations_from_Missouri" title="United States congressional delegations from Missouri">U.S. Congress from Missouri</a></td>
+<td><a href="/Missouri_state_executive_offices" title="Missouri state executive offices">Missouri state executives</a></td>
+<td><a href="/Missouri_State_Legislature" class="mw-redirect" title="Missouri State Legislature">Missouri State Legislature</a></td>
+<td><a href="/Courts_in_Missouri" title="Courts in Missouri">Courts in Missouri</a></td>
+<td><a href="/List_of_Missouri_ballot_measures" title="List of Missouri ballot measures">Missouri ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Montana" title="Montana">Montana</a></td>
+<td>145,549 square miles</td>
+<td>1,084,225</td>
+<td><a href="/United_States_congressional_delegations_from_Montana" title="United States congressional delegations from Montana">U.S. Congress from Montana</a></td>
+<td><a href="/Montana_state_executive_offices" title="Montana state executive offices">Montana state executives</a></td>
+<td><a href="/Montana_State_Legislature" title="Montana State Legislature">Montana State Legislature</a></td>
+<td><a href="/Courts_in_Montana" title="Courts in Montana">Courts in Montana</a></td>
+<td><a href="/List_of_Montana_ballot_measures" title="List of Montana ballot measures">Montana ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Nebraska" title="Nebraska">Nebraska</a></td>
+<td>76,817 square miles</td>
+<td>1,961,504</td>
+<td><a href="/United_States_congressional_delegations_from_Nebraska" title="United States congressional delegations from Nebraska">U.S. Congress from Nebraska</a></td>
+<td><a href="/Nebraska_state_executive_offices" title="Nebraska state executive offices">Nebraska state executives</a></td>
+<td><a href="/Nebraska_State_Legislature" class="mw-redirect" title="Nebraska State Legislature">Nebraska State Legislature</a></td>
+<td><a href="/Courts_in_Nebraska" title="Courts in Nebraska">Courts in Nebraska</a></td>
+<td><a href="/List_of_Nebraska_ballot_measures" title="List of Nebraska ballot measures">Nebraska ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Nevada" title="Nevada">Nevada</a></td>
+<td>109,859 square miles</td>
+<td>3,104,614</td>
+<td><a href="/United_States_congressional_delegations_from_Nevada" title="United States congressional delegations from Nevada">U.S. Congress from Nevada</a></td>
+<td><a href="/Nevada_state_executive_offices" title="Nevada state executive offices">Nevada state executives</a></td>
+<td><a href="/Nevada_State_Legislature" title="Nevada State Legislature">Nevada State Legislature</a></td>
+<td><a href="/Courts_in_Nevada" title="Courts in Nevada">Courts in Nevada</a></td>
+<td><a href="/List_of_Nevada_ballot_measures" title="List of Nevada ballot measures">Nevada ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/New_Hampshire" title="New Hampshire">New Hampshire</a></td>
+<td>8,953 square miles</td>
+<td>1,377,529</td>
+<td><a href="/United_States_congressional_delegations_from_New_Hampshire" title="United States congressional delegations from New Hampshire">U.S. Congress from New Hampshire</a></td>
+<td><a href="/New_Hampshire_state_executive_offices" title="New Hampshire state executive offices">New Hampshire state executives</a></td>
+<td><a href="/New_Hampshire_State_Legislature" class="mw-redirect" title="New Hampshire State Legislature">New Hampshire State Legislature</a></td>
+<td><a href="/Courts_in_New_Hampshire" title="Courts in New Hampshire">Courts in New Hampshire</a></td>
+<td><a href="/List_of_New_Hampshire_ballot_measures" title="List of New Hampshire ballot measures">New Hampshire ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/New_Jersey" title="New Jersey">New Jersey</a></td>
+<td>7,354 square miles</td>
+<td>9,288,994</td>
+<td><a href="/United_States_congressional_delegations_from_New_Jersey" title="United States congressional delegations from New Jersey">U.S. Congress from New Jersey</a></td>
+<td><a href="/New_Jersey_state_executive_offices" title="New Jersey state executive offices">New Jersey state executives</a></td>
+<td><a href="/New_Jersey_State_Legislature" title="New Jersey State Legislature">New Jersey State Legislature</a></td>
+<td><a href="/Courts_in_New_Jersey" title="Courts in New Jersey">Courts in New Jersey</a></td>
+<td><a href="/List_of_New_Jersey_ballot_measures" title="List of New Jersey ballot measures">New Jersey ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/New_Mexico" title="New Mexico">New Mexico</a></td>
+<td>121,312 square miles</td>
+<td>2,117,522</td>
+<td><a href="/United_States_congressional_delegations_from_New_Mexico" title="United States congressional delegations from New Mexico">U.S. Congress from New Mexico</a></td>
+<td><a href="/New_Mexico_state_executive_offices" title="New Mexico state executive offices">New Mexico state executives</a></td>
+<td><a href="/New_Mexico_State_Legislature" title="New Mexico State Legislature">New Mexico State Legislature</a></td>
+<td><a href="/Courts_in_New_Mexico" title="Courts in New Mexico">Courts in New Mexico</a></td>
+<td><a href="/List_of_New_Mexico_ballot_measures" title="List of New Mexico ballot measures">New Mexico ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/New_York" title="New York">New York</a></td>
+<td>47,123 square miles</td>
+<td>20,201,249</td>
+<td><a href="/United_States_congressional_delegations_from_New_York" title="United States congressional delegations from New York">U.S. Congress from New York</a></td>
+<td><a href="/New_York_state_executive_offices" title="New York state executive offices">New York state executives</a></td>
+<td><a href="/New_York_State_Legislature" title="New York State Legislature">New York State Legislature</a></td>
+<td><a href="/Courts_in_New_York" title="Courts in New York">Courts in New York</a></td>
+<td><a href="/List_of_New_York_ballot_measures" title="List of New York ballot measures">New York ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/North_Carolina" title="North Carolina">North Carolina</a></td>
+<td>48,622 square miles</td>
+<td>10,439,388</td>
+<td><a href="/United_States_congressional_delegations_from_North_Carolina" title="United States congressional delegations from North Carolina">U.S. Congress from North Carolina</a></td>
+<td><a href="/North_Carolina_state_executive_offices" title="North Carolina state executive offices">North Carolina state executives</a></td>
+<td><a href="/North_Carolina_State_Legislature" class="mw-redirect" title="North Carolina State Legislature">North Carolina State Legislature</a></td>
+<td><a href="/Courts_in_North_Carolina" title="Courts in North Carolina">Courts in North Carolina</a></td>
+<td><a href="/List_of_North_Carolina_ballot_measures" title="List of North Carolina ballot measures">North Carolina ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/North_Dakota" title="North Dakota">North Dakota</a></td>
+<td>68,993 square miles</td>
+<td>779,094</td>
+<td><a href="/United_States_congressional_delegations_from_North_Dakota" title="United States congressional delegations from North Dakota">U.S. Congress from North Dakota</a></td>
+<td><a href="/North_Dakota_state_executive_offices" title="North Dakota state executive offices">North Dakota state executives</a></td>
+<td><a href="/North_Dakota_State_Legislature" class="mw-redirect" title="North Dakota State Legislature">North Dakota State Legislature</a></td>
+<td><a href="/Courts_in_North_Dakota" title="Courts in North Dakota">Courts in North Dakota</a></td>
+<td><a href="/List_of_North_Dakota_ballot_measures" title="List of North Dakota ballot measures">North Dakota ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Ohio" title="Ohio">Ohio</a></td>
+<td>40,858 square miles</td>
+<td>11,799,448</td>
+<td><a href="/United_States_congressional_delegations_from_Ohio" title="United States congressional delegations from Ohio">U.S. Congress from Ohio</a></td>
+<td><a href="/Ohio_state_executive_offices" title="Ohio state executive offices">Ohio state executives</a></td>
+<td><a href="/Ohio_State_Legislature" class="mw-redirect" title="Ohio State Legislature">Ohio State Legislature</a></td>
+<td><a href="/Courts_in_Ohio" title="Courts in Ohio">Courts in Ohio</a></td>
+<td><a href="/List_of_Ohio_ballot_measures" title="List of Ohio ballot measures">Ohio ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Oklahoma" title="Oklahoma">Oklahoma</a></td>
+<td>68,596 square miles</td>
+<td>3,959,353</td>
+<td><a href="/United_States_congressional_delegations_from_Oklahoma" title="United States congressional delegations from Oklahoma">U.S. Congress from Oklahoma</a></td>
+<td><a href="/Oklahoma_state_executive_offices" title="Oklahoma state executive offices">Oklahoma state executives</a></td>
+<td><a href="/Oklahoma_State_Legislature" title="Oklahoma State Legislature">Oklahoma State Legislature</a></td>
+<td><a href="/Courts_in_Oklahoma" title="Courts in Oklahoma">Courts in Oklahoma</a></td>
+<td><a href="/List_of_Oklahoma_ballot_measures" title="List of Oklahoma ballot measures">Oklahoma ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Oregon" title="Oregon">Oregon</a></td>
+<td>95,995 square miles</td>
+<td>4,237,256</td>
+<td><a href="/United_States_congressional_delegations_from_Oregon" title="United States congressional delegations from Oregon">U.S. Congress from Oregon</a></td>
+<td><a href="/Oregon_state_executive_offices" title="Oregon state executive offices">Oregon state executives</a></td>
+<td><a href="/Oregon_State_Legislature" title="Oregon State Legislature">Oregon State Legislature</a></td>
+<td><a href="/Courts_in_Oregon" title="Courts in Oregon">Courts in Oregon</a></td>
+<td><a href="/List_of_Oregon_ballot_measures" title="List of Oregon ballot measures">Oregon ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Pennsylvania" title="Pennsylvania">Pennsylvania</a></td>
+<td>44,741 square miles</td>
+<td>13,002,700</td>
+<td><a href="/United_States_congressional_delegations_from_Pennsylvania" title="United States congressional delegations from Pennsylvania">U.S. Congress from Pennsylvania</a></td>
+<td><a href="/Pennsylvania_state_executive_offices" title="Pennsylvania state executive offices">Pennsylvania state executives</a></td>
+<td><a href="/Pennsylvania_State_Legislature" class="mw-redirect" title="Pennsylvania State Legislature">Pennsylvania State Legislature</a></td>
+<td><a href="/Courts_in_Pennsylvania" title="Courts in Pennsylvania">Courts in Pennsylvania</a></td>
+<td><a href="/List_of_Pennsylvania_ballot_measures" title="List of Pennsylvania ballot measures">Pennsylvania ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Rhode_Island" title="Rhode Island">Rhode Island</a></td>
+<td>1,033 square miles</td>
+<td>1,097,379</td>
+<td><a href="/United_States_congressional_delegations_from_Rhode_Island" title="United States congressional delegations from Rhode Island">U.S. Congress from Rhode Island</a></td>
+<td><a href="/Rhode_Island_state_executive_offices" title="Rhode Island state executive offices">Rhode Island state executives</a></td>
+<td><a href="/Rhode_Island_State_Legislature" class="mw-redirect" title="Rhode Island State Legislature">Rhode Island State Legislature</a></td>
+<td><a href="/Courts_in_Rhode_Island" title="Courts in Rhode Island">Courts in Rhode Island</a></td>
+<td><a href="/List_of_Rhode_Island_ballot_measures" title="List of Rhode Island ballot measures">Rhode Island ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/South_Carolina" title="South Carolina">South Carolina</a></td>
+<td>30,064 square miles</td>
+<td>5,118,425</td>
+<td><a href="/United_States_congressional_delegations_from_South_Carolina" title="United States congressional delegations from South Carolina">U.S. Congress from South Carolina</a></td>
+<td><a href="/South_Carolina_state_executive_offices" title="South Carolina state executive offices">South Carolina state executives</a></td>
+<td><a href="/South_Carolina_State_Legislature" title="South Carolina State Legislature">South Carolina State Legislature</a></td>
+<td><a href="/Courts_in_South_Carolina" title="Courts in South Carolina">Courts in South Carolina</a></td>
+<td><a href="/List_of_South_Carolina_ballot_measures" title="List of South Carolina ballot measures">South Carolina ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/South_Dakota" title="South Dakota">South Dakota</a></td>
+<td>75,808 square miles</td>
+<td>886,667</td>
+<td><a href="/United_States_congressional_delegations_from_South_Dakota" title="United States congressional delegations from South Dakota">U.S. Congress from South Dakota</a></td>
+<td><a href="/South_Dakota_state_executive_offices" title="South Dakota state executive offices">South Dakota state executives</a></td>
+<td><a href="/South_Dakota_State_Legislature" title="South Dakota State Legislature">South Dakota State Legislature</a></td>
+<td><a href="/Courts_in_South_Dakota" title="Courts in South Dakota">Courts in South Dakota</a></td>
+<td><a href="/List_of_South_Dakota_ballot_measures" title="List of South Dakota ballot measures">South Dakota ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Tennessee" title="Tennessee">Tennessee</a></td>
+<td>41,232 square miles</td>
+<td>6,910,840</td>
+<td><a href="/United_States_congressional_delegations_from_Tennessee" title="United States congressional delegations from Tennessee">U.S. Congress from Tennessee</a></td>
+<td><a href="/Tennessee_state_executive_offices" title="Tennessee state executive offices">Tennessee state executives</a></td>
+<td><a href="/Tennessee_State_Legislature" class="mw-redirect" title="Tennessee State Legislature">Tennessee State Legislature</a></td>
+<td><a href="/Courts_in_Tennessee" title="Courts in Tennessee">Courts in Tennessee</a></td>
+<td><a href="/List_of_Tennessee_ballot_measures" title="List of Tennessee ballot measures">Tennessee ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Texas" title="Texas">Texas</a></td>
+<td>261,266 square miles</td>
+<td>29,145,505</td>
+<td><a href="/United_States_congressional_delegations_from_Texas" title="United States congressional delegations from Texas">U.S. Congress from Texas</a></td>
+<td><a href="/Texas_state_executive_offices" title="Texas state executive offices">Texas state executives</a></td>
+<td><a href="/Texas_State_Legislature" title="Texas State Legislature">Texas State Legislature</a></td>
+<td><a href="/Courts_in_Texas" title="Courts in Texas">Courts in Texas</a></td>
+<td><a href="/List_of_Texas_ballot_measures" title="List of Texas ballot measures">Texas ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Utah" title="Utah">Utah</a></td>
+<td>82,376 square miles</td>
+<td>3,271,616</td>
+<td><a href="/United_States_congressional_delegations_from_Utah" title="United States congressional delegations from Utah">U.S. Congress from Utah</a></td>
+<td><a href="/Utah_state_executive_offices" title="Utah state executive offices">Utah state executives</a></td>
+<td><a href="/Utah_State_Legislature" title="Utah State Legislature">Utah State Legislature</a></td>
+<td><a href="/Courts_in_Utah" title="Courts in Utah">Courts in Utah</a></td>
+<td><a href="/List_of_Utah_ballot_measures" title="List of Utah ballot measures">Utah ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Vermont" title="Vermont">Vermont</a></td>
+<td>9,217 square miles</td>
+<td>643,077</td>
+<td><a href="/United_States_congressional_delegations_from_Vermont" title="United States congressional delegations from Vermont">U.S. Congress from Vermont</a></td>
+<td><a href="/Vermont_state_executive_offices" title="Vermont state executive offices">Vermont state executives</a></td>
+<td><a href="/Vermont_State_Legislature" title="Vermont State Legislature">Vermont State Legislature</a></td>
+<td><a href="/Courts_in_Vermont" title="Courts in Vermont">Courts in Vermont</a></td>
+<td><a href="/List_of_Vermont_ballot_measures" title="List of Vermont ballot measures">Vermont ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Virginia" title="Virginia">Virginia</a></td>
+<td>39,481 square miles</td>
+<td>8,631,393</td>
+<td><a href="/United_States_congressional_delegations_from_Virginia" title="United States congressional delegations from Virginia">U.S. Congress from Virginia</a></td>
+<td><a href="/Virginia_state_executive_offices" title="Virginia state executive offices">Virginia state executives</a></td>
+<td><a href="/Virginia_State_Legislature" class="mw-redirect" title="Virginia State Legislature">Virginia State Legislature</a></td>
+<td><a href="/Courts_in_Virginia" title="Courts in Virginia">Courts in Virginia</a></td>
+<td><a href="/List_of_Virginia_ballot_measures" title="List of Virginia ballot measures">Virginia ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Washington" title="Washington">Washington</a></td>
+<td>66,455 square miles</td>
+<td>7,705,281</td>
+<td><a href="/United_States_congressional_delegations_from_Washington" title="United States congressional delegations from Washington">U.S. Congress from Washington</a></td>
+<td><a href="/Washington_state_executive_offices" title="Washington state executive offices">Washington state executives</a></td>
+<td><a href="/Washington_State_Legislature" title="Washington State Legislature">Washington State Legislature</a></td>
+<td><a href="/Courts_in_Washington" title="Courts in Washington">Courts in Washington</a></td>
+<td><a href="/List_of_Washington_ballot_measures" title="List of Washington ballot measures">Washington ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/West_Virginia" title="West Virginia">West Virginia</a></td>
+<td>24,041 square miles</td>
+<td>1,793,716</td>
+<td><a href="/United_States_congressional_delegations_from_West_Virginia" title="United States congressional delegations from West Virginia">U.S. Congress from West Virginia</a></td>
+<td><a href="/West_Virginia_state_executive_offices" title="West Virginia state executive offices">West Virginia state executives</a></td>
+<td><a href="/West_Virginia_State_Legislature" title="West Virginia State Legislature">West Virginia State Legislature</a></td>
+<td><a href="/Courts_in_West_Virginia" title="Courts in West Virginia">Courts in West Virginia</a></td>
+<td><a href="/List_of_West_Virginia_ballot_measures" title="List of West Virginia ballot measures">West Virginia ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Wisconsin" title="Wisconsin">Wisconsin</a></td>
+<td>54,166 square miles</td>
+<td>5,893,718</td>
+<td><a href="/United_States_congressional_delegations_from_Wisconsin" title="United States congressional delegations from Wisconsin">U.S. Congress from Wisconsin</a></td>
+<td><a href="/Wisconsin_state_executive_offices" title="Wisconsin state executive offices">Wisconsin state executives</a></td>
+<td><a href="/Wisconsin_State_Legislature" title="Wisconsin State Legislature">Wisconsin State Legislature</a></td>
+<td><a href="/Courts_in_Wisconsin" title="Courts in Wisconsin">Courts in Wisconsin</a></td>
+<td><a href="/List_of_Wisconsin_ballot_measures" title="List of Wisconsin ballot measures">Wisconsin ballot measures</a>
+</td></tr>
+<tr>
+<td><a href="/Wyoming" title="Wyoming">Wyoming</a></td>
+<td>97,088 square miles</td>
+<td>576,851</td>
+<td><a href="/United_States_congressional_delegations_from_Wyoming" title="United States congressional delegations from Wyoming">U.S. Congress from Wyoming</a></td>
+<td><a href="/Wyoming_state_executive_offices" title="Wyoming state executive offices">Wyoming state executives</a></td>
+<td><a href="/Wyoming_State_Legislature" title="Wyoming State Legislature">Wyoming State Legislature</a></td>
+<td><a href="/Courts_in_Wyoming" title="Courts in Wyoming">Courts in Wyoming</a></td>
+<td><a href="/List_of_Wyoming_ballot_measures" title="List of Wyoming ballot measures">Wyoming ballot measures</a>
+</td></tr>
+</tbody></table>
+<h2><span id="Initiative_&amp;_referendum_in_the_U.S."></span><span class="mw-headline" id="Initiative_.26_referendum_in_the_U.S.">Initiative &amp; referendum in the U.S.</span></h2>
+<dl><dd><dl><dd><i>Main page: <a href="/Laws_governing_ballot_measures" title="Laws governing ballot measures">Laws governing ballot measures</a></i></dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Initiate_constitutional_amendments">Initiate constitutional amendments</span></h3>
+<p>In 18 states, citizens can start an <a href="/Initiated_constitutional_amendment" title="Initiated constitutional amendment">initiated constitutional amendment</a>:
+</p><p><a href="/Arizona" title="Arizona">Arizona</a> · <a href="/Arkansas" title="Arkansas">Arkansas</a> · <a href="/California" title="California">California</a> · <a href="/Colorado" title="Colorado">Colorado</a> · <a href="/Florida" title="Florida">Florida</a> · <a href="/Illinois" title="Illinois">Illinois</a> · <a href="/Massachusetts" title="Massachusetts">Massachusetts</a> · <a href="/Michigan" title="Michigan">Michigan</a> · <a href="/Mississippi" title="Mississippi">Mississippi</a> · <a href="/Missouri" title="Missouri">Missouri</a> · <a href="/Montana" title="Montana">Montana</a> · <a href="/Nebraska" title="Nebraska">Nebraska</a> · <a href="/Nevada" title="Nevada">Nevada</a> · <a href="/North_Dakota" title="North Dakota">North Dakota</a> · <a href="/Ohio" title="Ohio">Ohio</a> · <a href="/Oklahoma" title="Oklahoma">Oklahoma</a> · <a href="/Oregon" title="Oregon">Oregon</a> · <a href="/South_Dakota" title="South Dakota">South Dakota</a>
+</p>
+<h3><span class="mw-headline" id="Legislatively-referred_constitutional_amendments">Legislatively-referred constitutional amendments</span></h3>
+<p>Every state except for <a href="/Delaware" title="Delaware">Delaware</a> has <a href="/Legislatively_referred_constitutional_amendment" title="Legislatively referred constitutional amendment">legislatively referred constitutional amendments</a>.
+</p>
+<h3><span class="mw-headline" id="Initiated_state_statutes">Initiated state statutes</span></h3>
+<p>In 21 states, citizens can start an <a href="/Initiated_state_statute" title="Initiated state statute">initiated state statute</a>:
+</p><p><a href="/Alaska" title="Alaska">Alaska</a> · <a href="/Arizona" title="Arizona">Arizona</a> · <a href="/Arkansas" title="Arkansas">Arkansas</a> · <a href="/California" title="California">California</a> · <a href="/Colorado" title="Colorado">Colorado</a> · <a href="/Idaho" title="Idaho">Idaho</a> · <a href="/Maine" title="Maine">Maine</a> · <a href="/Massachusetts" title="Massachusetts">Massachusetts</a> · <a href="/Michigan" title="Michigan">Michigan</a> · <a href="/Missouri" title="Missouri">Missouri</a> · <a href="/Montana" title="Montana">Montana</a> · <a href="/Nebraska" title="Nebraska">Nebraska</a> · <a href="/Nevada" title="Nevada">Nevada</a> · <a href="/North_Dakota" title="North Dakota">North Dakota</a> · <a href="/Ohio" title="Ohio">Ohio</a> · <a href="/Oklahoma" title="Oklahoma">Oklahoma</a> · <a href="/Oregon" title="Oregon">Oregon</a> · <a href="/South_Dakota" title="South Dakota">South Dakota</a> · <a href="/Utah" title="Utah">Utah</a> · <a href="/Washington" title="Washington">Washington</a> · <a href="/Wyoming" title="Wyoming">Wyoming</a>
+</p>
+<h3><span class="mw-headline" id="Legislatively-referred_state_statutes">Legislatively-referred state statutes</span></h3>
+<p>In 24 states and one unincorporated organized territory, legislatures can use employ a <a href="/Legislatively_referred_state_statute" title="Legislatively referred state statute">legislatively referred state statute</a>: 
+</p><p><a href="/Arizona" title="Arizona">Arizona</a> · <a href="/Arkansas" title="Arkansas">Arkansas</a> · <a href="/California" title="California">California</a> · <a href="/Colorado" title="Colorado">Colorado</a> · <a href="/Delaware" title="Delaware">Delaware</a> · <a href="/Idaho" title="Idaho">Idaho</a> · <a href="/Illinois" title="Illinois">Illinois</a> · <a href="/Kentucky" title="Kentucky">Kentucky</a> · <a href="/Maine" title="Maine">Maine</a> · <a href="/Maryland" title="Maryland">Maryland</a> · <a href="/Massachusetts" title="Massachusetts">Massachusetts</a> · <a href="/Michigan" title="Michigan">Michigan</a> · <a href="/Missouri" title="Missouri">Missouri</a> · <a href="/Montana" title="Montana">Montana</a> · <a href="/Nebraska" title="Nebraska">Nebraska</a> · <a href="/Nevada" title="Nevada">Nevada</a> · <a href="/New_Mexico" title="New Mexico">New Mexico</a> · <a href="/North_Dakota" title="North Dakota">North Dakota</a> · <a href="/Ohio" title="Ohio">Ohio</a> · <a href="/Oklahoma" title="Oklahoma">Oklahoma</a> · <a href="/Oregon" title="Oregon">Oregon</a> · <a href="/Puerto_Rico" class="mw-redirect" title="Puerto Rico">Puerto Rico</a> · <a href="/South_Dakota" title="South Dakota">South Dakota</a> · <a href="/Utah" title="Utah">Utah</a> · <a href="/Washington" title="Washington">Washington</a> · <a href="/Puerto_Rico" class="mw-redirect" title="Puerto Rico">Puerto Rico</a>
+</p>
+<h3><span class="mw-headline" id="Veto_referendum">Veto referendum</span></h3>
+<p>In 25 states, citizens can overturn state statutes through <a href="/Veto_referendum" title="Veto referendum">veto referendum</a>: 
+</p><p><a href="/Alaska" title="Alaska">Alaska</a> · <a href="/Arizona" title="Arizona">Arizona</a> · <a href="/Arkansas" title="Arkansas">Arkansas</a> · <a href="/California" title="California">California</a> · <a href="/Colorado" title="Colorado">Colorado</a> · <a href="/Idaho" title="Idaho">Idaho</a> · <a href="/Kentucky" title="Kentucky">Kentucky</a> · <a href="/Maine" title="Maine">Maine</a> · <a href="/Maryland" title="Maryland">Maryland</a> · <a href="/Massachusetts" title="Massachusetts">Massachusetts</a> · <a href="/Michigan" title="Michigan">Michigan</a> · <a href="/Missouri" title="Missouri">Missouri</a> · <a href="/Montana" title="Montana">Montana</a> · <a href="/Nebraska" title="Nebraska">Nebraska</a> · <a href="/Nevada" title="Nevada">Nevada</a> · <a href="/New_Mexico" title="New Mexico">New Mexico</a> · <a href="/North_Dakota" title="North Dakota">North Dakota</a> · <a href="/Ohio" title="Ohio">Ohio</a> · <a href="/Oklahoma" title="Oklahoma">Oklahoma</a> · <a href="/Oregon" title="Oregon">Oregon</a> · <a href="/South_Dakota" title="South Dakota">South Dakota</a> · <a href="/Utah" title="Utah">Utah</a> · <a href="/Washington" title="Washington">Washington</a> · <a href="/Washington,_D.C." title="Washington, D.C.">Washington, D.C.</a> · <a href="/Wyoming" title="Wyoming">Wyoming</a>
+</p>
+<h3><span class="mw-headline" id="Statewide_recall">Statewide recall</span></h3>
+<p>In 19 states, citizens can <a href="/Recall" class="mw-redirect" title="Recall">recall their state officials</a>: 
+</p><p><a href="/Laws_governing_recall_in_Alaska" title="Laws governing recall in Alaska">Alaska</a> · <a href="/Laws_governing_recall_in_Arizona" title="Laws governing recall in Arizona">Arizona</a> · <a href="/Laws_governing_recall_in_California" title="Laws governing recall in California">California</a> · <a href="/Laws_governing_recall_in_Colorado" title="Laws governing recall in Colorado">Colorado</a> · <a href="/Laws_governing_recall_in_Georgia" title="Laws governing recall in Georgia">Georgia</a> · <a href="/Laws_governing_recall_in_Idaho" title="Laws governing recall in Idaho">Idaho</a> · <a href="/Laws_governing_recall_in_Illinois" title="Laws governing recall in Illinois">Illinois</a> · <a href="/Laws_governing_recall_in_Kansas" title="Laws governing recall in Kansas">Kansas</a> · <a href="/Laws_governing_recall_in_Louisiana" title="Laws governing recall in Louisiana">Louisiana</a> · <a href="/Laws_governing_recall_in_Michigan" title="Laws governing recall in Michigan">Michigan</a> · <a href="/Laws_governing_recall_in_Minnesota" title="Laws governing recall in Minnesota">Minnesota</a> · <a href="/Laws_governing_recall_in_Montana" title="Laws governing recall in Montana">Montana</a> · <a href="/Laws_governing_recall_in_Nevada" title="Laws governing recall in Nevada">Nevada</a> · <a href="/Laws_governing_recall_in_New_Jersey" title="Laws governing recall in New Jersey">New Jersey</a> · <a href="/Laws_governing_recall_in_North_Dakota" title="Laws governing recall in North Dakota">North Dakota</a> · <a href="/Laws_governing_recall_in_Oregon" title="Laws governing recall in Oregon">Oregon</a> · <a href="/Laws_governing_recall_in_Rhode_Island" title="Laws governing recall in Rhode Island">Rhode Island</a> · <a href="/Laws_governing_recall_in_Washington" title="Laws governing recall in Washington">Washington</a> · <a href="/Laws_governing_recall_in_Wisconsin" title="Laws governing recall in Wisconsin">Wisconsin</a>
+</p>
+<h3><span class="mw-headline" id="Right_of_statute_affirmation">Right of statute affirmation</span></h3>
+<p>One state grants the right of statute affirmation: <a href="/Nevada" title="Nevada">Nevada</a>
+</p>
+<h3><span class="mw-headline" id="Right_of_citizen-initiated_grand_jury_empanelment">Right of citizen-initiated grand jury empanelment</span></h3>
+<p>In 6 states and one unincorporated organized territory, citizens can <a href="/Petitions_to_impanel_grand_juries" title="Petitions to impanel grand juries">petition to impanel grand juries</a>: 
+</p><p><a href="/Laws_governing_citizen_grand_juries_in_Kansas" title="Laws governing citizen grand juries in Kansas">Kansas</a> · <a href="/Laws_governing_citizen_grand_juries_in_Nevada" title="Laws governing citizen grand juries in Nevada">Nevada</a> · <a href="/Laws_governing_citizen_grand_juries_in_North_Dakota" title="Laws governing citizen grand juries in North Dakota">North Dakota</a> · <a href="/Laws_governing_citizen_grand_juries_in_New_Mexico" title="Laws governing citizen grand juries in New Mexico">New Mexico</a> · <a href="/Laws_governing_citizen_grand_juries_in_Nebraska" title="Laws governing citizen grand juries in Nebraska">Nebraska</a> · <a href="/Laws_governing_citizen_grand_juries_in_Oklahoma" title="Laws governing citizen grand juries in Oklahoma">Oklahoma</a> · <a href="/Puerto_Rico" class="mw-redirect" title="Puerto Rico">Puerto Rico</a>
+</p>
+<div id="div-gpt-ad-1548351761485-0"><script>googletag.cmd.push(function() { googletag.display("div-gpt-ad-1548351761485-0"); });</script></div><h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="/Legislative_Branch" title="Legislative Branch">U.S. Congress</a></li>
+<li><a href="/State_Politics" title="State Politics">State politics</a></li>
+<li><a href="/Municipal_Government" title="Municipal Government">Municipal government</a></li>
+<li><a href="/States_with_initiative_or_referendum" title="States with initiative or referendum">States with initiative or referendum</a></li>
+<li><a href="/Political_recall_efforts_by_state" title="Political recall efforts by state">Political recall efforts by state</a></li></ul>
+<h2><span class="mw-headline" id="Footnotes">Footnotes</span></h2>
+<p>
+<script type="text/javascript">
+if(document.getElementsByClassName("reference").length==0) if(document.getElementById('Footnotes')!==null) document.getElementById('Footnotes').parentNode.style.display = 'none';
+</script>
+	
+</p>
+<div class="references-small"><div class="mobile-columns">
+</div></div>
+<!-- 
+NewPP limit report
+Cached time: 20230311033153
+Cache expiry: 0
+Dynamic content: true
+Complications: []
+CPU time usage: 0.278 seconds
+Real time usage: 0.928 seconds
+Preprocessor visited node count: 951/1000000
+Post‐expand include size: 326/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 4364/7000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.963      1 -total
+ 18.46%    2.024      1 Template:Icafull
+ 17.90%    1.963      1 Template:Reflist
+ 15.32%    1.680      1 Template:Lrssfull
+ 14.76%    1.618      1 Template:Vrfull
+ 14.60%    1.601      1 Template:Lrcafull
+ 14.33%    1.571      1 Template:Issfull
+-->
+</div></div>								<div class="printfooter">
+				Retrieved from "<a dir="ltr" href="https://ballotpedia.org/wiki/index.php?title=States&amp;oldid=9082002">https://ballotpedia.org/wiki/index.php?title=States&amp;oldid=9082002</a>"				</div>
+												<div id="catlinks-container" style="display:none"><div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="/Category:One-off_pages,_active" title="Category:One-off pages, active">One-off pages, active</a></li><li><a href="/Category:Lists_on_Ballotpedia" title="Category:Lists on Ballotpedia">Lists on Ballotpedia</a></li></ul></div></div></div>
+												<div class="visualClear"></div>
+							</div>
+			<!-- /bodyContent -->
+		</div>
+					</div>
+			</div>
+
+			
+			<div id='div-gpt-ad-1548351407491-0'><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1548351407491-0'); });</script></div>
+
+			<div class="visualClear"></div>
+			
+			<div class="row" id="footer-links">
+ 				<div style="text-align:center; font-size:16px; color:#666; width: 100%;">
+<p>Ballotpedia features 397,365 encyclopedic articles written and curated by our professional staff of editors, writers, and researchers. <a target="_blank" rel="noreferrer noopener" class="external text" href="https://ballotpedia.happyfox.com/new">Click here</a> to contact our editorial staff, and <a target="_blank" rel="noreferrer noopener" class="external text" href="https://ballotpedia.happyfox.com/new">click here</a> to report an error. <a target="_blank" rel="noreferrer noopener" class="external text" href="mailto:media@ballotpedia.org">Click here</a> to contact us for media inquiries, and please <a href="/Support" title="Support">donate here</a> to support our continued expansion.
+</p>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Information_about_voting">Information about voting</span></h3>
+<ul><li><a href="/Sample_Ballot_Lookup" title="Sample Ballot Lookup">What's on my ballot?</a></li>
+<li><a href="/Where_do_I_vote" title="Where do I vote">Where do I vote?</a></li>
+<li><a href="/Online_voter_registration_in_the_50_states" class="mw-redirect" title="Online voter registration in the 50 states">How do I register to vote?</a></li>
+<li><a href="/Absentee_voting" class="mw-redirect" title="Absentee voting">How do I request a ballot?</a></li>
+<li><a href="/Elections_calendar" title="Elections calendar">When do I vote?</a></li>
+<li><a href="/State_Poll_Opening_and_Closing_Times" class="mw-redirect" title="State Poll Opening and Closing Times">When are polls open?</a></li>
+<li><a href="/Who_represents_me" title="Who represents me">Who Represents Me?</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="2023_Elections">2023 Elections</span></h3>
+<ul><li><a href="/United_States_Congress_elections,_2023" class="mw-redirect" title="United States Congress elections, 2023">Congress</a></li>
+<li><a href="/Gubernatorial_elections,_2023" title="Gubernatorial elections, 2023">Governors</a></li>
+<li><a href="/State_executive_official_elections,_2023" title="State executive official elections, 2023">State executives</a></li>
+<li><a href="/State_legislative_elections,_2023" title="State legislative elections, 2023">State legislatures</a></li>
+<li><a href="/2023_ballot_measures" title="2023 ballot measures">Ballot measures</a></li>
+<li><a href="/State_judicial_elections,_2023" title="State judicial elections, 2023">State judges</a></li>
+<li><a href="/United_States_municipal_elections,_2023" title="United States municipal elections, 2023">Municipal officials</a></li>
+<li><a href="/School_board_elections,_2023" title="School board elections, 2023">School boards</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="2024_Elections">2024 Elections</span></h3>
+<ul><li><a href="/Presidential_election,_2024" title="Presidential election, 2024">2024 Presidential election</a></li>
+<li><a href="/Presidential_candidates,_2024" title="Presidential candidates, 2024">2024 Presidential candidates</a></li>
+<li><a href="/United_States_Congress_elections,_2024" title="United States Congress elections, 2024">2024 Congressional elections</a></li>
+<li><a href="/State_executive_official_elections,_2024" title="State executive official elections, 2024">State executive elections (2024)</a></li>
+<li><a href="/State_legislative_elections,_2024" title="State legislative elections, 2024">State legislative elections (2024)</a></li>
+<li><a href="/State_judicial_elections,_2024" title="State judicial elections, 2024">2024 State judge elections</a></li>
+<li><a href="/United_States_municipal_elections,_2024" title="United States municipal elections, 2024">2024 Local elections</a></li>
+<li><a href="/2024_ballot_measures" title="2024 ballot measures">2024 Ballot measures</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Analysis">Analysis</span></h3>
+<ul><li><a href="/State_government_trifectas" title="State government trifectas">State Trifectas</a></li>
+<li><a href="/State_government_triplexes" title="State government triplexes">State Triplexes</a></li>
+<li><a href="/Status_of_redistricting_after_the_2020_census" title="Status of redistricting after the 2020 census">Redistricting</a></li>
+<li><a href="/Pivot_Counties:_The_counties_that_voted_Obama-Obama-Trump_from_2008-2016" title="Pivot Counties: The counties that voted Obama-Obama-Trump from 2008-2016">Pivot Counties</a></li>
+<li><a href="/Ballotpedia_Courts:_State_Partisanship" title="Ballotpedia Courts: State Partisanship">State Supreme Court Partisanship</a></li>
+<li><a href="/Political_responses_to_the_coronavirus_(COVID-19)_pandemic,_2020" class="mw-redirect" title="Political responses to the coronavirus (COVID-19) pandemic, 2020">Responses to coronavirus</a></li>
+<li><a href="/Conflicts_in_school_board_elections,_2021-2022" title="Conflicts in school board elections, 2021-2022">Conflicts in school board elections, 2021-2022</a></li>
+<li><a href="/Ballotpedia%27s_Polling_Indexes" title="Ballotpedia&#39;s Polling Indexes">Polling indexes</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Get_Engaged">Get Engaged</span></h3>
+<ul><li><a href="/Support" title="Support">Donate to Ballotpedia</a></li>
+<li><a href="/Contact_us" title="Contact us">Contact us</a></li>
+<li><a href="/Report_an_error" title="Report an error">Report an error</a></li>
+<li><a href="/Ballotpedia:Events" title="Ballotpedia:Events">Events</a></li>
+<li><a href="/Ballotpedia_Email_Updates" title="Ballotpedia Email Updates">Email updates</a></li>
+<li><a href="/On_the_Ballot" title="On the Ballot">Ballotpedia's weekly podcast</a></li>
+<li><a href="/Ballotpedia:Job_opportunities" title="Ballotpedia:Job opportunities">Job opportunities</a></li>
+<li><a href="/Support:Volunteer" title="Support:Volunteer">Volunteer</a></li>
+<li><a href="/Engage_with_Ballotpedia" title="Engage with Ballotpedia">Other ways to engage</a></li>
+<li><a href="/Ballotpedia:Ad_policy" title="Ballotpedia:Ad policy">Ad Policy</a></li>
+<li><a target="_blank" rel="noreferrer noopener" class="external text" href="https://www.bonfire.com/store/ballotpedia/">Ballotpedia Store</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Information_for_candidates">Information for candidates</span></h3>
+<ul><li><a href="/Ballotpedia%27s_Candidate_Connection" title="Ballotpedia&#39;s Candidate Connection">Ballotpedia's Candidate Survey</a></li>
+<li><a href="/Ballot_access_for_major_and_minor_party_candidates" title="Ballot access for major and minor party candidates">How do I run for office?</a></li>
+<li><a href="/Ballotpedia%27s_Candidate_Connection" title="Ballotpedia&#39;s Candidate Connection">How do I update a page?</a></li>
+<li><a href="/Election_results" class="mw-redirect" title="Election results">Election results</a></li>
+<li><a target="_blank" rel="noreferrer noopener" class="external text" href="https://docs.google.com/forms/d/e/1FAIpQLSddoUjxvy5yEyoKoltTe6-B_j668rbBsbcf7UDJI8cOgG2FBA/viewform">Send us candidate contact info</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Services">Services</span></h3>
+<ul><li><a href="/Ballotpedia:What_people_are_saying" title="Ballotpedia:What people are saying">Media inquiries</a></li>
+<li><a href="/Ballotpedia:Buy_Political_Data" title="Ballotpedia:Buy Political Data">Data sales</a></li>
+<li><a href="/Ballotpedia:Buy_Political_Data" title="Ballotpedia:Buy Political Data">API</a></li>
+<li><a href="/Ballotpedia:Premium_Research_Services" title="Ballotpedia:Premium Research Services">Premium Research Services</a></li></ul>
+</div>
+<div class="footer-links-block">
+<h3><span class="mw-headline" id="Trending">Trending</span></h3>
+<ul><li><a href="/Elections_calendar" title="Elections calendar">2023 Elections</a></li>
+<li><a href="/Presidential_election,_2024" title="Presidential election, 2024">2024 Presidential election</a></li>
+<li><a href="/Joe_Biden%27s_Cabinet" title="Joe Biden&#39;s Cabinet">Biden Administration</a></li>
+<li><a href="/Recall_overview" title="Recall overview">Recall elections</a></li>
+<li><a target="_blank" rel="noreferrer noopener" class="external text" href="https://news.ballotpedia.org/">Ballotpedia News</a></li></ul>
+</div>
+<div class="footer-links-block">
+</div> 			</div>
+		</div>
+		<!-- /content -->
+
+		<!-- sidebar-left -->
+		<div class="sidebar-wrapper sidebar-left-wrapper" id="sidebar-left">
+			<div id="navtitle" class="navtitle"><h2><span class="glyphicon glyphicon-menu-hamburger"></span> SITE NAVIGATION</h2></div>
+			<ul><li><a href="/Survey" title="Survey">Ballotpedia's Candidate Survey</a></li>
+<li><span class="self"><a href="/Elections" title="Elections">2023 Elections</a></span>
+<ul><li><a href="/Sample_Ballot_Lookup" title="Sample Ballot Lookup">Preview your ballot</a></li>
+<li><a href="/Elections_calendar" title="Elections calendar">Upcoming elections</a></li>
+<li><a href="/Statewide_primary_elections_calendar" title="Statewide primary elections calendar">2023 Statewide primary dates</a></li>
+<li><a href="/Signature_requirements_and_deadlines_for_2023_state_government_elections" title="Signature requirements and deadlines for 2023 state government elections">2023 Filing deadlines</a></li>
+<li><a href="/Special_elections_to_the_118th_United_States_Congress_(2023-2024)" title="Special elections to the 118th United States Congress (2023-2024)">Special Congressional elections (2023-2024)</a></li>
+<li><a href="/State_executive_official_elections,_2023" title="State executive official elections, 2023">2023 State executive elections</a></li>
+<li><a href="/State_legislative_elections,_2023" title="State legislative elections, 2023">2023 State legislative elections</a></li>
+<li><a href="/United_States_municipal_elections,_2023" title="United States municipal elections, 2023">2023 Local elections</a></li>
+<li><a href="/2023_ballot_measures" title="2023 ballot measures">2023 Ballot measures</a></li></ul></li>
+<li><span class="self"><a href="/Main_Page" title="Main Page">2024 Elections</a></span>
+<ul><li><a href="/Presidential_election,_2024" title="Presidential election, 2024">2024 Presidential election</a></li>
+<li><a href="/Presidential_candidates,_2024" title="Presidential candidates, 2024">2024 Presidential candidates</a></li>
+<li><a href="/United_States_Congress_elections,_2024" title="United States Congress elections, 2024">2024 Congressional elections</a></li>
+<li><a href="/State_executive_official_elections,_2024" title="State executive official elections, 2024">State executive elections (2024)</a></li>
+<li><a href="/State_legislative_elections,_2024" title="State legislative elections, 2024">State legislative elections (2024)</a></li>
+<li><a href="/State_judicial_elections,_2024" title="State judicial elections, 2024">2024 State judge elections</a></li>
+<li><a href="/United_States_municipal_elections,_2024" title="United States municipal elections, 2024">2024 Local elections</a></li>
+<li><a href="/2024_ballot_measures" title="2024 ballot measures">2024 Ballot measures</a></li></ul></li>
+<li><span class="self"><a href="/Ballotpedia%27s_Election_Analysis_Hub,_2022" title="Ballotpedia&#39;s Election Analysis Hub, 2022">Ballotpedia's 2022 elections analysis</a></span>
+<ul><li><a href="/Election_results,_2022:_Wave_elections" title="Election results, 2022: Wave elections">2022 Wave elections</a></li>
+<li><a href="/Election_results,_2022:_Congressional_margin_of_victory_analysis" title="Election results, 2022: Congressional margin of victory analysis">2022 Congressional margins of victory</a></li>
+<li><a href="/Annual_Congressional_Competitiveness_Report,_2022" title="Annual Congressional Competitiveness Report, 2022">2022 Congressional Competitiveness Report</a></li>
+<li><a href="/Annual_State_Executive_Competitiveness_Report,_2022" title="Annual State Executive Competitiveness Report, 2022">State Executive Competitiveness Report, 2022</a></li>
+<li><a href="/Election_results,_2022:_State_government_trifectas" title="Election results, 2022: State government trifectas">State government trifectas in 2022</a></li>
+<li><a href="/Annual_State_Legislative_Competitiveness_Report:_Vol._12,_2022" title="Annual State Legislative Competitiveness Report: Vol. 12, 2022">State Legislative Competitiveness Report, 2022</a></li>
+<li><a href="/State_judicial_elections,_2022" title="State judicial elections, 2022">State judicial elections, 2022</a></li>
+<li><a href="/Conflicts_in_school_board_elections,_2021-2022" title="Conflicts in school board elections, 2021-2022">Conflicts in school board elections, 2021-2022</a></li>
+<li><a href="/Partisanship_in_United_States_municipal_elections_(2022)" title="Partisanship in United States municipal elections (2022)">Partisanship in 2022 United States local elections</a></li>
+<li><a href="/2022_ballot_measures#Trends_in_2022" title="2022 ballot measures">Trends in 2022 ballot measures</a></li></ul></li>
+<li><span class="self"><a href="/Joe_Biden_presidential_administration" title="Joe Biden presidential administration">The Biden administration</a></span>
+<ul><li><a href="/Joe_Biden%27s_Cabinet" title="Joe Biden&#39;s Cabinet">Cabinet officials</a></li>
+<li><a href="/Joe_Biden%27s_executive_orders_and_actions" title="Joe Biden&#39;s executive orders and actions">Executive orders and actions</a></li>
+<li><a href="/Joe_Biden_presidential_administration#Key_legislation" title="Joe Biden presidential administration">Key legislation</a></li>
+<li><a href="/Joe_Biden_presidential_transition#White_House_senior_staff" title="Joe Biden presidential transition">White House senior staff</a></li>
+<li><a href="/Joe_Biden:_Vetoed_legislation" title="Joe Biden: Vetoed legislation">Vetoes</a></li></ul></li>
+<li><span class="self"><a href="/Federal_Politics" title="Federal Politics">Government</a></span>
+<ul><li><a href="/Executive_Branch" title="Executive Branch">U.S. President</a></li>
+<li><a href="/Legislative_Branch" title="Legislative Branch">U.S. Congress</a></li>
+<li><a href="/Supreme_Court_of_the_United_States" title="Supreme Court of the United States">U.S. Supreme Court</a></li>
+<li><a href="/United_States_federal_courts" title="United States federal courts">Federal courts</a></li>
+<li><a href="/States#State_governments" title="States">State government</a></li>
+<li><a href="/Municipal_Government" title="Municipal Government">Municipal government</a></li>
+<li><a href="/School_Boards_and_School_Board_Elections" title="School Boards and School Board Elections">School boards</a></li>
+<li><a href="/Ballot_Measures_overview" title="Ballot Measures overview">Ballot measures</a></li>
+<li><a href="/Recall_overview" title="Recall overview">Recalls</a></li></ul></li>
+<li><span class="self"><a href="/Public_Policy" title="Public Policy">Politics and policy</a></span>
+<ul><li><a href="/Status_of_redistricting_after_the_2020_census" title="Status of redistricting after the 2020 census">Redistricting</a></li>
+<li><a href="/The_Administrative_State_Project" title="The Administrative State Project">Administrative State Project</a></li>
+<li><a href="/Documenting_America%27s_Path_to_Recovery" title="Documenting America&#39;s Path to Recovery">Coronavirus pandemic</a></li>
+<li><a href="/Election_Policy" title="Election Policy">Election policy</a></li>
+<li><a target="_blank" rel="noreferrer noopener" class="external text" href="https://legislation.ballotpedia.org/elections/home">Election legislation tracking</a></li>
+<li><a href="/Public_Policy" title="Public Policy">Policy in the states</a></li>
+<li><a href="/State_government_trifectas" title="State government trifectas">Trifectas</a></li>
+<li><a href="/Ballot_Access" title="Ballot Access">Running for office</a></li></ul></li>
+<li><span class="self"><a href="/Ballotpedia:About" title="Ballotpedia:About">About us</a></span>
+<ul><li><a href="/Ballotpedia:About" title="Ballotpedia:About">About Ballotpedia</a></li>
+<li><a href="/Contact_us" title="Contact us">Contact us</a></li>
+<li><a href="/Support" title="Support">Donate</a></li>
+<li><a href="/Ballotpedia%27s_editorial_independence_policy" title="Ballotpedia&#39;s editorial independence policy">Editorial independence</a></li>
+<li><a href="/Ballotpedia:Index_of_Contents" title="Ballotpedia:Index of Contents">Index</a></li>
+<li><a href="/Ballotpedia:Job_opportunities" title="Ballotpedia:Job opportunities">Job opportunities</a></li>
+<li><a href="/News_and_events" title="News and events">News and events</a></li>
+<li><a href="/Ballotpedia:Staff" title="Ballotpedia:Staff">Staff</a></li>
+<li><a href="/Support:Volunteer" title="Support:Volunteer">Volunteer</a></li>
+<li><a href="/On_the_Ballot" title="On the Ballot">Ballotpedia's weekly podcast</a></li></ul></li</ul>			<!--<div id='div-gpt-ad-1548351983468-0' style='height:600px; width:160px; position: -webkit-sticky; /* Safari */ position: sticky; top: 0;'><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1548351983468-0'); });</script></div>-->
+		</div>
+		<!-- /sidebar-left -->
+
+		<!-- sidebar-right -->
+		<div class="sidebar-wrapper sidebar-right-wrapper" id="sidebar-right">
+			<div id='div-gpt-ad-1548352229745-0' style='height:600px; width:160px;position: -webkit-sticky; /* Safari */ position: sticky; top: 0;'><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1548352229745-0'); });</script></div>
+		</div>
+		<!-- /sidebar-right -->
+
+			<!-- footer -->
+			<div id="footer" role="contentinfo" class="footer container footer-sticky">
+						<ul id="footer-places"><li id="footer-places-privacy"><a href="/Ballotpedia:Privacy_policy" title="Ballotpedia:Privacy policy">Privacy policy</a></li><li id="footer-places-about"><a href="/Ballotpedia:About" title="Ballotpedia:About">About Ballotpedia</a></li><li id="footer-places-disclaimer"><a href="/Ballotpedia:General_disclaimer" title="Ballotpedia:General disclaimer">Disclaimers</a></li></ul><ul id="footer-custom"><li class="dropup"><a href="/wiki/index.php?title=Special:UserLogin&amp;returnto=States" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Login</a></li></ul><div style="clear:both"></div>			</div>
+			<!-- /footer -->
+		
+
+			<!-- Facebook Pixel Code -->
+			<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
+				if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0"; n.queue=[];t=b.createElement(e);t.async=!0; t.src=v;s=b.getElementsByTagName(e)[0];
+				s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js" ); fbq("init", "360312574466105");
+				fbq("track", "PageView");
+			</script>
+			<noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=360312574466105&ev=PageView&noscript=1"/></noscript>
+			<!-- End Facebook Pixel Code -->
+		
+			<!-- Twitter universal website tag code -->
+			<script>
+			!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+			},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+			a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+			// Insert Twitter Pixel ID and Standard Event data below
+			twq('init','o2jx2');
+			twq('track','PageView');
+			</script>
+			<!-- End Twitter universal website tag code -->
+		
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.278","walltime":"0.928","ppvisitednodes":{"value":951,"limit":1000000},"postexpandincludesize":{"value":326,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":5,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":4364,"limit":7000000},"timingprofile":["100.00%   10.963      1 -total"," 18.46%    2.024      1 Template:Icafull"," 17.90%    1.963      1 Template:Reflist"," 15.32%    1.680      1 Template:Lrssfull"," 14.76%    1.618      1 Template:Vrfull"," 14.60%    1.601      1 Template:Lrcafull"," 14.33%    1.571      1 Template:Issfull"]},"cachereport":{"timestamp":"20230311033153","ttl":0,"transientcontent":true}}});});</script>
+<!-- Optimizely -->
+<!--<script src="https://cdn.optimizely.com/js/5793622713.js"></script>-->
+<!-- End Optimizely -->
+
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-7416006-3', 'auto');
+ga('send', 'pageview');
+</script>
+<script src="https://ssl.google-analytics.com/ga.js"></script>
+<!-- End Google Analytics -->
+
+
+<!-- Quantcast Tag -->
+<script type="text/javascript">
+var _qevents = _qevents || [];
+
+(function() {
+var elem = document.createElement('script');
+elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+elem.async = true;
+elem.type = "text/javascript";
+var scpt = document.getElementsByTagName('script')[0];
+scpt.parentNode.insertBefore(elem, scpt);
+})();
+
+_qevents.push({
+qacct:"p-Lx8vcgWv5twR2"
+});
+</script>
+
+<noscript>
+<div style="display:none;">
+<img src="//pixel.quantserve.com/pixel/p-Lx8vcgWv5twR2.gif" border="0" height="1" width="1" alt="Quantcast"/>
+</div>
+</noscript>
+<!-- End Quantcast tag -->
+
+
+
+
+<!-- Start Alexa Certify Javascript -->
+<script type="text/javascript">
+_atrk_opts = { atrk_acct:"3N+Vi1a4ZP00iC", domain:"ballotpedia.org",dynamic: true};
+(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://d31qbv1cthcecs.cloudfront.net/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+</script>
+<noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=3N+Vi1a4ZP00iC" style="display:none" height="1" width="1" alt="" /></noscript>
+<!-- End Alexa Certify Javascript -->
+
+
+<script type="text/javascript">
+piAId = '482201';
+piCId = '4426';
+piHostname = 'pi.pardot.com';
+(function() { function async_load(){
+	if ( window.location.href != "https://ballotpedia.org/Main_Page" && window.location.href != "https://ballotpedia.org/Election_results,_2018" ) {
+		var s = document.createElement('script'); s.type = 'text/javascript';
+		s.src = ('https:' == document.location.protocol ? 'https://pi' : 'http://cdn') + '.pardot.com/pd.js';
+		var c = document.getElementsByTagName('script')[0]; c.parentNode.insertBefore(s, c);
+	}
+}
+if(window.attachEvent) { window.attachEvent('onload', async_load); }
+else { window.addEventListener('load', async_load, false); }
+})();
+</script>
+
+
+<!-- added by Tom on 2020-04-20 per https://app.asana.com/0/460328012758964/1171283310306519 MC then modified per https://app.asana.com/0/998426598658794/1172837503958937/f
+-->
+<script src="https://a.publir.com/platform/ads.js" type="text/javascript"></script>
+<script type="text/javascript">
+if(document.getElementById('adblock1122112')){
+} else { 
+var p_currentPage = window.location.href;
+var p_siteId = "384";
+var p_json_final = { p_currentPage, p_siteId};
+var url = 'https://l026e7vji8.execute-api.us-east-1.amazonaws.com/default/pAnalytics';
+fetch(url, {method: 'POST', mode: 'no-cors',body: JSON.stringify(p_json_final),credentials: 'include',headers: {'Content-Type': 'text/plain',}});
+document.write('<scri'+'pt src="https://fkrkkmxsqeb5bj9r.s3.amazonaws.com/384.js" type="text/javascript"></scri'+'pt>');
+}
+</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":1022});});</script>	</body>
+</html>
