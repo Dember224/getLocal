@@ -81,13 +81,13 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
       const election_date = new Date(finance_object.election_year);
       const election_year = finance_object.year ?? election_date.getFullYear();
   
-      const first_name = parsedName.first.toLowerCase();
-      const last_name = parsedName.last.toLowerCase();
+      const first_name = parsedName.first.toLowerCase().trim();
+      const last_name = parsedName.last.toLowerCase().trim();
   
       let level = ProcessLevel(finance_object.office)
       const where = {
-        first_name:parsedName.first.toLowerCase(),
-        last_name:parsedName.last.toLowerCase(),
+        first_name,
+        last_name,
         // party:party,
         state_name,
         district:finance_object.district ? finance_object.district : null,
@@ -124,7 +124,10 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
             state_name: finance_object.state
           }
         }) //if the finance lookup couldn't find a district number. Look up the district from the Candidate Search view using names, state, and year.
-        if(!cs)continue;
+        if(!cs){
+          console.log('All district checks failed.')
+          continue;
+        }
         const district_number = cs.district;
         const chamber_id = chamber.chamber_id;
 
@@ -151,16 +154,46 @@ CampaignFinanceLoader.prototype.loadCampaignFinances = async function(finance_ar
           year: election_year
         }
       });
-  
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      } 
+
+      const cap_first_name = capitalizeFirstLetter(first_name);
+      const cap_last_name = capitalizeFirstLetter(last_name);
       // sequelize.where(sequelize.fn('LOWER', sequelize.col('firstname')), 'LIKE', '%' + search.toLowerCase() + '%')
   
-      const candidates = await this.Candidate.findAll({
+      let candidates = await this.Candidate.findAll({
         where: {
-          first_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('first_name')), Op.eq, first_name.toLowerCase()),
-          last_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('last_name')), Op.eq, last_name.toLowerCase())
+          first_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('first_name')), Op.eq, first_name),
+          last_name: sequelize.where(sequelize.fn('LOWER', sequelize.col('last_name')), Op.eq, last_name)
         }
       });
+      //Somehow we're not capturing records because the lowercase default is failing.
+      //This isn't ideal but we're checking the database for first letter caps first last and both names.
+      //improves Virginia retrieval by 30-40 records. A huge difference for a state.
       if(!candidates.length) {
+        
+        candidates = await this.Candidate.findAll({
+          first_name: cap_first_name,
+          last_name: cap_last_name
+        }) 
+      }
+      if(!candidates.length){
+
+        candidates = await this.Candidate.findAll({
+          first_name: first_name,
+          last_name: cap_last_name
+        }) 
+      }
+      
+      if(!candidates.length){
+        candidates = await this.Candidate.findAll({
+          first_name: cap_first_name,
+          last_name: last_name
+        }) 
+      }
+      
+      if(! candidates.length){
         console.log('no candidates found for: ',parsedName, candidates);
         noMatch.push({...finance_object, first_name, last_name});
       } else {
