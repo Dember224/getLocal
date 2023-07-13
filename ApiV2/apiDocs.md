@@ -2,6 +2,8 @@
 
 ## Documentation
 
+## Root https://hubs-api.herokuapp.com
+
 ### GET
 ### `/availableStates`
 
