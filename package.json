@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Dember224/getLocal#readme",
   "dependencies": {
+    "@json2csv/node": "^7.0.1",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "apexcharts": "^3.33.1",
@@ -38,6 +39,7 @@
     "js-file-downloader": "^1.1.24",
     "js-file-downloader-temp": "^1.1.8",
     "jszip": "^3.6.0",
+    "mkdirp": "^3.0.1",
     "moment": "^2.29.3",
     "net": "^1.0.2",
     "node-stream-zip": "^1.15.0",

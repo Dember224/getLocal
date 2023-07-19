@@ -1,5 +1,9 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const {AsyncParser} = require('@json2csv/node');
+const fs = require('fs').promises;
+const {mkdirp} = require('mkdirp')
+const moment = require('moment');
 
 class ActBlue {
     constructor(){
@@ -48,7 +52,6 @@ class ActBlue {
             const data = await this.acquireDataFromDiv(div);
             data_list.push(data)
         }
-        console.log(data_list)
         return data_list;
 
     }
@@ -61,6 +64,7 @@ class ActBlue {
             const page_list = await this.retrieveDataFromDivList(chamber, page);
             if(page_list.length){
                 page_list.map(x=>{
+                    x.office = chamber;
                     all_data.push(x)
                 });
             } else {
@@ -69,11 +73,49 @@ class ActBlue {
             
             await page ++;
         }
-        console.log(all_data)
+        return all_data
+    }
+
+    async paginateBoth(){
+        const state_senate = await this.paginate('state-senate');
+        const state_house = await this.paginate('state-house');
+
+        const total_array = [];
+        state_senate.map(x=>{
+            total_array.push(x);
+        });
+        state_house.map(x=>{
+            total_array.push(x);
+        });
+        console.table(total_array)
+
+        return total_array;
+    }
+
+    async dataToCSV(data){
+        const opts = {};
+        const transformOpts = {};
+        const asyncOpts = {};
+        const parser = new AsyncParser(opts, transformOpts, asyncOpts);
+
+        const csv = await parser.parse(data).promise();
+        return csv;
+    }
+
+    async allDataCSV(){
+        const data = await this.paginateBoth();
+
+        const csv = await this.dataToCSV(data);
+        const path = `allCandidateData${moment().format('YYYY_MM_DDHH_m_s')}.csv`;
+        // await mkdirp(path);
+        await fs.writeFile(path, csv);
+        // console.log(csv)
     }
 
 
 }
 
-const act_blue = new ActBlue()
-act_blue.paginate('state-senate')
+// const act_blue = new ActBlue()
+// act_blue.allDataCSV()
+
+module.exports = ActBlue

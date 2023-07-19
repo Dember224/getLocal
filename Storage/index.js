@@ -363,6 +363,14 @@ async function getModels() {
         CampaignFinance.belongsTo(Candidacy, {
             foreignKey: 'candidacy_id'
         });
+
+        const Webpage = sequelize.define('Webpage', {
+            name: DataTypes.STRING,
+            fundraiser: DataTypes.STRING,
+            website: DataTypes.STRING,
+            race: DataTypes.STRING,
+            office: DataTypes.STRING
+        })
     
         const candidate_search_query = `
           Create or replace View "CandidateSearch" as
@@ -500,7 +508,8 @@ async function getModels() {
             Candidacy,
             CampaignFinance,
             CandidateSearch,
-            CensusData
+            CensusData,
+            Webpage
         };
     } catch(e){
         console.log('Failed to synchronize due to:', e)

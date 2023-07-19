@@ -19,7 +19,8 @@ const CampaignFinanceLoader = require('./Finances/load');
 const CensusDataLoader = require('./censusTools/load');
 const census_tools = require('./censusTools/index');
 const go_live_states = require('./miscellaneousVariables');
-
+const CandidateWebsiteLoader = require('./pageGetters/load');
+const ActBlue = require('./pageGetters/index');
 
 
 
@@ -93,12 +94,22 @@ async function loadCensusData(storage){
 
 }
 
+async function loadActBlueData(storage){
+  console.log('act blue loader called');
+  const act_blue = new ActBlue()
+  const data = await act_blue.paginateBoth();
+
+  const loadup = new CandidateWebsiteLoader(storage.models);
+  await loadup.loadWebsiteResults(data);
+}
+
 
 async function loader() {
   try {
     const isLoadTypeElections = await loadType == 'elections';
     const isLoadTypeFinance = await loadType == 'finance';
     const isLoadTypeCensus = await loadType == 'census';
+    const isLoadTypeActBlue = await loadType == 'actblue';
     console.log(await loadType)
     const storage = await getStorage();
     console.log('Promise pending', storage);
@@ -124,6 +135,9 @@ async function loader() {
         await loadCensusData(storage);
         return;
 
+      } else if(isLoadTypeActBlue){
+        await loadActBlueData(storage);
+        return;
       } else {
           throw new Error("invalid loadType: "+loadType);
       }
