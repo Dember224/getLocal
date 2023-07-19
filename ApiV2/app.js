@@ -119,6 +119,26 @@ app.get('/getAvailableStates', async(req, res, next)=>{
   }
 })
 
+app.get('/listCandidateWebsites', async(req, res, next)=>{
+  try{
+    const data = new DataAccess();
+    const website_array = await data.getAllCandidateWebPages();
+    return res.json(website_array);
+  } catch(e){
+    next(e);
+  }
+})
+
+app.get('/getCandidateWebpageCSV', async(req, res, next)=>{
+  try{
+    const data = new DataAccess();
+    const website_csv = await data.getAllCandidateWebPagesCSV();
+    return res.attachment(`allWebsites${moment().format('YYYY-MM-DD HH:m:s')}.csv`).send(website_csv);
+  } catch(e){
+    next(e);
+  }
+})
+
 // app.get('/profile', (req, res,next)=>{
 //   res.send()
 // })

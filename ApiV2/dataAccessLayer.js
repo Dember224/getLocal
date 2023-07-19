@@ -5,6 +5,7 @@ require('dotenv').config()
 //List of query imports here so the directory isn't littered with SQL
 const fullStateQuery = require('./queries/dataByState');
 const availableStateQuery = require('./queries/availableStates');
+const allWebpagesQuery = require('./queries/candidateWebpageQuery');
 
 
 class DataAccess {
@@ -113,11 +114,23 @@ class DataAccess {
         }
     }
 
+    async getAllCandidateWebPages(){
+        const webpage_data = await this.runQuery(allWebpagesQuery);
+        return webpage_data
+    }
+
+    async getAllCandidateWebPagesCSV(){
+        const data = await this.getAllCandidateWebPages();
+        const csv = await this.dataToCSV(data);
+        return csv
+    }
+
 
 };
 
-const data = new DataAccess()
-data.checkAvailableStates();
+// const data = new DataAccess();
+// data.getAllCandidateWebPages()
+// data.checkAvailableStates();
 
 
 module.exports = DataAccess
