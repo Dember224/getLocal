@@ -68,3 +68,27 @@
 ##### 400
 
 > The given state or year are not available. Please check the /getAvailableStates endpoint for a list of available states and years.
+
+### GET 
+### `/getCandidateWebpageCSV`
+
+
+#### Response
+
+##### 200
+
+> Returns a CSV containing all state house and state senate candidates with an actblue fundraising page or campaign website. The CSV should contain the following. 
+
+- `Name`
+    Full name of the candidate.
+- `Fundraiser`
+    The Act Blue fundraising page.
+- `Website`
+    The candidate's campaign website
+- `Race`
+    The candidate's state and district. 
+- `Office`
+    The chamber for the candidate's race.
+
+[CSV Link](https://hubs-api.herokuapp.com/getCandidateWebpageCSV)
+
